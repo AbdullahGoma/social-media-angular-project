@@ -1,2 +1,17 @@
 export enum ModalType {
+  AddStory = 'addStory',
+  AddPost = 'addPost',
+  PostDetails = 'postDetails',
+  StoryViewer = 'storyViewer',
+  ChatWindow = 'chatWindow',
+  ContactUs = 'contactUs',
+  UsernameChange = 'usernameChange',
+  NameChange = 'nameChange',
+  TwoFactorAuth = 'twoFactorAuth',
+  PasswordChange = 'passwordChange',
+  EmailChange = 'emailChange',
+  Blocking = 'blocking',
+  ProfileLock = 'profileLock',
+  ImagePreview = 'imagePreview',
+  AddReminder = 'addReminder',
 }
