@@ -1,3 +1,5 @@
+First Day:--------------------------------------------------
+
 1- Generate the app
 
 # Create new Angular project 
@@ -30,6 +32,8 @@ ng g c shared/components/modals/timeline/add-story-modal --skip-tests
 ng g c shared/components/modals/timeline/add-post-modal --skip-tests
 ng g c shared/components/modals/timeline/post-details-modal --skip-tests 
 ng g c shared/components/modals/timeline/story-viewer-modal --skip-tests
+ng g c shared/components/modals/timeline/comments-modal --skip-tests
+ng g c shared/components/modals/timeline/likes-modal --skip-tests
 
 # Generate chat components
 ng g c shared/components/modals/chat/chat-window-modal --skip-tests 
@@ -112,7 +116,11 @@ type nul > src\app\features\layout\layout.routes.ts
 
 
 
-3- 
+
+
+
+3- Make the app zoneless(Remove From Polyfills in angular.json and add in providers
+[provideExperimentalZonelessChangeDetection()])
 
 
 
@@ -120,6 +128,7 @@ type nul > src\app\features\layout\layout.routes.ts
 
 
 
+Second Day:--------------------------------------------------
 
 
 
@@ -127,15 +136,15 @@ type nul > src\app\features\layout\layout.routes.ts
 
 
 
+Third Day:--------------------------------------------------
 
 
 
+Forth Day:--------------------------------------------------
 
 
 
-
-
-
+Fifth Day:--------------------------------------------------
 
 
 
