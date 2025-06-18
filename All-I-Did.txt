@@ -103,6 +103,13 @@ ng g s features/settings/settings --skip-tests
 
 
 
+routes files:
+type nul > src\app\features\auth\auth.routes.ts
+type nul > src\app\features\profile\profile.routes.ts
+type nul > src\app\features\timeline\timeline.routes.ts
+type nul > src\app\features\settings\settings.routes.ts
+type nul > src\app\features\layout\layout.routes.ts
+
 
 
 3- 
