@@ -26,26 +26,26 @@ ng g s shared/components/modals/modal --skip-tests
 ng g d shared/components/modals/modal --skip-tests 
 
 # Generate timeline modals
-ng g c shared/components/modals/add-story-modal --skip-tests 
-ng g c shared/components/modals/add-post-modal --skip-tests
-ng g c shared/components/modals/post-details-modal --skip-tests 
-ng g c shared/components/modals/story-viewer-modal --skip-tests
+ng g c shared/components/modals/timeline/add-story-modal --skip-tests 
+ng g c shared/components/modals/timeline/add-post-modal --skip-tests
+ng g c shared/components/modals/timeline/post-details-modal --skip-tests 
+ng g c shared/components/modals/timeline/story-viewer-modal --skip-tests
 
 # Generate chat components
-ng g c shared/components/modals/chat-window-modal --skip-tests 
+ng g c shared/components/modals/chat/chat-window-modal --skip-tests 
 ng g c shared/components/chat/chat-container --skip-tests 
 
 # Generate settings modals
-ng g c shared/components/modals/contact-us-modal --skip-tests
-ng g c shared/components/modals/username-change-modal --skip-tests 
-ng g c shared/components/modals/name-change-modal --skip-tests 
-ng g c shared/components/modals/two-factor-auth-modal --skip-tests
-ng g c shared/components/modals/password-change-modal --skip-tests
-ng g c shared/components/modals/email-change-modal --skip-tests
-ng g c shared/components/modals/blocking-modal --skip-tests
-ng g c shared/components/modals/profile-lock-modal --skip-tests
-ng g c shared/components/modals/image-preview-modal --skip-tests 
-ng g c shared/components/modals/add-reminder-modal --skip-tests 
+ng g c shared/components/modals/settings/contact-us-modal --skip-tests
+ng g c shared/components/modals/settings/username-change-modal --skip-tests 
+ng g c shared/components/modals/settings/name-change-modal --skip-tests 
+ng g c shared/components/modals/settings/two-factor-auth-modal --skip-tests
+ng g c shared/components/modals/settings/password-change-modal --skip-tests
+ng g c shared/components/modals/settings/email-change-modal --skip-tests
+ng g c shared/components/modals/settings/blocking-modal --skip-tests
+ng g c shared/components/modals/settings/profile-lock-modal --skip-tests
+ng g c shared/components/modals/settings/image-preview-modal --skip-tests 
+ng g c shared/components/modals/settings/add-reminder-modal --skip-tests 
 
 # Generate models
 ng g interface shared/models/user
@@ -57,9 +57,49 @@ ng g enum shared/models/modal-type
 
 
 
-features(layout, 
+features(layout(have left side and right side and header), 
 timeline and profile(header profile and all tabs(render in outlet)) and 
-settings inside it)
+settings and auth(change password and confirmation password and 
+confirmation email and forget password and signIn and sign up and two factor all of that outlet render in auth)
+ inside it)
+
+
+# Generate layout components (shared after auth)
+ng g c features/layout/header --skip-tests
+ng g c features/layout/left-sidebar --skip-tests
+ng g c features/layout/right-sidebar --skip-tests 
+ng g c features/layout/layout-container --skip-tests 
+
+# Generate auth feature with child routes
+ng g c features/auth/auth-container --skip-tests
+ng g c features/auth/sign-in --skip-tests
+ng g c features/auth/sign-up --skip-tests
+ng g c features/auth/forgot-password --standalone
+ng g c features/auth/two-factor --skip-tests
+ng g c features/auth/change-password --skip-tests
+ng g c features/auth/confirm-email --skip-tests
+ng g c features/auth/confirm-password --skip-tests
+
+ng g s features/auth/auth --skip-tests
+
+# Generate timeline feature
+ng g c features/timeline/timeline-page --skip-tests 
+
+ng g s features/timeline/timeline --skip-tests
+
+# Generate profile feature with tabs
+ng g c features/profile/profile-container --skip-tests 
+ng g c features/profile/profile-header --skip-tests
+ng g c features/profile/tabs/about-tab --skip-tests
+ng g c features/profile/tabs/feed-tab --skip-tests
+ng g c features/profile/tabs/friends-tab --skip-tests
+ng g c features/profile/tabs/photos-tab --skip-tests 
+ng g c features/profile/tabs/favs-tab --skip-tests 
+
+# Generate settings feature
+ng g c features/settings/settings-page --skip-tests
+
+ng g s features/settings/settings --skip-tests
 
 
 
