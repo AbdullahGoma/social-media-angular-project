@@ -1,0 +1,128 @@
+src/
+├── app/
+│   ├── core/                          # Core module (singleton services)
+│   │   ├── auth/                      # Authentication services
+│   │   │   ├── auth.service.ts
+│   │   │   ├── auth.guard.ts
+│   │   │   ├── auth.interceptor.ts
+│   │   │   └── models/
+│   │   ├── http/                      # HTTP related services
+│   │   │   ├── api.service.ts
+│   │   │   └── error.interceptor.ts
+│   │   ├── loader/                    # Loading indicator
+│   │   │   ├── loader.service.ts
+│   │   │   └── loader.component.ts
+│   │   └── core.module.ts
+│   │
+│   ├── shared/                        # Shared module (components, pipes, directives)
+│   │   ├── components/                # Dumb components
+│   │   │   ├── modal/                 # Generic modal system
+│   │   │   │   ├── modal.component.ts
+│   │   │   │   ├── modal.service.ts
+│   │   │   │   └── modal.directive.ts
+│   │   │   ├── tabs/                  # Tab system
+│   │   │   ├── post/                  # Post component
+│   │   │   ├── story/                 # Story component
+│   │   │   └── ...                    # Other shared components
+│   │   │
+│   │   ├── directives/                # Shared directives
+│   │   │   ├── click-outside.directive.ts
+│   │   │   ├── infinite-scroll.directive.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── pipes/                     # Shared pipes
+│   │   │   ├── time-ago.pipe.ts
+│   │   │   ├── filter.pipe.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── models/                    # Shared interfaces/types
+│   │   │   ├── user.model.ts
+│   │   │   ├── post.model.ts
+│   │   │   └── ...
+│   │   │
+│   │   ├── utils/                     # Utility functions
+│   │   │   └── ...
+│   │   │
+│   │   └── shared.module.ts
+│   │
+│   ├── features/                      # Feature modules
+│   │   ├── layout/                    # Main layout components
+│   │   │   ├── components/
+│   │   │   │   ├── header/
+│   │   │   │   ├── left-sidebar/
+│   │   │   │   └── right-sidebar/
+│   │   │   └── layout.module.ts
+│   │   │
+│   │   ├── auth/                      # Authentication
+│   │   │   ├── components/
+│   │   │   │   ├── login/
+│   │   │   │   ├── signup/
+│   │   │   │   ├── two-factor/
+│   │   │   │   └── ...
+│   │   │   ├── store/                 # NgRx for auth
+│   │   │   │   ├── auth.actions.ts
+│   │   │   │   ├── auth.reducer.ts
+│   │   │   │   ├── auth.effects.ts
+│   │   │   │   └── auth.selectors.ts
+│   │   │   └── auth.module.ts
+│   │   │
+│   │   ├── timeline/                  # Timeline feature
+│   │   │   ├── components/
+│   │   │   │   ├── timeline/
+│   │   │   │   ├── create-post-modal/
+│   │   │   │   ├── post-detail-modal/
+│   │   │   │   └── ...
+│   │   │   ├── store/
+│   │   │   └── timeline.module.ts
+│   │   │
+│   │   ├── profile/                   # Profile feature
+│   │   │   ├── components/
+│   │   │   │   ├── profile-header/
+│   │   │   │   ├── about/
+│   │   │   │   ├── friends/
+│   │   │   │   └── ...
+│   │   │   ├── store/
+│   │   │   └── profile.module.ts
+│   │   │
+│   │   ├── chat/                      # Chat feature
+│   │   │   ├── components/
+│   │   │   │   ├── chat-window/
+│   │   │   │   ├── connection-list/
+│   │   │   │   └── ...
+│   │   │   ├── store/
+│   │   │   └── chat.module.ts
+│   │   │
+│   │   ├── search/                    # Search feature
+│   │   │   ├── components/
+│   │   │   ├── store/
+│   │   │   └── search.module.ts
+│   │   │
+│   │   └── settings/                  # Settings feature
+│   │       ├── components/
+│   │       │   ├── account/
+│   │       │   ├── security/
+│   │       │   └── ...
+│   │       ├── store/
+│   │       └── settings.module.ts
+│   │
+│   ├── store/                         # Root NgRx store
+│   │   ├── root.reducer.ts
+│   │   ├── root.effects.ts
+│   │   └── index.ts
+│   │
+│   ├── app.component.ts
+│   ├── app.component.html
+│   ├── app.component.css
+│   ├── app.module.ts
+│   └── app-routing.module.ts
+│
+├── assets/
+│   ├── images/                        # Static images
+│   └── styles/                        # Global styles
+│       ├── _variables.css             # CSS variables
+│       ├── _reset.css                 # CSS reset
+│       ├── _utilities.css             # Utility classes
+│       └── main.css                   # Main global styles
+│
+├── environments/
+└── ...

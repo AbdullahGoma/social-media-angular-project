@@ -1,2 +1,98 @@
 1- Generate the app
-2- 
+
+# Create new Angular project 
+ng new social-media --style=css
+
+
+
+2- generate folders(core, 
+
+
+shared(modals(modal backdrop, add stories, add posts, add post and post details
+and show all stories(that have progress and move between stories(full story system)
+ and chat window, and 
+all modal in 
+setting(Contact Us Modal, Username Change Modal, Name Change Modal, Two Factor Auth Modal,
+Password Change Modal, Email Change Modal, Blocking Modal, Profile Lock Modal, 
+Image Preview Modal, Chat Windows Container, Add Reminder Modal)) more modals in settings
+are also in timeline so we make it generic),
+and models
+and services)
+
+
+# Generate shared modal container and service 
+ng g c shared/components/modals/modal-backdrop --skip-tests 
+ng g s shared/components/modals/modal --skip-tests
+ng g d shared/components/modals/modal --skip-tests 
+
+# Generate timeline modals
+ng g c shared/components/modals/add-story-modal --skip-tests 
+ng g c shared/components/modals/add-post-modal --skip-tests
+ng g c shared/components/modals/post-details-modal --skip-tests 
+ng g c shared/components/modals/story-viewer-modal --skip-tests
+
+# Generate chat components
+ng g c shared/components/modals/chat-window-modal --skip-tests 
+ng g c shared/components/chat/chat-container --skip-tests 
+
+# Generate settings modals
+ng g c shared/components/modals/contact-us-modal --skip-tests
+ng g c shared/components/modals/username-change-modal --skip-tests 
+ng g c shared/components/modals/name-change-modal --skip-tests 
+ng g c shared/components/modals/two-factor-auth-modal --skip-tests
+ng g c shared/components/modals/password-change-modal --skip-tests
+ng g c shared/components/modals/email-change-modal --skip-tests
+ng g c shared/components/modals/blocking-modal --skip-tests
+ng g c shared/components/modals/profile-lock-modal --skip-tests
+ng g c shared/components/modals/image-preview-modal --skip-tests 
+ng g c shared/components/modals/add-reminder-modal --skip-tests 
+
+# Generate models
+ng g interface shared/models/user
+ng g interface shared/models/post
+ng g interface shared/models/story
+ng g interface shared/models/chat
+ng g interface shared/models/settings
+ng g enum shared/models/modal-type
+
+
+
+features(layout, 
+timeline and profile(header profile and all tabs(render in outlet)) and 
+settings inside it)
+
+
+
+
+
+3- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Install required dependencies
+ng add @ngrx/store@latest
+ng add @ngrx/effects@latest
