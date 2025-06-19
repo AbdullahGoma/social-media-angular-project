@@ -8,7 +8,6 @@ import { combineLatest } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
-import { ModalBackdropComponent } from "../../modal-backdrop/modal-backdrop.component";
 
 
 @Component({
@@ -17,7 +16,7 @@ import { ModalBackdropComponent } from "../../modal-backdrop/modal-backdrop.comp
   templateUrl: './image-preview-modal.component.html',
   styleUrls: ['./image-preview-modal.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ModalBackdropComponent],
+  imports: [],
 })
 export class ImagePreviewModalComponent {
   private modalService = inject(ModalService);
