@@ -1,0 +1,215 @@
+@layer left-sidebar {
+  /* Left Sidebar Styles */
+  .left-side {
+    width: 260px;
+    border-right: 1px solid var(--clr-border);
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s;
+    background-color: var(--clr-bg);
+    overflow: auto;
+    flex-shrink: 0;
+  }
+
+  .left-side-button {
+    display: none;
+  }
+
+  .logo {
+    font-family: var(--font-title);
+    font-size: 15px;
+    color: var(--clr-text-light);
+    font-weight: 600;
+    text-align: center;
+    height: 68px;
+    line-height: 68px;
+    letter-spacing: 4px;
+    position: sticky;
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--clr-primary) 0%,
+      var(--clr-primary) 76%,
+      transparent 100%
+    );
+  }
+
+  .side-wrapper {
+    padding: var(--space-xl);
+  }
+
+  .side-title {
+    font-family: var(--font-title);
+    color: var(--clr-text-dark);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: var(--space-md);
+  }
+
+  .side-menu {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  .side-menu svg {
+    margin-right: var(--space-md);
+    width: 16px;
+  }
+
+  .side-menu a {
+    text-decoration: none;
+    color: var(--clr-text-muted);
+    display: flex;
+    align-items: center;
+  }
+
+  .side-menu a:hover {
+    color: var(--clr-text-light);
+  }
+
+  .side-menu a:not(:last-child) {
+    margin-bottom: var(--space-md);
+  }
+
+  .follow-me {
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+    overflow: hidden;
+    color: var(--clr-text-muted);
+    padding: 0 var(--space-md);
+    height: 52px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--clr-border);
+    position: relative;
+  }
+
+  .follow-me svg {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--space-sm);
+  }
+
+  .follow-text {
+    display: flex;
+    align-items: center;
+    transition: 0.3s;
+  }
+
+  .follow-me:hover .follow-text {
+    transform: translateY(100%);
+  }
+
+  .follow-me:hover .developer {
+    top: 0;
+  }
+
+  .developer {
+    position: absolute;
+    color: var(--clr-text-light);
+    left: 0;
+    top: -100%;
+    display: flex;
+    transition: 0.3s;
+    padding: 0 var(--space-md);
+    align-items: center;
+    background-color: var(--clr-border);
+    width: 100%;
+    height: 100%;
+  }
+
+  .developer img {
+    border-radius: var(--radius-full);
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+    margin-right: var(--space-sm);
+  }
+
+  /* Mobile styles for left sidebar */
+  @media screen and (max-width: 930px) {
+    .left-side.active {
+      z-index: 4;
+    }
+
+    .logo {
+      top: 60px;
+    }
+
+    .left-side.active > *:not(.logo) {
+      opacity: 1;
+      transition: 0.3s 0.2s;
+    }
+
+    .left-side.active .left-side-button svg:first-child {
+      opacity: 0;
+    }
+
+    .left-side.active .left-side-button svg:last-child {
+      transform: translate(-50%, -50%);
+      opacity: 1;
+    }
+
+    /* This is do the delimeter  */
+    .left-side:not(.active) {
+      width: 45px; /* Make the width to be 45px instead of 280px  */
+      overflow: hidden;
+    }
+
+    /* This is do the delimeter  */
+    .container.resizing .left-side {
+      transition: none !important;
+    }
+
+    .left-side:not(.active) > *:not(.logo):not(.left-side-button) {
+      opacity: 0;
+    }
+
+    .left-side:not(.active) .logo {
+      position: relative;
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      margin-top: -10px;
+      height: auto;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .left-side-button {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      position: sticky;
+      top: 0;
+      cursor: pointer;
+      height: 60px;
+      background-color: var(--clr-bg);
+      border: 0;
+      padding: 0;
+      line-height: 0;
+      color: var(--clr-text-light);
+      border-bottom: 1px solid var(--clr-border);
+      z-index: 3;
+    }
+
+    .left-side-button svg {
+      transition: 0.2s;
+      width: 24px;
+    }
+
+    .left-side-button svg:last-child {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(100%, -50%);
+      opacity: 0;
+    }
+  }
+}

@@ -1,0 +1,167 @@
+@layer navs {
+  .user-nav {
+    display: none;
+    opacity: 0;
+    transition: opacity 1s, display 1s, translate 1s;
+    transition-behavior: allow-discrete;
+    translate: 100% 0;
+    position: absolute;
+    top: 100%;
+    right: 3.2rem;
+    background-color: var(--clr-bg);
+    padding: var(--space-md);
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    z-index: 10;
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      gap: var(--space-xs) var(--space-md);
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--clr-text);
+    }
+
+    li {
+      --delay: 0.5s;
+      translate: 50%;
+      transition: translate 1s var(--delay), opacity 1s var(--delay);
+    }
+
+    li:nth-child(2) {
+      --delay: 0.75s;
+    }
+
+    li:nth-child(3) {
+      --delay: 1s;
+    }
+
+    li + li {
+      margin-block-start: var(--space-sm);
+      padding-block-start: var(--space-sm);
+      border-top: 2px solid var(--clr-text-dark);
+    }
+  }
+
+  /* Show menu when aria-expanded is true */
+  [aria-expanded="true"] + .user-nav {
+    display: block;
+    opacity: 1;
+  }
+
+  [aria-expanded="true"] + .user-nav {
+    display: block;
+    opacity: 1;
+    translate: 0 0;
+
+    @starting-style {
+      opacity: 0;
+      translate: 0 -100%;
+    }
+
+    li {
+      translate: 0 0;
+      opacity: 1;
+
+      @starting-style {
+        opacity: 0;
+        translate: 50% 0;
+      }
+    }
+  }
+
+  @layer notifications {
+    .notification-btn {
+      position: relative;
+    }
+    .user-notifications {
+      position: absolute;
+      top: 2.52rem;
+      right: 4.2rem;
+      background-color: var(--clr-bg);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      padding: var(--space-sm) var(--space-sm) 0 var(--space-sm);
+      max-width: 400px;
+      font-family: var(--font-body);
+    }
+
+    .user-notifications {
+      transform: translateX(120%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.3s ease, opacity 0.3s ease,
+        visibility 0s linear 0.3s;
+      pointer-events: none;
+    }
+
+    .user-notifications.active {
+      transform: translateX(0);
+      opacity: 1;
+      visibility: visible;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .notifications-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: var(--space-md);
+      border-bottom: 1px solid #eee;
+      padding-bottom: var(--space-sm);
+      color: var(--clr-text);
+    }
+
+    .user-notification {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .user-notifications ul {
+      padding: 0;
+    }
+
+    .notifications-space > * + * {
+      margin-top: var(--space-md);
+    }
+
+    .user-notification a {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      text-decoration: none;
+    }
+
+    .notification-content {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--clr-text);
+    }
+
+    .notification-content .username {
+      color: var(--clr-accent);
+      font-weight: 600;
+    }
+
+    .notification-content .action {
+      color: var(--clr-accent-3);
+    }
+
+    .notification-content .post-name {
+      color: #e83e8c;
+      font-style: italic;
+    }
+
+    .notification-content > div {
+      margin-top: 2px;
+      color: #666;
+    }
+  }
+}

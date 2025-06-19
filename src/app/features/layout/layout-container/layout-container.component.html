@@ -1,1 +1,11 @@
-<p>layout-container works!</p>
+<div class="container">
+  <app-left-sidebar />
+  <div class="main">
+    <app-header />
+    <div class="main-container">
+      <router-outlet />
+    </div>
+  </div>
+  <app-right-sidebar />
+  <div class="overlay" id="overlay" onclick="closeSidebars()"></div>
+</div>

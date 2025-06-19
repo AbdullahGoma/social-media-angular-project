@@ -1,0 +1,69 @@
+@layer right-sidebar {
+  /* Right Sidebar Styles */
+  .right-side {
+    width: 280px;
+    flex-shrink: 0;
+    margin-left: auto;
+    overflow: auto;
+    background-color: var(--clr-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stories {
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .stories .user-img {
+    border: 2px solid var(--clr-accent-2);
+  }
+
+  .stories .album-date {
+    font-family: var(--font-body);
+  }
+
+  .user-status {
+    background-color: var(--clr-accent-3);
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    margin-left: auto;
+  }
+
+  .user-status.offline {
+    background-color: #606a8d;
+  }
+
+  .user-status.idle {
+    background-color: var(--clr-accent-4);
+  }
+
+  .contacts .username {
+    display: flex;
+    flex: 1;
+    align-items: center;
+  }
+
+  .right-search {
+    position: sticky !important;
+    top: 0;
+    border-bottom: 1px solid var(--clr-border);
+    margin-top: 0.75rem;
+  }
+
+  .right-search input {
+    padding-right: var(--space-sm);
+    width: 100%;
+  }
+
+  .search-bar-svgs {
+    color: var(--clr-icon);
+    display: flex;
+  }
+
+  .search-bar-svgs svg {
+    margin-right: var(--space-md);
+    width: 16px;
+    height: 16px;
+  }
+}

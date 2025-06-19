@@ -1,1 +1,91 @@
-<p>header works!</p>
+<div class="search-bar">
+  <div class="search-bar-content">
+    <input type="text" placeholder="Search" />
+
+    <div class="user-controls">
+      <button
+        class="account-button notification-btn"
+        aria-controls="user-notifications"
+        aria-expanded="false"
+      >
+        <svg
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="css-i6dzq1"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"
+          />
+        </svg>
+      </button>
+
+      <nav class="side-wrapper user-notifications" id="user-notifications">
+        <div class="notifications-title">Notifications</div>
+        <ul class="notifications-space">
+          <li class="user-notification">
+            <a href="#">
+              <img src="assets/pic.jpg" alt="" class="user-img" />
+              <div class="notification-content">
+                <span class="username">Mohammed</span>
+                <span class="action">commented on your post</span>
+                <span class="post-name">post name</span>
+                <div class="album-date">12 hours ago</div>
+              </div>
+            </a>
+          </li>
+          <li class="user-notification">
+            <a href="#">
+              <img src="assets/pic.jpg" alt="" class="user-img" />
+              <div class="notification-content">
+                <span class="username">Ahmed</span>
+                <span class="action">liked your post</span>
+                <span class="post-name">post name</span>
+                <div class="album-date">12 hours ago</div>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <a class="account-user" aria-controls="user-nav" aria-expanded="false">
+        Abdullah
+        <img src="assets/pic.jpg" alt="" class="account-profile" alt="" />
+        <span>▼</span>
+      </a>
+
+      <nav class="user-nav" id="user-nav">
+        <ul role="list">
+          <li><a href="/profile.html">My Profile</a></li>
+          <li><a href="/settings.html">Settings</a></li>
+          <li><a href="/signin.html">Sign Out</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <button
+    class="right-side-button"
+    id="sidebarRight"
+    onclick="toggleSidebar('right', event)"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      stroke="currentColor"
+      stroke-width="2"
+      fill="none"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="css-i6dzq1"
+    >
+      <path
+        d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+      ></path>
+    </svg>
+  </button>
+</div>
