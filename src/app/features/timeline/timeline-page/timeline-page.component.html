@@ -10,11 +10,11 @@
         <input
           class="status-input"
           placeholder="What's on your mind?"
-          data-modal-trigger
+          (click)="openPostModal()"
         />
       </div>
       <div class="status-actions">
-        <button class="status-action" data-modal-trigger>
+        <button class="status-action" (click)="openPostModal()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
             <path
@@ -23,7 +23,7 @@
           </svg>
           Status
         </button>
-        <button class="status-action" data-modal-trigger>
+        <button class="status-action" (click)="openPostModal()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
             <path
@@ -32,7 +32,7 @@
           </svg>
           Photos
         </button>
-        <button class="status-action" data-modal-trigger>
+        <button class="status-action" (click)="openPostModal()">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
             <path
@@ -375,3 +375,5 @@
     </div>
   </div>
 </div>
+
+<app-add-post-modal />

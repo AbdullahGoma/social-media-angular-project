@@ -1,1 +1,178 @@
-<p>add-post-modal works!</p>
+<div class="post-modal" [class.active]="modalStatus()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Create Post</h3>
+      <button class="close-modal" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="post-author">
+        <img
+          src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
+          class="author-img"
+          alt="Profile"
+        />
+        <div>
+          <h4>Abdullah Gomaa</h4>
+          <div class="post-options">
+            <!-- Audience Selector -->
+            <div class="dropdown audience-selector">
+              <button
+                class="dropdown-toggle"
+                (mousedown)="toggleAudienceDropdown($event)"
+                (blur)="showAudienceDropdown = false"
+              >
+                <span class="selected-option">
+                  {{ getAudienceIcon() }} {{ getAudienceLabel() }}
+                </span>
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 10l5 5 5-5z" />
+                </svg>
+              </button>
+              <div class="dropdown-menu" [class.show]="showAudienceDropdown">
+                @for (option of audienceOptions; track option.value) {
+                <div
+                  class="dropdown-item"
+                  (mousedown)="selectAudience(option.value)"
+                >
+                  {{ option.icon }} {{ option.label }}
+                </div>
+                }
+              </div>
+            </div>
+
+            <!-- Feeling Selector -->
+            <div class="dropdown feeling-selector">
+              <button
+                class="dropdown-toggle"
+                (click)="toggleFeelingDropdown($event)"
+                (blur)="showFeelingDropdown = false"
+              >
+                <span class="selected-option">{{ getSelectedFeeling() }}</span>
+              </button>
+              <div class="dropdown-menu" [class.show]="showFeelingDropdown">
+                <div class="dropdown-header">How are you feeling?</div>
+                <div class="feeling-options">
+                  @for (feeling of feelingOptions; track feeling.value) {
+                  <div
+                    class="feeling-option"
+                    (mousedown)="selectFeeling(feeling.value)"
+                  >
+                    <span>{{ feeling.emoji }}</span> {{ feeling.label }}
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Selector -->
+            <div class="dropdown status-selector">
+              <button
+                class="dropdown-toggle"
+                (click)="toggleStatusDropdown($event)"
+                (blur)="showStatusDropdown = false"
+              >
+                <span class="selected-option">{{ getSelectedStatus() }}</span>
+              </button>
+              <div class="dropdown-menu" [class.show]="showStatusDropdown">
+                <div class="dropdown-header">What are you doing?</div>
+                <div class="status-options">
+                  @for (status of statusOptions; track status.value) {
+                  <div
+                    class="status-option"
+                    (mousedown)="selectStatus(status.value)"
+                  >
+                    <span>{{ status.emoji }}</span> {{ status.label }}
+                  </div>
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <textarea
+        class="post-textarea"
+        placeholder="What's on your mind?"
+        [(ngModel)]="postText"
+      ></textarea>
+
+      <!-- Selected Tags -->
+      <div class="selected-tags">
+        @if (feeling()) {
+        <div class="tag">
+          {{ getFeelingLabel() }}
+          <button class="tag-remove" (click)="removeFeeling()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </button>
+        </div>
+        } @if (status()) {
+        <div class="tag">
+          {{ getStatusLabel() }}
+          <button class="tag-remove" (click)="removeStatus()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </button>
+        </div>
+        }
+      </div>
+
+      <!-- Media Preview -->
+      <div class="media-preview">
+        @for (media of mediaFiles(); track $index) {
+        <div class="media-item">
+          <img [src]="media.preview" alt="Preview" />
+          <button class="delete-media" (click)="removeMedia($index)">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+            >
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+              />
+            </svg>
+          </button>
+        </div>
+        }
+      </div>
+
+      <div class="modal-actions">
+        <button
+          class="add-media-btn"
+          (click)="triggerFileInput()"
+          [disabled]="mediaFiles().length >= MAX_IMAGES"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M448 80c8.8 0 16 7.2 16 16l0 319.8-5-6.5-136-176c-4.5-5.9-11.6-9.3-19-9.3s-14.4 3.4-19 9.3L202 340.7l-30.5-42.7C167 291.7 159.8 288 152 288s-15 3.7-19.5 10.1l-80 112L48 416.3l0-.3L48 96c0-8.8 7.2-16 16-16l384 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32zm80 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z"
+            />
+          </svg>
+          Add Media
+          <input
+            type="file"
+            #fileInput
+            (change)="onFileSelected($event)"
+            accept="image/*"
+            multiple
+            hidden
+          />
+        </button>
+        <button
+          class="post-submit"
+          (click)="submitPost()"
+          [disabled]="!canSubmit()"
+        >
+          Post
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
