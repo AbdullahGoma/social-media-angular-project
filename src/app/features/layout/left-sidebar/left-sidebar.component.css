@@ -7,8 +7,10 @@
     flex-direction: column;
     transition: 0.3s;
     background-color: var(--clr-bg);
-    overflow: auto;
+    overflow: hidden; /* Changed from auto to hidden */
     flex-shrink: 0;
+    position: relative; /* Added for proper child positioning */
+    height: 100vh; /* Ensure full viewport height */
   }
 
   .left-side-button {
