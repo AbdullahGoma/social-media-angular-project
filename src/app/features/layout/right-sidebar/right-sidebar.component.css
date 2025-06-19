@@ -67,3 +67,96 @@
     height: 16px;
   }
 }
+
+@layer reminder {
+  .reminders {
+    border-bottom: 1px solid var(--clr-border);
+  }
+
+  .add-reminder-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--clr-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: var(--space-md);
+    transition: background-color 0.2s ease;
+  }
+
+  .add-reminder-btn:hover {
+    background-color: #0a6ed1;
+  }
+
+  .add-reminder-btn svg {
+    fill: white;
+  }
+
+  .reminders-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .reminder-item {
+    background-color: var(--clr-bg-light);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    position: relative;
+  }
+
+  .reminder-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xs);
+  }
+
+  .reminder-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--clr-text-light);
+    margin: 0;
+  }
+
+  .delete-reminder-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .delete-reminder-btn:hover {
+    opacity: 1;
+  }
+
+  .delete-reminder-btn svg {
+    fill: #ff4d4f;
+  }
+
+  .reminder-detail {
+    font-size: 13px;
+    color: var(--clr-text-muted);
+    margin-bottom: var(--space-xs);
+    line-height: 1.4;
+  }
+
+  .reminder-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--clr-text-dark);
+  }
+
+  .reminder-time {
+    color: var(--clr-accent);
+  }
+}
