@@ -1,5 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { SidebarService } from '../../../core/services/sidebar.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -8,10 +9,27 @@ import { SidebarService } from '../../../core/services/sidebar.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private document = inject(DOCUMENT);
+  private clickHandler!: (event: Event) => void;
+
   protected sidebarService = inject(SidebarService);
   protected isUserMenuOpen = signal(false);
   protected isNotificationsOpen = signal(false);
+
+  ngOnInit(): void {
+    this.clickHandler = (event: Event) => {
+      if (!(event.target as Element).closest('.user-controls')) {
+        this.closeAllDropdowns();
+      }
+    };
+
+    this.document.addEventListener('click', this.clickHandler);
+  }
+
+  ngOnDestroy(): void {
+    this.document.removeEventListener('click', this.clickHandler);
+  }
 
   toggleUserMenu(event: Event): void {
     event.preventDefault();
