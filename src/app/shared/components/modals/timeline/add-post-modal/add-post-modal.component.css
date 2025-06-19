@@ -438,6 +438,7 @@
   aspect-ratio: 1;
   border-radius: var(--radius-sm);
   overflow: hidden;
+  cursor: pointer;
 }
 
 .media-item img {

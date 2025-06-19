@@ -11,11 +11,12 @@ import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PostService } from '../../../../../core/services/post.service';
+import { ImagePreviewModalComponent } from "../../settings/image-preview-modal/image-preview-modal.component";
 
 @Component({
   selector: 'app-add-post-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ImagePreviewModalComponent],
   templateUrl: './add-post-modal.component.html',
   styleUrls: ['./add-post-modal.component.css'],
 })
@@ -274,5 +275,9 @@ export class AddPostModalComponent {
       (a) => a.value === this.audience()
     );
     return selected ? selected.label : 'Public';
+  }
+
+  previewImage(imageUrl: string) {
+    this.modalService.openModal(ModalType.ImagePreview, imageUrl);
   }
 }

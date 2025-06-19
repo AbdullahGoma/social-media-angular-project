@@ -128,7 +128,7 @@
       <div class="media-preview">
         @for (media of mediaFiles(); track $index) {
         <div class="media-item">
-          <img [src]="media.preview" alt="Preview" />
+          <img [src]="media.preview" alt="Preview" (click)="previewImage(media.preview)" />
           <button class="delete-media" (click)="removeMedia($index)">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -176,3 +176,5 @@
     </div>
   </div>
 </div>
+
+<app-image-preview-modal />
