@@ -7,9 +7,6 @@ import { SidebarService } from '../../../core/services/sidebar.service';
   imports: [],
   templateUrl: './right-sidebar.component.html',
   styleUrl: './right-sidebar.component.css',
-  host: {
-    '[class.active]': 'sidebarService.rightSidebarVisible()',
-  },
 })
 export class RightSidebarComponent {
   protected sidebarService = inject(SidebarService);
@@ -30,16 +27,18 @@ export class RightSidebarComponent {
     const input = event.target as HTMLInputElement;
     const term = input.value.trim().toLowerCase();
     this.searchTerm.set(term);
-    
+
     if (!term) {
       this.filteredContacts.set(this.contacts());
       return;
     }
 
     this.filteredContacts.set(
-      this.contacts().filter(contact => 
-        contact.name.toLowerCase().includes(term) || 
-        contact.status.includes(term))
+      this.contacts().filter(
+        (contact) =>
+          contact.name.toLowerCase().includes(term) ||
+          contact.status.includes(term)
+      )
     );
   }
 

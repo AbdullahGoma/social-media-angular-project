@@ -405,7 +405,7 @@
     }
 
     .right-side.active {
-      transform: translatex(0);
+      transform: translateX(0);
     }
 
     .right-side-button {

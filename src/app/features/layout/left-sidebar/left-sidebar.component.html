@@ -1,4 +1,8 @@
-<div class="left-side" id="leftContainer">
+<div
+  class="left-side"
+  id="leftContainer"
+  [class.active]="sidebarService.leftSidebarVisible()"
+>
   <div
     class="left-side-button"
     id="sidebarLeft"

@@ -7,9 +7,6 @@ import { SidebarService } from '../../../core/services/sidebar.service';
   imports: [],
   templateUrl: './overlay.component.html',
   styleUrl: './overlay.component.css',
-  host: {
-    '[class.active]': 'sidebarService.overlayVisible()',
-  },
 })
 export class OverlayComponent {
   protected sidebarService = inject(SidebarService);

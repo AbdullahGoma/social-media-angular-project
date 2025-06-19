@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SidebarService } from '../../../core/services/sidebar.service';
 
 @Component({
@@ -7,9 +7,6 @@ import { SidebarService } from '../../../core/services/sidebar.service';
   imports: [],
   templateUrl: './left-sidebar.component.html',
   styleUrl: './left-sidebar.component.css',
-  host: {
-    '[class.active]': 'sidebarService.leftSidebarVisible()',
-  },
 })
 export class LeftSidebarComponent {
   protected sidebarService = inject(SidebarService);
