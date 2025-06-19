@@ -134,8 +134,11 @@ Second Day:--------------------------------------------------
 
 ng g s core/services/sidebar --skip-tests
 ng g s core/services/chat --skip-tests
+ng g s core/services/drag-scroll --skip-tests
+ng g s core/services/post --skip-tests
 
-
+ng g interface shared/models/chat-window
+ng g interface shared/models/chat-message
 
 
 

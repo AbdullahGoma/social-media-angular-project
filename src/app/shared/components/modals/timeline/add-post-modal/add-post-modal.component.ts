@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { PostService } from '../../../../../core/services/post.service';
 
 @Component({
   selector: 'app-add-post-modal',
@@ -20,6 +21,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class AddPostModalComponent {
   private modalService = inject(ModalService);
+  private postService = inject(PostService);
 
   // Form state
   postText = signal('');
@@ -183,14 +185,50 @@ export class AddPostModalComponent {
   // Submit post
   submitPost() {
     const postData = {
-      text: this.postText().trim(),
-      audience: this.audience(),
-      feeling: this.feeling(),
-      status: this.status(),
-      media: this.mediaFiles().map((f) => f.file),
+      author: {
+        name: 'Abdullah Gomaa',
+        avatar:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg',
+      },
+      content: this.postText().trim(),
+      images: this.mediaFiles().map((f) => f.preview),
+      feeling: this.feeling()
+        ? {
+            emoji:
+              this.feelingOptions.find((f) => f.value === this.feeling())
+                ?.emoji || '',
+            label:
+              this.feelingOptions.find((f) => f.value === this.feeling())
+                ?.label || '',
+          }
+        : undefined,
+      status: this.status()
+        ? {
+            emoji:
+              this.statusOptions.find((s) => s.value === this.status())
+                ?.emoji || '',
+            label:
+              this.statusOptions.find((s) => s.value === this.status())
+                ?.label || '',
+          }
+        : undefined,
+      date: this.formatCurrentDate(),
     };
 
+    this.postService.addPost(postData);
     this.closeModal();
+    this.resetForm();
+  }
+
+  private formatCurrentDate(): string {
+    const now = new Date();
+    const options: Intl.DateTimeFormatOptions = {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    };
+    const timeString = now.toLocaleTimeString('en-US', options);
+    return `${timeString} • Today`;
   }
 
   // Reset form

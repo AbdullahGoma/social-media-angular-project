@@ -53,326 +53,105 @@
       <input type="file" id="storyFileInput" accept="image/*" multiple hidden />
     </div>
 
-    <div class="album box">
-      <div class="status-main">
-        <img
-          src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
-          class="status-img profile-pic"
-        />
-        <div class="album-detail">
-          <div class="album-title">
-            <strong>Abdullah Gomaa</strong>
-            <span class="post-tag feeling-tag">😊 Happy</span>
-            <span class="post-tag status-tag">📺 Watching</span>
+    @for (post of posts(); track post.id) {
+      <div class="album box">
+        <div class="status-main">
+          <img [src]="post.author.avatar" class="status-img profile-pic" />
+          <div class="album-detail">
+            <div class="album-title">
+              <strong>{{ post.author.name }}</strong>
+              @if (post.feeling) {
+              <span class="post-tag feeling-tag">
+                {{ post.feeling.emoji }} {{ post.feeling.label }}
+              </span>
+              }
+              @if (post.status) {
+              <span class="post-tag status-tag">
+                {{ post.status.emoji }} {{ post.status.label }}
+              </span>
+              }
+            </div>
+            <div class="album-date">{{ post.date }}</div>
           </div>
-          <div class="album-date">2:30 PM • Today</div>
+          <button class="intro-menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+              <path
+                d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
+              />
+            </svg>
+          </button>
         </div>
-        <button class="intro-menu">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-            <path
-              d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="album-content">
-        <div class="album-text-wrapper">
-          <div class="album-text" data-expanded="false">
-            Check out these amazing moments from my weekend trip! The scenery
-            was breathtaking and the company was even better. Can't wait to go
-            back again soon! #NatureLover #WeekendGetaway
+        <div class="album-content">
+          <div class="album-text-wrapper">
+            <div class="album-text" [attr.data-expanded]="post.isExpanded">
+              {{ post.content }}
+            </div>
+            @if (!post.isExpanded) {
+            <button class="see-more-btn" (click)="toggleExpand(post.id)">
+              See More
+            </button>
+            }
           </div>
-          <button class="see-more-btn">See More</button>
-        </div>
-
-        <!-- Updated 4-image grid layout -->
-        <div class="album-photos four-images-grid">
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Mountain view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Sunset"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Lake view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Group photo"
-            class="album-photo"
-          />
-        </div>
-      </div>
-      <div class="album-actions">
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-            />
-          </svg>
-          42
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-            />
-          </svg>
-          13
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17 1l4 4-4 4" />
-            <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-            <path d="M21 13v2a4 4 0 01-4 4H3" />
-          </svg>
-          7
-        </a>
-      </div>
-    </div>
-
-    <div class="album box">
-      <div class="status-main">
-        <img
-          src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
-          class="status-img profile-pic"
-        />
-        <div class="album-detail">
-          <div class="album-title">
-            <strong>Abdullah Gomaa</strong>
-            <span class="post-tag feeling-tag">😊 Happy</span>
-            <span class="post-tag status-tag">📺 Watching</span>
+  
+          @if (post.images && post.images.length > 0) {
+          <div class="album-photos {{ getImageGridClass(post.images) }}">
+            @for (image of post.images; track $index) {
+            <img [src]="image" alt="Post image" class="album-photo" />
+            }
           </div>
-          <div class="album-date">2:30 PM • Today</div>
+          }
         </div>
-        <button class="intro-menu">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-            <path
-              d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="album-content">
-        <div class="album-text-wrapper">
-          <div class="album-text" data-expanded="false">
-            Check out these amazing moments from my weekend trip! The scenery
-            was breathtaking and the company was even better. Can't wait to go
-            back again soon! #NatureLover #WeekendGetaway
-          </div>
-          <button class="see-more-btn">See More</button>
-        </div>
-
-        <!-- Updated 4-image grid layout -->
-        <div class="album-photos four-images-grid">
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Mountain view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Sunset"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Lake view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Group photo"
-            class="album-photo"
-          />
-        </div>
-      </div>
-      <div class="album-actions">
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-            />
-          </svg>
-          42
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-            />
-          </svg>
-          13
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17 1l4 4-4 4" />
-            <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-            <path d="M21 13v2a4 4 0 01-4 4H3" />
-          </svg>
-          7
-        </a>
-      </div>
-    </div>
-
-    <div class="album box">
-      <div class="status-main">
-        <img
-          src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
-          class="status-img profile-pic"
-        />
-        <div class="album-detail">
-          <div class="album-title">
-            <strong>Abdullah Gomaa</strong>
-            <span class="post-tag feeling-tag">😊 Happy</span>
-            <span class="post-tag status-tag">📺 Watching</span>
-          </div>
-          <div class="album-date">2:30 PM • Today</div>
-        </div>
-        <button class="intro-menu">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-            <path
-              d="M0 48V487.7C0 501.1 10.9 512 24.3 512c5 0 9.9-1.5 14-4.4L192 400 345.7 507.6c4.1 2.9 9 4.4 14 4.4c13.4 0 24.3-10.9 24.3-24.3V48c0-26.5-21.5-48-48-48H48C21.5 0 0 21.5 0 48z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="album-content">
-        <div class="album-text-wrapper">
-          <div class="album-text" data-expanded="false">
-            Check out these amazing moments from my weekend trip! The scenery
-            was breathtaking and the company was even better. Can't wait to go
-            back again soon! #NatureLover #WeekendGetaway
-          </div>
-          <button class="see-more-btn">See More</button>
-        </div>
-
-        <!-- Updated 4-image grid layout -->
-        <div class="album-photos four-images-grid">
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Mountain view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Sunset"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Lake view"
-            class="album-photo"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
-            alt="Group photo"
-            class="album-photo"
-          />
+        <div class="album-actions">
+          <a href="#" class="album-action">
+            <svg
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+              />
+            </svg>
+            {{ post.likes }}
+          </a>
+          <a href="#" class="album-action">
+            <svg
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+              />
+            </svg>
+            {{ post.comments }}
+          </a>
+          <a href="#" class="album-action">
+            <svg
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+              viewBox="0 0 24 24"
+            >
+              <path d="M17 1l4 4-4 4" />
+              <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
+              <path d="M21 13v2a4 4 0 01-4 4H3" />
+            </svg>
+            {{ post.shares }}
+          </a>
         </div>
       </div>
-      <div class="album-actions">
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-            />
-          </svg>
-          42
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-            />
-          </svg>
-          13
-        </a>
-        <a href="#" class="album-action">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17 1l4 4-4 4" />
-            <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-            <path d="M21 13v2a4 4 0 01-4 4H3" />
-          </svg>
-          7
-        </a>
-      </div>
-    </div>
+      }
   </div>
 </div>
 
