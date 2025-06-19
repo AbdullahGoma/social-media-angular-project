@@ -3,11 +3,12 @@ import { ModalService } from '../../../core/services/modal.service';
 import { ModalType } from '../../../shared/models/modal-type';
 import { AddPostModalComponent } from '../../../shared/components/modals/timeline/add-post-modal/add-post-modal.component';
 import { PostService } from '../../../core/services/post.service';
+import { ImagePreviewModalComponent } from "../../../shared/components/modals/settings/image-preview-modal/image-preview-modal.component";
 
 @Component({
   selector: 'app-timeline-page',
   standalone: true,
-  imports: [AddPostModalComponent],
+  imports: [AddPostModalComponent, ImagePreviewModalComponent],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',
 })
@@ -39,5 +40,9 @@ export class TimelinePageComponent {
     if (count === 2) return 'two-images';
     if (count === 3) return 'three-images';
     return 'four-images';
+  }
+
+  previewImage(imageUrl: string) {
+    this.modalService.openModal(ModalType.ImagePreview, imageUrl);
   }
 }

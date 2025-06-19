@@ -606,6 +606,7 @@
     margin-top: 15px;
     border-radius: 8px;
     overflow: hidden;
+    cursor: pointer;
   }
 
   /* Four images layout - perfect 2x2 grid */

@@ -95,7 +95,12 @@
         @if (post.images && post.images.length > 0) {
         <div class="album-photos {{ getImageGridClass(post.images) }}">
           @for (image of post.images; track $index) {
-          <img [src]="image" alt="Post image" class="album-photo" />
+          <img
+            [src]="image"
+            alt="Post image"
+            class="album-photo"
+            (click)="previewImage(image)"
+          />
           }
         </div>
         }
@@ -155,3 +160,4 @@
 </div>
 
 <app-add-post-modal />
+<app-image-preview-modal />
