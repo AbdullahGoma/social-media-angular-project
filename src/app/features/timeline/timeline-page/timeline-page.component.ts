@@ -25,6 +25,13 @@ export class TimelinePageComponent {
     this.postService.toggleExpand(postId);
   }
 
+  shouldShowSeeMore(content: string): boolean {
+    const approxCharsPerLine = 100; // Approximate characters per line
+
+    // Simple character count estimation
+    return content.length > approxCharsPerLine * 3;
+  }
+
   getImageGridClass(images?: string[]): string {
     if (!images) return '';
     const count = images.length;
