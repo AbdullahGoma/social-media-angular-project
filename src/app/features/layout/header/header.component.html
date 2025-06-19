@@ -5,8 +5,8 @@
     <div class="user-controls">
       <button
         class="account-button notification-btn"
-        aria-controls="user-notifications"
-        aria-expanded="false"
+        (click)="toggleNotifications($event)"
+        [attr.aria-expanded]="isNotificationsOpen()"
       >
         <svg
           stroke="currentColor"
@@ -23,7 +23,10 @@
         </svg>
       </button>
 
-      <nav class="side-wrapper user-notifications" id="user-notifications">
+      <nav
+        class="side-wrapper user-notifications"
+        [class.active]="isNotificationsOpen()"
+      >
         <div class="notifications-title">Notifications</div>
         <ul class="notifications-space">
           <li class="user-notification">
@@ -51,13 +54,17 @@
         </ul>
       </nav>
 
-      <a class="account-user" aria-controls="user-nav" aria-expanded="false">
+      <a
+        class="account-user"
+        (click)="toggleUserMenu($event)"
+        [attr.aria-expanded]="isUserMenuOpen()"
+      >
         Abdullah
         <img src="assets/pic.jpg" alt="" class="account-profile" alt="" />
         <span>▼</span>
       </a>
 
-      <nav class="user-nav" id="user-nav">
+      <nav class="user-nav" [class.active]="isUserMenuOpen()">
         <ul role="list">
           <li><a href="/profile.html">My Profile</a></li>
           <li><a href="/settings.html">Settings</a></li>
@@ -70,7 +77,7 @@
   <button
     class="right-side-button"
     id="sidebarRight"
-    onclick="toggleSidebar('right', event)"
+    (click)="sidebarService.toggleSidebar('right')"
   >
     <svg
       viewBox="0 0 24 24"

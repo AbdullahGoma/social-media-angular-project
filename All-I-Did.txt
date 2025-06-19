@@ -72,6 +72,7 @@ confirmation email and forget password and signIn and sign up and two factor all
 # Generate layout components (shared after auth)
 ng g c features/layout/header --skip-tests
 ng g c features/layout/left-sidebar --skip-tests
+ng g c features/layout/overlay --skip-tests
 ng g c features/layout/right-sidebar --skip-tests 
 ng g c features/layout/layout-container --skip-tests 
 
@@ -131,7 +132,7 @@ type nul > src\app\features\layout\layout.routes.ts
 
 Second Day:--------------------------------------------------
 
-
+ng g s core/services/sidebar --skip-tests
 
 
 

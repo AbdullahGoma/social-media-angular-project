@@ -1,0 +1,1 @@
+<div class="overlay" id="overlay" onclick="closeSidebars()"></div>
