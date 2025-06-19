@@ -25,7 +25,7 @@
   <div class="side-wrapper contacts">
     <div class="side-title">CONTACTS</div>
     @for (contact of filteredContacts(); track contact.name) {
-    <div class="user">
+    <div class="user" (click)="openChat(contact)">
       <img [src]="contact.img" class="user-img" />
       <div class="username">
         {{ contact.name }}

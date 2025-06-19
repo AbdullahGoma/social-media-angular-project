@@ -133,6 +133,7 @@ type nul > src\app\features\layout\layout.routes.ts
 Second Day:--------------------------------------------------
 
 ng g s core/services/sidebar --skip-tests
+ng g s core/services/chat --skip-tests
 
 
 

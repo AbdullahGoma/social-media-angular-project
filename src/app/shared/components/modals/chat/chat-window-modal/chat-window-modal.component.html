@@ -1,1 +1,109 @@
-<p>chat-window-modal works!</p>
+<div
+  class="chat-window"
+  [class.minimized]="chatWindow().minimized"
+  [style.zIndex]="chatWindow().zIndex"
+  (mousedown)="bringToFront()"
+>
+  <div class="chat-header">
+    <div class="chat-title">
+      <img
+        [src]="chatWindow().contactImg"
+        [alt]="chatWindow().contactName"
+        class="user-img"
+      />
+      <span>{{ chatWindow().contactName }}</span>
+    </div>
+    <div class="chat-actions">
+      <button
+        class="chat-action-btn minimize-btn"
+        (click)="toggleMinimize()"
+        title="Minimize"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          fill="none"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          @if (!chatWindow().minimized) {
+          <ng-container>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </ng-container>
+          } @else {
+          <ng-container>
+            <path
+              d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"
+            ></path>
+          </ng-container>
+          }
+        </svg>
+      </button>
+      <button
+        class="chat-action-btn close-btn"
+        (click)="closeChat()"
+        title="Close"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          fill="none"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (!chatWindow().minimized) {
+  <div class="chat-messages-wrapper">
+    <div class="chat-messages" #messagesContainer (scroll)="onScroll()">
+      @for (message of chatWindow().messages; track $index) {
+      <div
+        class="message"
+        [class.sent]="message.isSent"
+        [class.received]="!message.isSent"
+      >
+        @if (message.imageUrl) {
+        <img [src]="message.imageUrl" class="message-image" />
+        } @if (message.text) {
+        <div>{{ message.text }}</div>
+        }
+        <div class="message-time">
+          {{ message.time | date : "shortTime" }}
+        </div>
+      </div>
+      }
+      <div class="auto-scroll"></div>
+    </div>
+  </div>
+  } @if (!chatWindow().minimized) {
+  <div class="chat-input-container">
+    <div class="chat-input-row">
+      <textarea
+        class="chat-input"
+        [ngModel]="messageText()"
+        (ngModelChange)="messageText.set($event)"
+        (keydown)="onKeyPress($event)"
+        placeholder="Type a message..."
+        rows="1"
+      ></textarea>
+      <button class="send-btn" (click)="sendMessage()" title="Send message">
+        <svg width="16" height="16" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+  }
+</div>

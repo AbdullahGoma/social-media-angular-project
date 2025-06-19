@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { SidebarService } from '../../../core/services/sidebar.service';
+import { ChatService } from '../../../core/services/chat.service';
 
 @Component({
   selector: 'app-right-sidebar',
@@ -10,6 +11,7 @@ import { SidebarService } from '../../../core/services/sidebar.service';
 })
 export class RightSidebarComponent {
   protected sidebarService = inject(SidebarService);
+  protected chatService = inject(ChatService);
   protected searchTerm = signal('');
   protected contacts = signal([
     { name: 'Andrei Mashrin', img: 'assets/pic.jpg', status: 'online' },
@@ -45,5 +47,9 @@ export class RightSidebarComponent {
   clearSearch(): void {
     this.searchTerm.set('');
     this.filteredContacts.set(this.contacts());
+  }
+
+  openChat(contact: any) {
+    this.chatService.openChat(contact.name, contact.img);
   }
 }

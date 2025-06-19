@@ -1,1 +1,5 @@
-<p>chat-container works!</p>
+<div class="chat-windows-container">
+  @for (chatWindow of chatWindows(); track chatWindow.id) {
+  <app-chat-window-modal [chatWindow]="chatWindow" />
+  }
+</div>
