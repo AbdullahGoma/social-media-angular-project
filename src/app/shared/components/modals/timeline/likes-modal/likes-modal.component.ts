@@ -17,14 +17,24 @@ export class LikesModalComponent {
   private modalService = inject(ModalService);
   private likeService = inject(LikeService);
 
+  private currentId = signal<string | null>(null);
   // Use signals to track which type of likes we're showing
   private modalType = signal<'post' | 'comment'>('post');
 
   // Combine both like sources
   likes = computed(() => {
-    return this.modalType() === 'post'
-      ? this.likeService.postLikes()
-      : this.likeService.commentLikes();
+    const id = this.currentId();
+    const type = this.modalType();
+
+    if (!id) return [];
+
+    if (type === 'post') {
+      return this.likeService.postLikes().filter((like) => like.postId === id);
+    } else {
+      return this.likeService
+        .commentLikes()
+        .filter((like) => like.commentId === id);
+    }
   });
 
   isModalOpenSignal = toSignal(
@@ -37,13 +47,21 @@ export class LikesModalComponent {
   private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
-    // When modal opens, determine if we're showing post or comment likes
     const sub = this.modalService
-      .getModalData<string>(ModalType.LikesModal)
+      .getModalData<{ id: string; type: 'post' | 'comment' }>(
+        ModalType.LikesModal
+      )
       .subscribe((data) => {
         if (data) {
-          // You might want to pass metadata to determine the type
-          this.modalType.set('comment'); // or 'post' based on data
+          this.currentId.set(data.id);
+          this.modalType.set(data.type);
+
+          // Load the appropriate likes
+          if (data.type === 'post') {
+            this.likeService.loadPostLikes(data.id);
+          } else {
+            this.likeService.loadCommentLikes(data.id);
+          }
         }
       });
 

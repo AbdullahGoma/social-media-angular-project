@@ -188,7 +188,9 @@ export class PostDetailsModalComponent implements OnInit {
    * @param postId The ID of the post to show likes for
    */
   openPostLikes(postId: string): void {
-    this.likeService.loadPostLikes(postId);
-    this.modalService.openModal(ModalType.LikesModal);
+    this.modalService.openModal(ModalType.LikesModal, {
+      id: postId,
+      type: 'post',
+    });
   }
 }

@@ -36,7 +36,9 @@ export class CommentComponent {
   }
 
   openLikes(): void {
-    this.likeService.loadCommentLikes(this.comment.id);
-    this.modalService.openModal(ModalType.LikesModal);
+    this.modalService.openModal(ModalType.LikesModal, {
+      id: this.comment.id,
+      type: 'comment',
+    });
   }
 }
