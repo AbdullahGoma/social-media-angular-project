@@ -89,6 +89,10 @@
     object-fit: cover;
   }
 
+  .post-detail-images:has(img:only-child) {
+    grid-template-columns: 1fr;
+  }
+
   .post-tags {
     display: flex;
     gap: 10px;
@@ -560,11 +564,7 @@
     background-color: var(--clr-bg-light);
     border-radius: var(--radius-md);
     padding: var(--space-sm);
-    margin-left: 50px; /* Consistent indentation for all reply levels */
-  }
-
-  .comment-box__item--reply .comment-box__text {
-    padding-left: 15px;
+    margin-left: 1rem; /* Consistent indentation for all reply levels */
   }
 
   /* Remove extra spacing for nested replies */

@@ -1,33 +1,77 @@
 // comment.service.ts
 import { Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Comment } from '../../shared/models/comment'; 
+import { Comment } from '../../shared/models/comment';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { delay, map } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
   private commentsSignal = signal<Comment[]>([]);
+  private currentPostId: string | null = null;
+
+  // Public observable for components to subscribe to
   comments$ = toObservable(this.commentsSignal);
 
-  // In a real app, call API here
+  /**
+   * Load comments for a specific post
+   * @param postId The ID of the post to load comments for
+   */
   loadComments(postId: string): Observable<Comment[]> {
-    // Simulate API call with delay
-    return of(this.generateMockComments(postId)).pipe(
-      delay(500),
-      map((comments) => {
-        this.commentsSignal.set(comments);
-        return comments;
+    this.currentPostId = postId;
+
+    // In a real app, replace this with actual API call
+    return this.fetchCommentsFromAPI(postId).pipe(
+      tap((comments) => {
+        this.commentsSignal.set(this.transformComments(comments));
       })
     );
   }
 
+  /**
+   * Add a new comment or reply
+   * @param postId The ID of the post being commented on
+   * @param content The comment text
+   * @param parentId The ID of the parent comment (for replies)
+   */
   addComment(
     postId: string,
     content: string,
     parentId: string | null = null
+  ): Observable<Comment> {
+    // In a real app, replace this with actual API call
+    return this.postCommentToAPI(postId, content, parentId).pipe(
+      tap((newComment) => {
+        if (parentId) {
+          this.addReplyToComment(parentId, newComment);
+        } else {
+          this.addTopLevelComment(newComment);
+        }
+      })
+    );
+  }
+
+  /**
+   * Clear all comments from state
+   */
+  clearComments() {
+    this.commentsSignal.set([]);
+    this.currentPostId = null;
+  }
+
+  // Private helper methods
+
+  private fetchCommentsFromAPI(postId: string): Observable<Comment[]> {
+    // Simulate API call with delay
+    return of(this.generateMockComments(postId)).pipe(delay(500));
+  }
+
+  private postCommentToAPI(
+    postId: string,
+    content: string,
+    parentId: string | null
   ): Observable<Comment> {
     const newComment: Comment = {
       id: Date.now().toString(),
@@ -42,19 +86,12 @@ export class CommentService {
       parentId,
     };
 
-    return of(newComment).pipe(
-      delay(300),
-      map((comment) => {
-        if (parentId) {
-          // Add as a reply
-          this.addReplyToComment(parentId, comment);
-        } else {
-          // Add as a top-level comment
-          this.commentsSignal.update((comments) => [comment, ...comments]);
-        }
-        return comment;
-      })
-    );
+    return of(newComment).pipe(delay(300));
+  }
+
+  private transformComments(comments: Comment[]): Comment[] {
+    // Convert flat comments array to nested structure if needed
+    return comments;
   }
 
   private addReplyToComment(parentId: string, reply: Comment) {
@@ -68,6 +105,10 @@ export class CommentService {
       parentComment.replies = [reply, ...parentComment.replies];
       this.commentsSignal.set(comments);
     }
+  }
+
+  private addTopLevelComment(comment: Comment) {
+    this.commentsSignal.update((comments) => [comment, ...comments]);
   }
 
   private findCommentById(
@@ -135,9 +176,5 @@ export class CommentService {
         likes: 5,
       },
     ];
-  }
-
-  clearComments() {
-    this.commentsSignal.set([]);
   }
 }

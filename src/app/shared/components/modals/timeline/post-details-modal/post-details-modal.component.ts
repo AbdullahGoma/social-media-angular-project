@@ -54,7 +54,7 @@ export class PostDetailsModalComponent implements OnInit {
       this.post.set(post);
 
       if (post) {
-        this.commentService.loadComments(post.id);
+        this.loadCommentsForPost(post.id);
       }
     });
 
@@ -62,8 +62,21 @@ export class PostDetailsModalComponent implements OnInit {
       this.comments.set(comments);
     });
 
-    this.destroyReferance.onDestroy(() => subscription.unsubscribe());
-    this.destroyReferance.onDestroy(() => subscriptionComments.unsubscribe());
+    this.destroyReferance.onDestroy(() => {
+      subscription.unsubscribe();
+      subscriptionComments.unsubscribe();
+    });
+  }
+
+  private loadCommentsForPost(postId: string) {
+    this.commentService.loadComments(postId).subscribe({
+      next: (comments) => {
+        // Comments are already set in the service
+      },
+      error: (err) => {
+        console.error('Failed to load comments:', err);
+      },
+    });
   }
 
   closeModal() {
