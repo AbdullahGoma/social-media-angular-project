@@ -150,4 +150,45 @@ export class PostDetailsModalComponent implements OnInit {
       this.modalService.openModal(ModalType.LikesModal, currentPost.id);
     }
   }
+
+  /**
+   * Toggle like on the current post
+   */
+  togglePostLike(): void {
+    if (this.post()) {
+      this.likeService.togglePostLike(this.post()!.id);
+      // Update local post likes count
+      this.post.update((p) => ({
+        ...p!,
+        likes: p!.likes + (p!.isLiked ? -1 : 1),
+        isLiked: !p!.isLiked,
+      }));
+    }
+  }
+
+  /**
+   * Toggle like on a comment
+   * @param commentId The ID of the comment to like/unlike
+   */
+  toggleCommentLike(commentId: string): void {
+    this.likeService.toggleCommentLike(commentId);
+  }
+
+  /**
+   * Open likes modal for a comment
+   * @param commentId The ID of the comment to show likes for
+   */
+  openCommentLikes(commentId: string): void {
+    this.likeService.loadCommentLikes(commentId);
+    this.modalService.openModal(ModalType.LikesModal);
+  }
+
+  /**
+   * Open likes modal for a post
+   * @param postId The ID of the post to show likes for
+   */
+  openPostLikes(postId: string): void {
+    this.likeService.loadPostLikes(postId);
+    this.modalService.openModal(ModalType.LikesModal);
+  }
 }

@@ -145,6 +145,7 @@ ng g interface shared/models/post
 
 
 Third Day:--------------------------------------------------
+Work On Post Details and Comments
 ng g interface shared/models/like
 ng g interface shared/models/comment
 ng g s core/services/comment --skip-tests

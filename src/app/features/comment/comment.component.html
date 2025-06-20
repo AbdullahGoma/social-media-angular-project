@@ -5,8 +5,9 @@
 >
   <div class="comment-box__content">
     <div class="comment-box__reactions">
-      <button class="comment-box__reaction-btn" aria-label="Like comment">
+      <button class="comment-box__reaction-btn" (click)="toggleLike()" aria-label="Like comment">
         <svg
+          [class.liked]="comment.isLiked"
           width="16"
           height="16"
           viewBox="0 0 24 24"
@@ -19,7 +20,7 @@
         </svg>
       </button>
       <hr class="comment-box__divider" />
-      <button class="comment-box__reaction-count" aria-label="View likes">
+      <button class="comment-box__reaction-count" (click)="openLikes()" aria-label="View likes">
         {{ comment.likes }}
       </button>
     </div>

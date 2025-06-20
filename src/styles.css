@@ -692,6 +692,17 @@
     margin-right: 6px;
   }
 
+
+  
+  .album-action-btn album-action-btn__like.liked {
+    fill: var(--clr-accent-4);
+  }
+
+  .album-action-btn album-action-btn__like path.liked {
+    stroke: var(--clr-accent-4);
+    fill: var(--clr-accent-4);
+  }
+
   /* ===== Responsive Styles ===== */
   @media screen and (max-width: 700px) {
     .profile-avatar {

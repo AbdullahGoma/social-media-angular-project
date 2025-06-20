@@ -19,4 +19,5 @@ export interface Post {
   comments: number;
   shares: number;
   isExpanded?: boolean;
+  isLiked?: boolean;
 }

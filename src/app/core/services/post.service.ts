@@ -108,6 +108,24 @@ export class PostService {
     this.selectedPostSignal.set(null);
   }
 
+  /**
+   * Toggle like on a post
+   * @param postId The ID of the post to like/unlike
+   */
+  toggleLike(postId: string): void {
+    const updatedPosts = this.posts.value.map((post) => {
+      if (post.id === postId) {
+        return {
+          ...post,
+          likes: post.likes + (post.isLiked ? -1 : 1),
+          isLiked: !post.isLiked,
+        };
+      }
+      return post;
+    });
+    this.posts.next(updatedPosts);
+  }
+
   private generateId(): string {
     return Math.random().toString(36).substring(2, 9);
   }

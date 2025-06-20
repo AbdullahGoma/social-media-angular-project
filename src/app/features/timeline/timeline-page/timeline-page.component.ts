@@ -56,4 +56,12 @@ export class TimelinePageComponent {
     this.postService.selectPost(postId);
     this.modalService.openModal(ModalType.PostDetails, postId); // Pass postId as data
   }
+
+  /**
+   * Toggle like on a post
+   * @param postId The ID of the post to like/unlike
+   */
+  togglePostLike(postId: string): void {
+    this.postService.toggleLike(postId);
+  }
 }

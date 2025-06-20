@@ -54,6 +54,22 @@ export class CommentService {
   }
 
   /**
+   * Toggle like on a comment
+   * @param commentId The ID of the comment to like/unlike
+   */
+  toggleCommentLike(commentId: string): void {
+    const comments = [...this.commentsSignal()];
+    const comment = this.findCommentById(comments, commentId);
+
+    if (comment) {
+      comment.likes = comment.likes || 0;
+      comment.likes += comment.isLiked ? -1 : 1;
+      comment.isLiked = !comment.isLiked;
+      this.commentsSignal.set(comments);
+    }
+  }
+
+  /**
    * Clear all comments from state
    */
   clearComments() {

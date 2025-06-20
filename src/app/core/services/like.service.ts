@@ -1,47 +1,158 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+// like.service.ts
+import { Injectable, signal } from '@angular/core';
 import { Like } from '../../shared/models/like';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LikeService {
-  private likes = new BehaviorSubject<Like[]>([]);
-  likes$ = this.likes.asObservable();
+  // Using signals for state management
+  public readonly postLikes = signal<Like[]>([]);
+  public readonly commentLikes = signal<Like[]>([]);
+  private currentPostId = signal<string | null>(null);
+  private currentCommentId = signal<string | null>(null);
 
-  loadLikes(postId: string) {
-    const mockLikes: Like[] = [
+  // Expose as observables
+  postLikes$ = toObservable(this.postLikes);
+  commentLikes$ = toObservable(this.commentLikes);
+
+  /**
+   * Load likes for a post
+   * @param postId The ID of the post to load likes for
+   */
+  loadPostLikes(postId: string): void {
+    this.currentPostId.set(postId);
+    // In a real app, replace with API call
+    const mockLikes = this.generateMockPostLikes(postId);
+    this.postLikes.set(mockLikes);
+  }
+
+  /**
+   * Load likes for a comment
+   * @param commentId The ID of the comment to load likes for
+   */
+  loadCommentLikes(commentId: string): void {
+    this.currentCommentId.set(commentId);
+    // In a real app, replace with API call
+    const mockLikes = this.generateMockCommentLikes(commentId);
+    this.commentLikes.set(mockLikes);
+  }
+
+  /**
+   * Toggle like on a post
+   * @param postId The ID of the post to like/unlike
+   */
+  togglePostLike(postId: string): void {
+    // In a real app, replace with API call
+    const currentUserId = 'current-user-id'; // Replace with actual user ID
+    const currentLikes = this.postLikes();
+
+    const existingLikeIndex = currentLikes.findIndex(
+      (like) => like.postId === postId && like.userId === currentUserId
+    );
+
+    if (existingLikeIndex >= 0) {
+      // Unlike
+      const updatedLikes = [...currentLikes];
+      updatedLikes.splice(existingLikeIndex, 1);
+      this.postLikes.set(updatedLikes);
+    } else {
+      // Like
+      const newLike: Like = {
+        id: Date.now().toString(),
+        postId,
+        userId: currentUserId,
+        userName: 'Current User',
+        userAvatar: 'assets/images/default-avatar.png',
+        timestamp: new Date().toISOString(),
+      };
+      this.postLikes.set([...currentLikes, newLike]);
+    }
+  }
+
+  /**
+   * Toggle like on a comment
+   * @param commentId The ID of the comment to like/unlike
+   */
+  toggleCommentLike(commentId: string): void {
+    // In a real app, replace with API call
+    const currentUserId = 'current-user-id'; // Replace with actual user ID
+    const currentLikes = this.commentLikes();
+
+    const existingLikeIndex = currentLikes.findIndex(
+      (like) => like.commentId === commentId && like.userId === currentUserId
+    );
+
+    if (existingLikeIndex >= 0) {
+      // Unlike
+      const updatedLikes = [...currentLikes];
+      updatedLikes.splice(existingLikeIndex, 1);
+      this.commentLikes.set(updatedLikes);
+    } else {
+      // Like
+      const newLike: Like = {
+        id: Date.now().toString(),
+        commentId,
+        userId: currentUserId,
+        userName: 'Current User',
+        userAvatar: 'assets/images/default-avatar.png',
+        timestamp: new Date().toISOString(),
+      };
+      this.commentLikes.set([...currentLikes, newLike]);
+    }
+  }
+
+  /**
+   * Clear all likes from state
+   */
+  clearLikes(): void {
+    this.postLikes.set([]);
+    this.commentLikes.set([]);
+    this.currentPostId.set(null);
+    this.currentCommentId.set(null);
+  }
+
+  // Private helper methods
+  private generateMockPostLikes(postId: string): Like[] {
+    return [
       {
         id: '1',
         postId,
         userId: 'user1',
         userName: 'Sarah Miller',
-        userAvatar: 'https://example.com/avatar1.jpg',
-        timestamp: '2 hours ago',
+        userAvatar: 'assets/images/avatar1.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
       },
       {
         id: '2',
         postId,
         userId: 'user2',
         userName: 'Michael Chen',
-        userAvatar: 'https://example.com/avatar2.jpg',
-        timestamp: '4 hours ago',
+        userAvatar: 'assets/images/avatar2.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 4).toISOString(),
       },
     ];
-    this.likes.next(mockLikes);
   }
 
-  toggleLike(postId: string) {
-    // Implement like toggle logic
-    console.log(`Toggling like for post ${postId}`);
-  }
-
-  toggleCommentLike(commentId: string) {
-    // Implement comment like toggle logic
-    console.log(`Toggling like for comment ${commentId}`);
-  }
-
-  clearLikes() {
-    this.likes.next([]);
+  private generateMockCommentLikes(commentId: string): Like[] {
+    return [
+      {
+        id: '3',
+        commentId,
+        userId: 'user3',
+        userName: 'Alex Johnson',
+        userAvatar: 'assets/images/avatar3.jpg',
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+      },
+      {
+        id: '4',
+        commentId,
+        userId: 'user4',
+        userName: 'Emily Wilson',
+        userAvatar: 'assets/images/avatar4.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
+      },
+    ];
   }
 }

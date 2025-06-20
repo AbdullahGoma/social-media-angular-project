@@ -111,6 +111,15 @@
     transition: all 0.2s ease;
   }
 
+  .comment-box__reaction-btn svg.liked {
+    fill: var(--clr-accent-4);
+  }
+
+  .comment-box__reaction-btn svg path.liked {
+    stroke: var(--clr-accent-4);
+    fill: var(--clr-accent-4);
+  }
+
   .comment-box__reaction-btn:hover:after {
     animation: ripple 0.6s ease-in-out forwards;
   }

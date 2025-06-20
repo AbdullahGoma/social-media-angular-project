@@ -10,4 +10,5 @@ export interface Comment {
   likes: number;
   parentId?: string | null; // null for top-level comments
   replies?: Comment[];
+  isLiked?: boolean;
 }
