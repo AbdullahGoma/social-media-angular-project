@@ -662,7 +662,8 @@
     margin-top: 12px;
   }
 
-  .album-action {
+  .album-action,
+  .album-action-btn {
     margin-right: 20px;
     text-decoration: none;
     color: var(--clr-text-muted);
@@ -673,11 +674,19 @@
     transition: color 0.2s;
   }
 
-  .album-action:hover {
+  .album-action-btn {
+    cursor: pointer;
+    background: none;
+    border: none;
+  }
+
+  .album-action:hover,
+  .album-action-btn:hover {
     color: var(--clr-text);
   }
 
-  .album-action svg {
+  .album-action svg,
+  .album-action-btn svg {
     width: 16px;
     height: 16px;
     margin-right: 6px;
@@ -739,7 +748,8 @@
       aspect-ratio: 1/1;
     }
 
-    .album-action {
+    .album-action,
+    .album-action-btn {
       margin-right: 15px;
       font-size: 13px;
     }
@@ -802,17 +812,17 @@
     border-radius: 8px;
     overflow: hidden;
   }
-  
+
   /* Single image layout */
   .single-image {
     grid-template-columns: 1fr;
   }
-  
+
   /* Two images layout */
   .two-images {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   /* Three images layout */
   .three-images {
     grid-template-columns: 1fr 1fr;
@@ -821,13 +831,13 @@
     grid-column: span 2;
     aspect-ratio: 2/1;
   }
-  
+
   /* Four images layout */
   .four-images {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
   }
-  
+
   /* Make all photos square and equal size */
   .album-photo {
     width: 100%;
@@ -836,11 +846,11 @@
     aspect-ratio: 1/1;
     transition: transform 0.3s ease;
   }
-  
+
   .album-photo:hover {
     transform: scale(1.02);
   }
-  
+
   /* Adjust aspect ratio for first image in 3-image layout */
   .three-images .album-photo:first-child {
     aspect-ratio: 2/1;

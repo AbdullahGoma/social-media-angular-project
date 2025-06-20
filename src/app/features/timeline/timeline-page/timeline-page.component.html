@@ -54,7 +54,7 @@
     </div>
 
     @for (post of posts(); track post.id) {
-    <div class="album box"  (click)="openPostDetails(post.id)">
+    <div class="album box">
       <div class="status-main">
         <img [src]="post.author.avatar" class="status-img profile-pic" />
         <div class="album-detail">
@@ -106,7 +106,7 @@
         }
       </div>
       <div class="album-actions">
-        <a href="#" class="album-action">
+        <button href="#" class="album-action-btn">
           <svg
             stroke="currentColor"
             stroke-width="2"
@@ -120,8 +120,8 @@
             />
           </svg>
           {{ post.likes }}
-        </a>
-        <a href="#" class="album-action">
+        </button>
+        <button href="#" class="album-action-btn" (click)="openPostDetails(post.id)">
           <svg
             stroke="currentColor"
             stroke-width="2"
@@ -136,8 +136,8 @@
             />
           </svg>
           {{ post.comments }}
-        </a>
-        <a href="#" class="album-action">
+        </button>
+        <button href="#" class="album-action-btn">
           <svg
             stroke="currentColor"
             stroke-width="2"
@@ -152,7 +152,7 @@
             <path d="M21 13v2a4 4 0 01-4 4H3" />
           </svg>
           {{ post.shares }}
-        </a>
+        </button>
       </div>
     </div>
     }
