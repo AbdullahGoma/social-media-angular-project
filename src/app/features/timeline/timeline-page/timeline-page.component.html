@@ -54,7 +54,7 @@
     </div>
 
     @for (post of posts(); track post.id) {
-    <div class="album box">
+    <div class="album box"  (click)="openPostDetails(post.id)">
       <div class="status-main">
         <img [src]="post.author.avatar" class="status-img profile-pic" />
         <div class="album-detail">
@@ -161,3 +161,4 @@
 
 <app-add-post-modal />
 <app-image-preview-modal />
+<app-post-details-modal />

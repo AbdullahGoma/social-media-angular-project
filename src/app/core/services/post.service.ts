@@ -1,44 +1,22 @@
 import { Injectable, signal } from '@angular/core';
 import { Post } from '../../shared/models/post';
+import { BehaviorSubject } from 'rxjs';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private posts = signal<Post[]>(this.generateDummyPosts());
+  private posts = new BehaviorSubject<Post[]>([]);
+  private selectedPostSignal = signal<Post | null>(null);
+  readonly selectedPost = this.selectedPostSignal;
 
-  get posts$() {
-    return this.posts.asReadonly();
-  }
+  posts$ = this.posts.asObservable();
+  selectedPost$ = toObservable(this.selectedPost);
 
-  addPost(newPost: Omit<Post, 'id' | 'likes' | 'comments' | 'shares'>) {
-    this.posts.update((posts) => [
-      {
-        ...newPost,
-        id: this.generateId(),
-        likes: 0,
-        comments: 0,
-        shares: 0,
-        isExpanded: false,
-      },
-      ...posts,
-    ]);
-  }
-
-  toggleExpand(postId: string) {
-    this.posts.update((posts) =>
-      posts.map((post) =>
-        post.id === postId ? { ...post, isExpanded: !post.isExpanded } : post
-      )
-    );
-  }
-
-  private generateId(): string {
-    return Math.random().toString(36).substring(2, 9);
-  }
-
-  private generateDummyPosts(): Post[] {
-    return [
+  constructor() {
+    // Initialize with mock data
+    this.posts.next([
       {
         id: '1',
         author: {
@@ -60,13 +38,13 @@ export class PostService {
         likes: 42,
         comments: 13,
         shares: 7,
+        isExpanded: false,
       },
       {
         id: '2',
         author: {
-          name: 'Abdullah Gomaa',
-          avatar:
-            'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg',
+          name: 'John Doe',
+          avatar: 'https://example.com/avatar3.jpg',
         },
         content:
           'Just finished reading an amazing book! Highly recommend it to everyone who loves science fiction.',
@@ -74,6 +52,7 @@ export class PostService {
         likes: 28,
         comments: 5,
         shares: 2,
+        isExpanded: false,
       },
       {
         id: '3',
@@ -92,6 +71,44 @@ export class PostService {
         comments: 8,
         shares: 3,
       },
-    ];
+    ]);
+  }
+
+  // Add new post
+  addPost(newPost: Omit<Post, 'id' | 'likes' | 'comments' | 'shares'>) {
+    const post: Post = {
+      ...newPost,
+      id: this.generateId(),
+      likes: 0,
+      comments: 0,
+      shares: 0,
+      isExpanded: false,
+    };
+    const currentPosts = this.posts.value;
+    this.posts.next([post, ...currentPosts]);
+    return post;
+  }
+
+  toggleExpand(postId: string) {
+    const posts = this.posts.value.map((post) => {
+      if (post.id === postId) {
+        return { ...post, isExpanded: !post.isExpanded };
+      }
+      return post;
+    });
+    this.posts.next(posts);
+  }
+
+  selectPost(postId: string) {
+    const post = this.posts.value.find((p) => p.id === postId);
+    this.selectedPostSignal.set(post || null);
+  }
+
+  clearSelectedPost() {
+    this.selectedPostSignal.set(null);
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substring(2, 9);
   }
 }

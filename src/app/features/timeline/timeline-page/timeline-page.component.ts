@@ -3,12 +3,18 @@ import { ModalService } from '../../../core/services/modal.service';
 import { ModalType } from '../../../shared/models/modal-type';
 import { AddPostModalComponent } from '../../../shared/components/modals/timeline/add-post-modal/add-post-modal.component';
 import { PostService } from '../../../core/services/post.service';
-import { ImagePreviewModalComponent } from "../../../shared/components/modals/settings/image-preview-modal/image-preview-modal.component";
+import { ImagePreviewModalComponent } from '../../../shared/components/modals/settings/image-preview-modal/image-preview-modal.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { PostDetailsModalComponent } from "../../../shared/components/modals/timeline/post-details-modal/post-details-modal.component";
 
 @Component({
   selector: 'app-timeline-page',
   standalone: true,
-  imports: [AddPostModalComponent, ImagePreviewModalComponent],
+  imports: [
+    AddPostModalComponent,
+    ImagePreviewModalComponent,
+    PostDetailsModalComponent,
+  ],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',
 })
@@ -16,7 +22,7 @@ export class TimelinePageComponent {
   private postService = inject(PostService);
   private modalService = inject(ModalService);
 
-  posts = this.postService.posts$;
+  posts = toSignal(this.postService.posts$, { initialValue: [] });
 
   openPostModal() {
     this.modalService.openModal(ModalType.AddPost);
@@ -44,5 +50,10 @@ export class TimelinePageComponent {
 
   previewImage(imageUrl: string) {
     this.modalService.openModal(ModalType.ImagePreview, imageUrl);
+  }
+
+  openPostDetails(postId: string) {
+    this.postService.selectPost(postId);
+    this.modalService.openModal(ModalType.PostDetails, postId); // Pass postId as data
   }
 }

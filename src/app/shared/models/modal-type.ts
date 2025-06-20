@@ -14,4 +14,5 @@ export enum ModalType {
   ProfileLock = 'profileLock',
   ImagePreview = 'imagePreview',
   AddReminder = 'addReminder',
+  LikesModal = 'likesModal',
 }

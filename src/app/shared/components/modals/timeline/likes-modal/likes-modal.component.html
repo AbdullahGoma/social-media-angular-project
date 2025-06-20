@@ -1,1 +1,23 @@
-<p>likes-modal works!</p>
+@if (likes()) {
+<div class="likes-overlay" [class.active]="isModalActive()">
+  <div class="likes-box">
+    <div class="likes-box__title-container">
+      <span class="likes-box__title">Likes</span>
+      <button class="box__close" (click)="closeModal()">&times;</button>
+    </div>
+    <div class="likes-box__items">
+      @for (like of likes(); track like.id) {
+      <div class="likes-box__item">
+        <div class="likes-box__avatar">
+          <img [src]="like.userAvatar" alt="User avatar" />
+        </div>
+        <div class="likes-box__user-info">
+          <span class="likes-box__username">{{ like.userName }}</span>
+          <p class="likes-box__timestamp">{{ like.timestamp }}</p>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
