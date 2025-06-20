@@ -694,14 +694,15 @@
 
 
   
-  .album-action-btn album-action-btn__like.liked {
+  .album-action-btn .album-action-btn__like.liked {
     fill: var(--clr-accent-4);
   }
-
-  .album-action-btn album-action-btn__like path.liked {
+  
+  .album-action-btn .album-action-btn__like.liked path {
     stroke: var(--clr-accent-4);
     fill: var(--clr-accent-4);
   }
+  
 
   /* ===== Responsive Styles ===== */
   @media screen and (max-width: 700px) {
