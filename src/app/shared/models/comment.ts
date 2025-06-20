@@ -6,7 +6,8 @@ export interface Comment {
     avatar: string;
   };
   content: string;
-  timestamp: string;
+  timestamp: string | Date;
   likes: number;
+  parentId?: string | null; // null for top-level comments
   replies?: Comment[];
 }

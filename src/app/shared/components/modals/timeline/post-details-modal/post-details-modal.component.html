@@ -1,187 +1,146 @@
 @if (post()) {
-  <div class="post-detail-modal" [class.active]="isModalActive()">
-    <div class="modal-content">
-      <button class="close-modal" (click)="closeModal()">&times;</button>
-  
-      <div class="post-detail-header">
-        <img [src]="post()!.author.avatar" class="profile-pic" />
-        <div>
-          <h3>{{ post()!.author.name }}</h3>
-          <div class="post-time">{{ post()?.date }}</div>
-        </div>
+<div class="post-detail-modal" [class.active]="isModalActive()">
+  <div class="modal-content">
+    <button class="close-modal" (click)="closeModal()">&times;</button>
+
+    <div class="post-detail-header">
+      <img [src]="post()!.author.avatar" class="profile-pic" />
+      <div>
+        <h3>{{ post()!.author.name }}</h3>
+        <div class="post-time">{{ post()?.date }}</div>
       </div>
-  
-      <div class="post-detail-content">
-        <p>{{ post()!.content }}</p>
-  
-        @if (post()!.images && post()!.images!.length) {
-        <div class="post-detail-images">
-          @for (image of post()?.images; track $index) {
-          <img [src]="image" alt="Post image" />
-          }
-        </div>
-        } @if (post()?.feeling || post()?.status) {
-        <div class="post-tags">
-          @if (post()?.feeling) {
-          <span class="post-tag feeling-tag">
-            {{ post()?.feeling?.emoji }} {{ post()?.feeling?.label }}
-          </span>
-          } @if (post()?.status) {
-          <span class="post-tag status-tag">
-            {{ post()?.status?.emoji }} {{ post()?.status?.label }}
-          </span>
-          }
-        </div>
+    </div>
+
+    <div class="post-detail-content">
+      <p>{{ post()!.content }}</p>
+
+      @if (post()!.images && post()!.images!.length) {
+      <div class="post-detail-images">
+        @for (image of post()?.images; track $index) {
+        <img [src]="image" alt="Post image" />
         }
       </div>
-  
-      <div class="post-detail-actions">
-        <button
-          class="action-btn like-btn"
-          (click)="likeService.toggleLike(post()!.id)"
-        >
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
-            />
-          </svg>
-          <span>{{ post()?.likes }}</span>
-        </button>
-        <button class="action-btn comment-btn">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-          </svg>
-          <span>{{ post()?.comments }}</span>
-        </button>
-        <button class="action-btn share-btn">
-          <svg
-            stroke="currentColor"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M17 1l4 4-4 4" />
-            <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
-            <path d="M21 13v2a4 4 0 01-4 4H3" />
-          </svg>
-          <span>{{ post()?.shares }}</span>
-        </button>
+      } @if (post()?.feeling || post()?.status) {
+      <div class="post-tags">
+        @if (post()?.feeling) {
+        <span class="post-tag feeling-tag">
+          {{ post()?.feeling?.emoji }} {{ post()?.feeling?.label }}
+        </span>
+        } @if (post()?.status) {
+        <span class="post-tag status-tag">
+          {{ post()?.status?.emoji }} {{ post()?.status?.label }}
+        </span>
+        }
       </div>
-  
-      <!-- Comment Section -->
-      <div class="post-comments">
-        <div class="comment-box__items">
-          @for (comment of comments(); track comment.id) {
-          <div class="comment-box__item">
-            <div class="comment-box__content">
-              <div class="comment-box__reactions">
-                <button
-                  class="comment-box__reaction-btn"
-                  (click)="likeService.toggleCommentLike(comment.id)"
-                >
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="var(--clr-icon)"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"
-                    />
-                  </svg>
-                </button>
-                <hr class="comment-box__divider" />
-                <button
-                  class="comment-box__reaction-count"
-                  (click)="openLikesModal()"
-                >
-                  {{ comment.likes }}
-                </button>
-              </div>
-              <div class="comment-box__body">
-                <div class="comment-box__user">
-                  <div class="comment-box__avatar">
-                    <img [src]="comment.author.avatar" alt="User avatar" />
-                  </div>
-                  <div class="comment-box__user-info">
-                    <span class="comment-box__username">{{
-                      comment.author.name
-                    }}</span>
-                    <time class="comment-box__timestamp">{{
-                      comment.timestamp
-                    }}</time>
-                  </div>
-                </div>
-                <p class="comment-box__text">{{ comment.content }}</p>
-              </div>
-            </div>
-          </div>
-          }
-        </div>
-  
-        <!-- Reply section -->
-        <div class="comment-box__reply">
-          <div class="comment-box__reply-container">
-            <textarea
-              class="comment-box__reply-input"
-              placeholder="Write your reply..."
-              [(ngModel)]="newComment"
-              (keydown.enter)="addComment()"
-            ></textarea>
-            <div class="comment-box__reply-actions">
-              <button
-                type="submit"
-                class="comment-box__send-btn"
-                (click)="addComment()"
-              >
-                <svg
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  height="18"
-                  width="18"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-width="2.5"
-                    stroke="var(--clr-text-light)"
-                    d="M12 5L12 20"
-                  />
-                  <path
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-width="2.5"
-                    stroke="var(--clr-text-light)"
-                    d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"
-                  />
-                </svg>
+      }
+    </div>
+
+    <div class="post-detail-actions">
+      <button
+        class="action-btn like-btn"
+        (click)="likeService.toggleLike(post()!.id)"
+      >
+        <svg
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+          />
+        </svg>
+        <span>{{ post()?.likes }}</span>
+      </button>
+      <button class="action-btn comment-btn">
+        <svg
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="css-i6dzq1"
+          viewBox="0 0 24 24"
+        >
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        <span>{{ post()?.comments }}</span>
+      </button>
+      <button class="action-btn share-btn">
+        <svg
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="css-i6dzq1"
+          viewBox="0 0 24 24"
+        >
+          <path d="M17 1l4 4-4 4" />
+          <path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4" />
+          <path d="M21 13v2a4 4 0 01-4 4H3" />
+        </svg>
+        <span>{{ post()?.shares }}</span>
+      </button>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="post-comments">
+      <div class="comment-box__items">
+        @for (comment of comments(); track comment.id) {
+          <app-comment 
+            [comment]="comment"
+            [isActive]="isCommentActive(comment.id)"
+            (replyClicked)="onReplyClicked($event)"
+          ></app-comment>
+        }
+      </div>
+      
+      <!-- Main comment input -->
+      <div class="comment-box__reply">
+        <div class="comment-box__reply-container">
+          @if (replyingToUsername) {
+            <div class="comment-box__replying-to">
+              Replying to {{ replyingToUsername }}
+              <button class="comment-box__cancel-reply" (click)="cancelReply()">
+                ×
               </button>
             </div>
+          }
+          <textarea
+            class="comment-box__reply-input"
+            [placeholder]="replyingToUsername ? 'Write your reply...' : 'Write a comment...'"
+            [(ngModel)]="newComment"
+            (keydown.enter)="addComment()"
+          ></textarea>
+          <div class="comment-box__reply-actions">
+            @if (replyingToUsername) {
+              <button
+                type="button"
+                class="comment-box__cancel-btn"
+                (click)="cancelReply()"
+              >
+                Cancel
+              </button>
+            }
+            <button
+              type="submit"
+              class="comment-box__send-btn"
+              (click)="addComment()"
+            >
+              <svg fill="none" viewBox="0 0 24 24" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="var(--clr-text-light)" d="M12 5L12 20"/>
+                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="var(--clr-text-light)" d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
-  <app-likes-modal />  
+</div>
+
+<app-likes-modal />
 }
