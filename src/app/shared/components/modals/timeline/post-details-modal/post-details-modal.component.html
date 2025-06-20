@@ -89,7 +89,7 @@
       <!-- Comment Section -->
       <div class="post-comments">
         <div class="comment-box__items">
-          @for (comment of comments$ | async; track comment.id) {
+          @for (comment of comments(); track comment.id) {
           <div class="comment-box__item">
             <div class="comment-box__content">
               <div class="comment-box__reactions">

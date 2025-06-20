@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Comment } from '../../shared/models/comment';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
-  private comments = new BehaviorSubject<Comment[]>([]);
-  comments$ = this.comments.asObservable();
+  private commentsSignal = signal<Comment[] | null>(null);
+  comments$ = toObservable(this.commentsSignal);
 
   loadComments(postId: string) {
     const mockComments: Comment[] = [
@@ -36,7 +37,7 @@ export class CommentService {
         ],
       },
     ];
-    this.comments.next(mockComments);
+    this.commentsSignal.set(mockComments);
   }
 
   addComment(postId: string, content: string) {
@@ -51,10 +52,10 @@ export class CommentService {
       timestamp: 'Just now',
       likes: 0,
     };
-    this.comments.next([...this.comments.value, newComment]);
+    this.commentsSignal.update((comments) => [...(comments ?? []), newComment]);
   }
 
   clearComments() {
-    this.comments.next([]);
+    this.commentsSignal.set([]);
   }
 }

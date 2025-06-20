@@ -33,7 +33,6 @@ export class LikesModalComponent {
   ngOnInit() {
     const subscription = this.likes$.subscribe((likes) => {
       this.likes.set(likes);
-      console.log(this.isModalActive());
     });
 
     this.destroyReferance.onDestroy(() => subscription.unsubscribe());

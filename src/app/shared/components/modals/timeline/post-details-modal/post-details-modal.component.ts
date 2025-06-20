@@ -9,7 +9,7 @@ import { CommentService } from '../../../../../core/services/comment.service';
 import { LikeService } from '../../../../../core/services/like.service';
 import { Observable } from 'rxjs';
 import { Post } from '../../../../models/post';
-
+import { Comment } from '../../../../models/comment'; 
 @Component({
   selector: 'app-post-details-modal',
   standalone: true,
@@ -22,10 +22,13 @@ export class PostDetailsModalComponent implements OnInit {
   private postService = inject(PostService);
   private commentService = inject(CommentService);
   protected likeService = inject(LikeService);
+
+
   post$: Observable<Post | null> = this.postService.selectedPost$;
   post = signal<Post | null>(null);
 
   comments$ = this.commentService.comments$;
+  comments = signal<Comment[] | null>(null);
   newComment = '';
 
   private destroyReferance = inject(DestroyRef);
@@ -39,9 +42,18 @@ export class PostDetailsModalComponent implements OnInit {
   ngOnInit() {
     const subscription = this.post$.subscribe((post) => {
       this.post.set(post);
+
+      if (post) {
+        this.commentService.loadComments(post.id);
+      }
+    });
+
+    const subscriptionComments = this.comments$.subscribe((comments) => {
+      this.comments.set(comments);
     });
 
     this.destroyReferance.onDestroy(() => subscription.unsubscribe());
+    this.destroyReferance.onDestroy(() => subscriptionComments.unsubscribe());
   }
 
   closeModal() {

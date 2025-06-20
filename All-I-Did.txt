@@ -147,6 +147,8 @@ ng g interface shared/models/post
 Third Day:--------------------------------------------------
 ng g interface shared/models/like
 ng g interface shared/models/comment
+ng g s core/services/comment --skip-tests
+ng g s core/services/like --skip-tests
 
 Forth Day:--------------------------------------------------
 
