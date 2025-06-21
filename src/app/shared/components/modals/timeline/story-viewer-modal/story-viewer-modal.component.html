@@ -1,1 +1,45 @@
-<p>story-viewer-modal works!</p>
+<div class="story-viewer" [class.active]="isModalOpen()">
+  <div class="story-content">
+    <div class="story-header">
+      <div class="user-info">
+        <img
+          class="user-avatar"
+          [src]="currentStory()?.image"
+          [alt]="currentStory()?.user"
+        />
+        <span class="user-name">{{ currentStory()?.user }}</span>
+      </div>
+      <button class="close-story" (click)="closeModal()">&times;</button>
+    </div>
+
+    <div
+      class="story-media"
+      #storyMedia
+      (click)="handleMediaClick($event)"
+      (mousedown)="handleMouseDown($event)"
+      (mousemove)="handleMouseMove($event)"
+      (mouseup)="handleMouseUp($event)"
+      (mouseleave)="handleMouseUp($event)"
+      (touchstart)="handleTouchStart($event)"
+      (touchmove)="handleTouchMove($event)"
+      (touchend)="handleTouchEnd($event)"
+    >
+      <img
+        #mediaImg
+        src=""
+        alt="Story"
+        (load)="onImageLoad()"
+        (error)="onImageError()"
+      />
+      <div #mediaText class="story-text-content"></div>
+    </div>
+
+    <div class="story-progress">
+      @for (progress of progressValues; track $index) {
+      <div class="progress-container">
+        <div class="progress-bar" [style.width.%]="progress"></div>
+      </div>
+      }
+    </div>
+  </div>
+</div>

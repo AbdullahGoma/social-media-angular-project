@@ -44,14 +44,7 @@
       </div>
     </div>
 
-    <div class="box">
-      <div class="stories-container">
-        <div class="stories-scroll">
-          <!-- Stories will be added here by JavaScript -->
-        </div>
-      </div>
-      <input type="file" id="storyFileInput" accept="image/*" multiple hidden />
-    </div>
+    <app-stories />
 
     @for (post of posts(); track post.id) {
     <div class="album box">
@@ -172,3 +165,4 @@
 <app-add-post-modal />
 <app-image-preview-modal />
 <app-post-details-modal />
+<app-story-viewer-modal />

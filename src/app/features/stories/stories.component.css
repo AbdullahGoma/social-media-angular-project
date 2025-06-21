@@ -1,4 +1,9 @@
 @layer stories {
+  .box {
+    background-color: var(--clr-primary);
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+  }
   /* Stories Container */
   .stories-container {
     padding: 1.5rem 0.5rem;
@@ -641,63 +646,6 @@
     .story-text-content {
       font-size: 14px;
       padding: 10px;
-    }
-  }
-
-  .story-media::before,
-  .story-media::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 30%;
-    z-index: 10;
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
-  }
-
-  .story-media::before {
-    left: 0;
-    background: linear-gradient(90deg, rgba(0, 0, 0, 0.3), transparent);
-  }
-
-  .story-media::after {
-    right: 0;
-    background: linear-gradient(270deg, rgba(0, 0, 0, 0.3), transparent);
-  }
-
-  .story-media.drag-left::before {
-    opacity: 1;
-  }
-
-  .story-media.drag-right::after {
-    opacity: 1;
-  }
-
-  /* Loading indicator */
-  .story-media.loading {
-    position: relative;
-  }
-
-  .story-media.loading::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #fff;
-    animation: spin 1s ease-in-out infinite;
-    z-index: 10;
-  }
-
-  @keyframes spin {
-    to {
-      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 }

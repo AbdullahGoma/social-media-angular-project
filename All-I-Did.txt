@@ -151,10 +151,10 @@ ng g interface shared/models/comment
 ng g s core/services/comment --skip-tests
 ng g s core/services/like --skip-tests
 ng g c features/comment --skip-tests 
+ng g s core/services/story --skip-tests
 
 
-
-
+ng g c features/stories --skip-tests 
 
 
 

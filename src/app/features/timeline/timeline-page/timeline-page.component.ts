@@ -6,6 +6,8 @@ import { PostService } from '../../../core/services/post.service';
 import { ImagePreviewModalComponent } from '../../../shared/components/modals/settings/image-preview-modal/image-preview-modal.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PostDetailsModalComponent } from "../../../shared/components/modals/timeline/post-details-modal/post-details-modal.component";
+import { StoriesComponent } from "../../stories/stories.component";
+import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
 
 @Component({
   selector: 'app-timeline-page',
@@ -14,7 +16,9 @@ import { PostDetailsModalComponent } from "../../../shared/components/modals/tim
     AddPostModalComponent,
     ImagePreviewModalComponent,
     PostDetailsModalComponent,
-  ],
+    StoriesComponent,
+    StoryViewerModalComponent
+],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',
 })
