@@ -32,9 +32,7 @@ export class AddPostModalComponent {
   mediaFiles = signal<{ file: File; preview: string }[]>([]);
   MAX_IMAGES = 4;
 
-  modalStatus = toSignal(this.modalService.isModalOpen(ModalType.AddPost), {
-    initialValue: false,
-  });
+  isModalOpen = this.modalService.isModalOpen(ModalType.AddPost);
 
   // Dropdown states
   showAudienceDropdown = false;

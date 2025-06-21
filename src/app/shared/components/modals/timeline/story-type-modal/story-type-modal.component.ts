@@ -1,7 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-story-type-modal',
@@ -12,18 +11,16 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class StoryTypeModalComponent {
   private modalService = inject(ModalService);
 
-  readonly isModalOpenSignal = toSignal(
-    this.modalService.isModalOpen(ModalType.StoryType),
-    { initialValue: false }
-  );
-
-  readonly isModalOpen = computed(() => this.isModalOpenSignal());
+  isModalOpen = this.modalService.isModalOpen(ModalType.StoryType);
 
   selectType(type: 'image' | 'text' | 'image-text') {
+    // Store the selected type in modal data
+    this.modalService.setModalData(ModalType.StoryType, { type });
+
     if (type === 'text') {
-      this.modalService.openModal(ModalType.TextEditor);
+      this.modalService.openModal(ModalType.TextEditor, { type });
     } else {
-      // Handle image or image-text
+      // Trigger file input click for image types
       document.getElementById('storyFileInput')?.click();
     }
     this.close();

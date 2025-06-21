@@ -61,9 +61,7 @@ export class StoryViewerModalComponent implements OnDestroy {
       }));
   });
 
-  isModalOpen = toSignal(this.modalService.isModalOpen(ModalType.StoryViewer), {
-    initialValue: false,
-  });
+  isModalOpen = this.modalService.isModalOpen(ModalType.StoryViewer);
 
   constructor() {
     // Auto-start progress when viewer becomes active

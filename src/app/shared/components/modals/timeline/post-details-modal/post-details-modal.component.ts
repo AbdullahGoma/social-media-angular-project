@@ -43,11 +43,7 @@ export class PostDetailsModalComponent implements OnInit {
 
   private destroyReferance = inject(DestroyRef);
 
-  isModalActive = computed(() => {
-    return this.modalService
-      .isModalOpen(ModalType.PostDetails)
-      .subscribe((isOpen) => isOpen);
-  });
+  isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
   ngOnInit() {
     const subscription = this.post$.subscribe((post) => {

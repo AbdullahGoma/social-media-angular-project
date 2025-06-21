@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, effect } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Story, StoryItem } from '../../shared/models/story';
 
 @Injectable({

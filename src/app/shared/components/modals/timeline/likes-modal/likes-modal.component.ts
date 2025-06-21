@@ -1,4 +1,11 @@
-import { Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
@@ -28,45 +35,36 @@ export class LikesModalComponent {
 
     if (!id) return [];
 
-    if (type === 'post') {
-      return this.likeService.postLikes().filter((like) => like.postId === id);
-    } else {
-      return this.likeService
-        .commentLikes()
-        .filter((like) => like.commentId === id);
-    }
+    return type === 'post'
+      ? this.likeService.postLikes().filter((like) => like.postId === id)
+      : this.likeService.commentLikes().filter((like) => like.commentId === id);
   });
 
-  isModalOpenSignal = toSignal(
-    this.modalService.isModalOpen(ModalType.LikesModal),
-    { initialValue: false }
-  );
-
-  isModalActive = computed(() => this.isModalOpenSignal());
+  isModalOpen = this.modalService.isModalOpen(ModalType.LikesModal);
 
   private destroyRef = inject(DestroyRef);
 
-  ngOnInit() {
-    const sub = this.modalService
-      .getModalData<{ id: string; type: 'post' | 'comment' }>(
-        ModalType.LikesModal
-      )
-      .subscribe((data) => {
-        if (data) {
-          this.currentId.set(data.id);
-          this.modalType.set(data.type);
+  private _effect = effect(
+    () => {
+      const data = this.modalService.getModalData<{
+        id: string;
+        type: 'post' | 'comment';
+      }>(ModalType.LikesModal)();
 
-          // Load the appropriate likes
-          if (data.type === 'post') {
-            this.likeService.loadPostLikes(data.id);
-          } else {
-            this.likeService.loadCommentLikes(data.id);
-          }
+      if (data) {
+        this.currentId.set(data.id);
+        this.modalType.set(data.type);
+
+        // ✅ Call appropriate loader to populate likes
+        if (data.type === 'post') {
+          this.likeService.loadPostLikes(data.id);
+        } else {
+          this.likeService.loadCommentLikes(data.id);
         }
-      });
-
-    this.destroyRef.onDestroy(() => sub.unsubscribe());
-  }
+      }
+    },
+    { allowSignalWrites: true }
+  );
 
   closeModal() {
     this.modalService.closeModal(ModalType.LikesModal);

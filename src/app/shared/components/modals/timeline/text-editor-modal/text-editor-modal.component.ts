@@ -17,26 +17,60 @@ export class TextEditorModalComponent {
   private modalService = inject(ModalService);
   private storyService = inject(StoryService);
 
-  isModalOpen = toSignal(this.modalService.isModalOpen(ModalType.TextEditor), {
-    initialValue: false,
-  });
+  isModalOpen = this.modalService.isModalOpen(ModalType.TextEditor);
+  modalData = this.modalService.getModalData<any>(ModalType.TextEditor);
 
   text = '';
   fontSize = '18px';
   textColor = '#ffffff';
   bgColor = '#000000';
   position: 'top' | 'center' | 'bottom' = 'bottom';
+  imageUrl: string | null = null;
+  storyType: 'text' | 'image' | 'image-text' = 'text';
+
+  constructor() {
+    // Get the image URL if passed from the story type modal
+    const data = this.modalData();
+    if (data?.imageUrl) {
+      this.imageUrl = data.imageUrl;
+      this.storyType = 'image-text';
+    } else if (data?.type) {
+      this.storyType = data.type;
+    }
+  }
 
   save() {
-    const newStory: StoryItem = {
-      id: Date.now().toString(),
-      type: 'text',
-      content: this.text,
-      background: this.bgColor,
-      color: this.textColor,
-      fontSize: this.fontSize,
-      position: this.position,
-    };
+    let newStory: StoryItem;
+
+    if (this.storyType === 'text') {
+      newStory = {
+        id: Date.now().toString(),
+        type: 'text',
+        content: this.text,
+        background: this.bgColor,
+        color: this.textColor,
+        fontSize: this.fontSize,
+        position: this.position,
+      };
+    } else if (this.storyType === 'image-text' && this.imageUrl) {
+      newStory = {
+        id: Date.now().toString(),
+        type: 'image-text',
+        url: this.imageUrl,
+        text: this.text,
+        color: this.textColor,
+        fontSize: this.fontSize,
+        position: this.position,
+      };
+    } else if (this.storyType === 'image' && this.imageUrl) {
+      newStory = {
+        id: Date.now().toString(),
+        type: 'image',
+        url: this.imageUrl,
+      };
+    } else {
+      return;
+    }
 
     // Add to stories
     this.storyService.addStory(newStory);

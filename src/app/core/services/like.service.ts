@@ -1,4 +1,3 @@
-// like.service.ts
 import { Injectable, signal } from '@angular/core';
 import { Like } from '../../shared/models/like';
 import { toObservable } from '@angular/core/rxjs-interop';

@@ -18,7 +18,7 @@
         }
       </div>
       
-      @if (currentUser()?.isMine) {
+      @if (currentUser().isMine) {
         <button class="delete-story" title="Delete Story" (click)="deleteStory()">🗑️</button>
       }
       

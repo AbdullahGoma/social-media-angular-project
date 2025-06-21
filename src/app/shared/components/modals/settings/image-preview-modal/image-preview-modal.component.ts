@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 import { combineLatest } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 
@@ -27,8 +27,10 @@ export class ImagePreviewModalComponent {
 
   constructor() {
     combineLatest([
-      this.modalService.getModalData<string>(ModalType.ImagePreview),
-      this.modalService.isModalOpen(ModalType.ImagePreview),
+      toObservable(
+        this.modalService.getModalData<string>(ModalType.ImagePreview)
+      ),
+      toObservable(this.modalService.isModalOpen(ModalType.ImagePreview)),
     ])
       .pipe(takeUntilDestroyed())
       .subscribe(([url, open]) => {

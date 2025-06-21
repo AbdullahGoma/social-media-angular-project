@@ -3,6 +3,7 @@ import { StoryService } from '../../core/services/story.service';
 import { DragScrollService } from '../../core/services/drag-scroll.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ModalType } from '../../shared/models/modal-type';
+import { StoryItem } from '../../shared/models/story';
 
 @Component({
   selector: 'app-stories',
@@ -40,13 +41,35 @@ export class StoriesComponent {
   handleFileInput(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      // Process the selected files
+      const file = input.files[0];
       const reader = new FileReader();
+
       reader.onload = (e) => {
         const imageUrl = e.target?.result as string;
-        this.modalService.openModal(ModalType.TextEditor, { imageUrl });
+        const storyType =
+          this.modalService.getModalData<{ type: string }>(
+            ModalType.StoryType
+          )()?.type || 'image';
+
+        if (storyType === 'image') {
+          // Create image-only story immediately
+          const newStory: StoryItem = {
+            id: Date.now().toString(),
+            type: 'image',
+            url: imageUrl,
+          };
+          this.storyService.addStory(newStory);
+        } else {
+          // Open text editor for image with text
+          this.modalService.openModal(ModalType.TextEditor, {
+            imageUrl,
+            type: 'image-text',
+          });
+        }
       };
-      reader.readAsDataURL(input.files[0]);
+
+      reader.readAsDataURL(file);
+      input.value = ''; // Reset input
     }
   }
 }

@@ -1,52 +1,54 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
+import { computed, Injectable, signal } from '@angular/core';
 import { ModalType } from '../../shared/models/modal-type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModalService {
-  private activeModals = new BehaviorSubject<ModalType[]>([]);
-  private modalData = new BehaviorSubject<{ [key: string]: any }>({});
+  // Use signals instead of BehaviorSubject
+  private activeModals = signal<ModalType[]>([]);
+  private modalData = signal<{ [key: string]: any }>({});
 
-  // Use getters for better encapsulation
-  get activeModals$() {
-    return this.activeModals
-      .asObservable()
-      .pipe(
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
-      );
-  }
+  // Computed signals for derived state
+  activeModalsList = computed(() => this.activeModals());
+  modalDataMap = computed(() => this.modalData());
 
+  // Check if a specific modal is open
   isModalOpen(modalName: ModalType) {
-    return this.activeModals.pipe(
-      map((modals) => modals.includes(modalName)),
-      distinctUntilChanged()
-    );
+    return computed(() => this.activeModals().includes(modalName));
   }
 
+  // Get data for a specific modal
   getModalData<T>(modalName: ModalType) {
-    return this.modalData.pipe(
-      map((data) => data[modalName] as T),
-      distinctUntilChanged()
-    );
+    return computed(() => this.modalData()[modalName] as T);
   }
 
+  // Open a modal with optional data
   openModal(modalName: ModalType, data?: any) {
-    const currentModals = this.activeModals.value;
+    const currentModals = this.activeModals();
     if (!currentModals.includes(modalName)) {
-      this.activeModals.next([...currentModals, modalName]);
+      this.activeModals.set([...currentModals, modalName]);
       if (data) {
-        this.modalData.next({
-          ...this.modalData.value,
+        this.modalData.update((currentData) => ({
+          ...currentData,
           [modalName]: data,
-        });
+        }));
       }
     }
   }
 
+  // Close a modal
   closeModal(modalName: ModalType) {
-    const currentModals = this.activeModals.value;
-    this.activeModals.next(currentModals.filter((m) => m !== modalName));
+    this.activeModals.update((currentModals) =>
+      currentModals.filter((m) => m !== modalName)
+    );
+  }
+
+  // Set data for a specific modal
+  setModalData(modalName: ModalType, data: any) {
+    this.modalData.update((currentData) => ({
+      ...currentData,
+      [modalName]: data,
+    }));
   }
 }

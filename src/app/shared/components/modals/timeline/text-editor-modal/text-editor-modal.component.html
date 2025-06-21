@@ -1,6 +1,12 @@
 <div class="text-editor-modal" [class.active]="isModalOpen()">
   <div class="editor-content">
-    <h3>Add Your Text</h3>
+    <h3>{{ imageUrl ? "Add Text to Image" : "Add Your Text" }}</h3>
+
+    @if (imageUrl) {
+    <div class="image-preview">
+      <img [src]="imageUrl" alt="Story image" />
+    </div>
+    }
 
     <textarea
       [(ngModel)]="text"
