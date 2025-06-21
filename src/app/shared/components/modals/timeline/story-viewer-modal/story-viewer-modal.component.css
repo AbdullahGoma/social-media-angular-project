@@ -927,4 +927,20 @@
       background-position: 0% 50%;
     }
   }
+
+  .progress-bar {
+    transition: width 0.1s linear;
+    will-change: width;
+    transform: translateZ(0); /* Force hardware acceleration */
+  }
+
+  .story-media.loading img {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .story-media img {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
 }

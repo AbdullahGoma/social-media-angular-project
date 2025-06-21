@@ -140,18 +140,21 @@ export class StoryService {
     const storyItemIndex = this._currentStoryItemIndex();
     const stories = this._stories();
 
+    // Check if there are more stories for current user
     if (storyItemIndex < stories[userIndex].stories.length - 1) {
       this._currentStoryItemIndex.update((val) => val + 1);
-    } else if (userIndex < stories.length - 1) {
+      this.startProgress();
+    }
+    // Check if there are more users
+    else if (userIndex < stories.length - 1) {
       this._currentUserIndex.update((val) => val + 1);
       this._currentStoryItemIndex.set(0);
-    } else {
-      this.closeStory();
-      return; // Don't start progress if we're closing
+      this.startProgress();
     }
-
-    // Only start progress if not closing
-    this.startProgress();
+    // Otherwise close the viewer
+    else {
+      this.closeStory();
+    }
   }
 
   goToPrev() {
@@ -162,13 +165,16 @@ export class StoryService {
     const stories = this._stories();
 
     if (storyItemIndex > 0) {
+      // Previous story in current user
       this._currentStoryItemIndex.update((val) => val - 1);
     } else if (userIndex > 0) {
+      // Move to previous user's last story
       this._currentUserIndex.update((val) => val - 1);
       this._currentStoryItemIndex.set(
         stories[userIndex - 1].stories.length - 1
       );
     }
+    // No action needed if at first story of first user
 
     this.startProgress();
   }

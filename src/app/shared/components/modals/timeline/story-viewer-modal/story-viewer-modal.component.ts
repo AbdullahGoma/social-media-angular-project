@@ -93,7 +93,7 @@ export class StoryViewerModalComponent implements OnDestroy {
       const index = this.storyService.currentStoryItemIndex();
       untracked(() => {
         this.currentProgress.set(0);
-        this.startProgress();
+        this.imageLoaded.set(false); // Reset loaded state when story changes
       });
     });
 
@@ -119,6 +119,13 @@ export class StoryViewerModalComponent implements OnDestroy {
   }
 
   private startProgress() {
+    this.clearProgressInterval();
+
+    // Don't start if image isn't loaded or viewer is paused
+    if (!this.imageLoaded() || this.storyService.isPaused()) {
+      return;
+    }
+
     this.clearProgressInterval();
     this.currentProgress.set(0);
     this.startTime.set(Date.now());
@@ -149,12 +156,15 @@ export class StoryViewerModalComponent implements OnDestroy {
     const userIndex = this.storyService.currentUserIndex();
     const storyIndex = this.storyService.currentStoryItemIndex();
 
-    if (storyIndex < stories[userIndex].stories.length - 1) {
-      this.storyService.goToNext();
-    } else if (userIndex < stories.length - 1) {
+    // If we're not at the end, let the service handle navigation
+    if (
+      storyIndex < stories[userIndex].stories.length - 1 ||
+      userIndex < stories.length - 1
+    ) {
       this.storyService.goToNext();
     } else {
-      this.storyService.closeStory();
+      // We're at the very end - close the viewer
+      this.closeStory();
     }
   }
 
@@ -210,9 +220,10 @@ export class StoryViewerModalComponent implements OnDestroy {
     if (clickX >= width * 0.3 && clickX <= width * 0.7) {
       this.togglePause();
     } else if (clickX > width * 0.7) {
-      this.goToNext();
+      // This will now properly handle end-of-stories case
+      this.storyService.goToNext();
     } else if (clickX < width * 0.3) {
-      this.goToPrev();
+      this.storyService.goToPrev();
     }
   }
 
