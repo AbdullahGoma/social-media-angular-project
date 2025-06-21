@@ -4,12 +4,14 @@ import { DragScrollService } from '../../core/services/drag-scroll.service';
 import { ModalService } from '../../core/services/modal.service';
 import { ModalType } from '../../shared/models/modal-type';
 import { StoryItem } from '../../shared/models/story';
+import { StoryTypeModalComponent } from "../../shared/components/modals/timeline/story-type-modal/story-type-modal.component";
 
 @Component({
   selector: 'app-stories',
   standalone: true,
   templateUrl: './stories.component.html',
   styleUrls: ['./stories.component.css'],
+  imports: [StoryTypeModalComponent],
 })
 export class StoriesComponent {
   @ViewChild('storiesScroll') storiesScroll!: ElementRef<HTMLDivElement>;
@@ -20,6 +22,7 @@ export class StoriesComponent {
   private modalService = inject(ModalService);
 
   stories = this.storyService.stories;
+  private selectedType: 'image' | 'text' | 'image-text' = 'image';
 
   ngAfterViewInit() {
     this.dragScrollService.initialize(this.storiesScroll);
@@ -36,6 +39,16 @@ export class StoriesComponent {
 
   openAddStoryModal() {
     this.modalService.openModal(ModalType.StoryType);
+  }
+
+  onTypeSelected(type: 'image' | 'text' | 'image-text') {
+    this.selectedType = type;
+    if (type !== 'text') {
+      // Trigger file input after a small delay to ensure modal is closed
+      setTimeout(() => {
+        this.fileInput.nativeElement.click();
+      }, 100);
+    }
   }
 
   handleFileInput(event: Event) {

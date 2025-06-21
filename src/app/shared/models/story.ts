@@ -21,4 +21,5 @@ export interface StoryItem {
   color?: string;
   position?: 'top' | 'center' | 'bottom';
   timestamp?: string;
+  createdAt?: string;
 }

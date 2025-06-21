@@ -61,9 +61,7 @@ export class StoryService {
   // Add this method to handle adding new stories
   addStory(storyItem: StoryItem) {
     const stories = this._stories();
-    const myStoryIndex = stories.findIndex(
-      (story) => story.user === 'Your Story'
-    );
+    const myStoryIndex = stories.findIndex((story) => story.isMine);
 
     if (myStoryIndex >= 0) {
       // Add to existing "Your Story"

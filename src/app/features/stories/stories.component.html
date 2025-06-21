@@ -36,5 +36,14 @@
       }
     </div>
   </div>
-  <input type="file" id="storyFileInput" #fileInput accept="image/*" multiple hidden />
+  <input 
+    type="file" 
+    #fileInput 
+    id="storyFileInput" 
+    accept="image/*" 
+    hidden 
+    (change)="handleFileInput($event)"
+  />
+  
+  <app-story-type-modal (typeSelected)="onTypeSelected($event)" />
 </div>

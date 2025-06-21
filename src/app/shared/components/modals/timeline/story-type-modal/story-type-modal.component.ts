@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 
@@ -10,6 +10,7 @@ import { ModalType } from '../../../../models/modal-type';
 })
 export class StoryTypeModalComponent {
   private modalService = inject(ModalService);
+  @Output() typeSelected = new EventEmitter<'image' | 'text' | 'image-text'>();
 
   isModalOpen = this.modalService.isModalOpen(ModalType.StoryType);
 
@@ -19,11 +20,12 @@ export class StoryTypeModalComponent {
 
     if (type === 'text') {
       this.modalService.openModal(ModalType.TextEditor, { type });
+      this.close();
     } else {
-      // Trigger file input click for image types
-      document.getElementById('storyFileInput')?.click();
+      // Emit the type to parent component
+      this.typeSelected.emit(type);
+      this.close();
     }
-    this.close();
   }
 
   close() {

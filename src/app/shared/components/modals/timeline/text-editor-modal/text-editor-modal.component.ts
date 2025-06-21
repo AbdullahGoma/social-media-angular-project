@@ -51,6 +51,7 @@ export class TextEditorModalComponent {
         color: this.textColor,
         fontSize: this.fontSize,
         position: this.position,
+        createdAt: new Date().toISOString(),
       };
     } else if (this.storyType === 'image-text' && this.imageUrl) {
       newStory = {
@@ -61,12 +62,7 @@ export class TextEditorModalComponent {
         color: this.textColor,
         fontSize: this.fontSize,
         position: this.position,
-      };
-    } else if (this.storyType === 'image' && this.imageUrl) {
-      newStory = {
-        id: Date.now().toString(),
-        type: 'image',
-        url: this.imageUrl,
+        createdAt: new Date().toISOString(),
       };
     } else {
       return;
