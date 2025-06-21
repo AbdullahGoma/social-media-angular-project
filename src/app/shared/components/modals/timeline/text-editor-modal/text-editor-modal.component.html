@@ -1,0 +1,73 @@
+<div class="text-editor-modal">
+  <div class="editor-content">
+    <h3>Add Your Text</h3>
+
+    <textarea
+      [(ngModel)]="text"
+      placeholder="Enter your story text"
+      (keydown.enter)="$event.preventDefault()"
+    ></textarea>
+
+    <div class="text-controls">
+      <label>
+        Font Size:
+        <select [(ngModel)]="fontSize" class="font-size">
+          <option value="14px">Small</option>
+          <option value="18px" selected>Medium</option>
+          <option value="24px">Large</option>
+        </select>
+      </label>
+
+      <label>
+        Text Color:
+        <input
+          type="color"
+          [(ngModel)]="textColor"
+          class="text-color"
+          value="#ffffff"
+        />
+      </label>
+
+      <label>
+        Background:
+        <input
+          type="color"
+          [(ngModel)]="bgColor"
+          class="bg-color"
+          value="#000000"
+        />
+      </label>
+    </div>
+
+    <div class="position-selector">
+      <div
+        class="position-option"
+        [class.selected]="position === 'top'"
+        (click)="selectPosition('top')"
+      >
+        Top
+      </div>
+
+      <div
+        class="position-option"
+        [class.selected]="position === 'center'"
+        (click)="selectPosition('center')"
+      >
+        Center
+      </div>
+
+      <div
+        class="position-option"
+        [class.selected]="position === 'bottom'"
+        (click)="selectPosition('bottom')"
+      >
+        Bottom
+      </div>
+    </div>
+
+    <div class="editor-buttons">
+      <button class="save-text-btn" (click)="save()">Save</button>
+      <button class="cancel-text-btn" (click)="close()">Cancel</button>
+    </div>
+  </div>
+</div>

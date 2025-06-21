@@ -8,6 +8,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { PostDetailsModalComponent } from "../../../shared/components/modals/timeline/post-details-modal/post-details-modal.component";
 import { StoriesComponent } from "../../stories/stories.component";
 import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
+import { StoryTypeModalComponent } from "../../../shared/components/modals/timeline/story-type-modal/story-type-modal.component";
+import { TextEditorModalComponent } from "../../../shared/components/modals/timeline/text-editor-modal/text-editor-modal.component";
 
 @Component({
   selector: 'app-timeline-page',
@@ -17,7 +19,9 @@ import { StoryViewerModalComponent } from "../../../shared/components/modals/tim
     ImagePreviewModalComponent,
     PostDetailsModalComponent,
     StoriesComponent,
-    StoryViewerModalComponent
+    StoryViewerModalComponent,
+    StoryTypeModalComponent,
+    TextEditorModalComponent
 ],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',

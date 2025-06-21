@@ -1,7 +1,8 @@
 <div class="box">
   <div class="stories-container">
     <div class="stories-scroll" #storiesScroll>
-      <div class="story-item add-story-item" (click)="fileInput.click()">
+      <!-- Add Story Button -->
+      <div class="story-item add-story-item" (click)="openAddStoryModal()">
         <div class="add-story-circle">
           <svg
             class="add-story-icon"
@@ -20,11 +21,12 @@
         <div class="story-user">Add Story</div>
       </div>
 
-      @for (story of storyService.storiesSignal(); track story.id) {
+      <!-- Stories List -->
+      @for (story of stories(); track story.id; let i = $index) {
       <div
         class="story-item"
         [class.viewed]="story.viewed"
-        (click)="openStory(story)"
+        (click)="openStory(i)"
       >
         <div class="story-image" [class.viewed]="story.viewed">
           <img [src]="story.image" [alt]="story.user" />
@@ -34,11 +36,5 @@
       }
     </div>
   </div>
-  <input
-    #fileInput
-    type="file"
-    accept="image/*"
-    hidden
-    (change)="handleFileInput($event)"
-  />
+  <input type="file" id="storyFileInput" accept="image/*" multiple hidden />
 </div>

@@ -15,4 +15,6 @@ export enum ModalType {
   ImagePreview = 'imagePreview',
   AddReminder = 'addReminder',
   LikesModal = 'likesModal',
+  StoryType = 'storyType',
+  TextEditor = 'textEditor',
 }

@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ModalService } from '../../../../../core/services/modal.service';
+import { ModalType } from '../../../../models/modal-type';
 
 @Component({
   selector: 'app-add-story-modal',
   standalone: true,
-  imports: [],
   templateUrl: './add-story-modal.component.html',
-  styleUrl: './add-story-modal.component.css'
+  styleUrls: ['./add-story-modal.component.css'],
 })
 export class AddStoryModalComponent {
+  private modalService = inject(ModalService);
 
+  openStoryTypeModal() {
+    this.modalService.openModal(ModalType.StoryType);
+  }
+
+  close() {
+    this.modalService.closeModal(ModalType.AddStory);
+  }
 }

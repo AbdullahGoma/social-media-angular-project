@@ -1,0 +1,130 @@
+@layer text-editor {
+  .text-editor-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .text-editor-modal .editor-content {
+    background: var(--bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+  }
+
+  .text-editor-modal h3 {
+    color: hsl(var(--clr-white));
+    margin-bottom: 15px;
+  }
+
+  .text-editor-modal textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: none;
+    resize: none;
+  }
+
+  .text-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+
+  .text-controls label {
+    color: hsl(var(--clr-white));
+    font-size: 14px;
+    display: block;
+  }
+
+  .text-controls select,
+  .text-controls input[type="color"] {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    border: none;
+  }
+
+  .position-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  .position-option {
+    background: var(--clr-bg-light);
+    color: hsl(var(--clr-white));
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    flex: 1;
+    margin: 0 5px;
+    text-align: center;
+  }
+
+  .position-option.selected {
+    background: var(--clr-accent);
+  }
+
+  .editor-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .editor-buttons button {
+    flex: 1;
+    padding: 0.125rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .save-text-btn {
+    background: var(--clr-secondary);
+    color: white;
+  }
+
+  .cancel-text-btn {
+    background: #f44336;
+    color: white;
+  }
+
+  /* Enhanced Text Display */
+  .story-text-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    text-align: center;
+    word-break: break-word;
+    font-family: "Arial", sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    max-height: 50%;
+    overflow-y: auto;
+  }
+
+  .text-top {
+    top: 10%;
+  }
+
+  .text-center {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .text-bottom {
+    bottom: 10%;
+  }
+}

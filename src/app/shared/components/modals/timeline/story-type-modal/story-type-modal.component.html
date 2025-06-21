@@ -1,0 +1,22 @@
+<div class="story-type-modal">
+  <div class="modal-content">
+    <h3>Select Story Type</h3>
+
+    <div class="type-option" (click)="selectType('image')">
+      <div class="option-icon">🖼️</div>
+      <span>Image Only</span>
+    </div>
+
+    <div class="type-option" (click)="selectType('text')">
+      <div class="option-icon">✏️</div>
+      <span>Text Only</span>
+    </div>
+
+    <div class="type-option" (click)="selectType('image-text')">
+      <div class="option-icon">🖼️+✏️</div>
+      <span>Image with Text</span>
+    </div>
+
+    <button class="cancel-btn" (click)="close()">Cancel</button>
+  </div>
+</div>

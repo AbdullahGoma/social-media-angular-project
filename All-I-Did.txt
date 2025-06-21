@@ -163,9 +163,9 @@ ng g c features/stories --skip-tests
 
 
 
-
-
 Forth Day:--------------------------------------------------
+ng g c shared/components/modals/timeline/story-type-modal --skip-tests 
+ng g c shared/components/modals/timeline/text-editor-modal --skip-tests
 
 
 
