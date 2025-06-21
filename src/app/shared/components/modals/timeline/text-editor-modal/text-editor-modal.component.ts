@@ -4,17 +4,22 @@ import { StoryService } from '../../../../../core/services/story.service';
 import { StoryItem } from '../../../../models/story';
 import { ModalType } from '../../../../models/modal-type';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-text-editor-modal',
   standalone: true,
   templateUrl: './text-editor-modal.component.html',
   styleUrls: ['./text-editor-modal.component.css'],
-  imports: [FormsModule]
+  imports: [FormsModule],
 })
 export class TextEditorModalComponent {
   private modalService = inject(ModalService);
   private storyService = inject(StoryService);
+
+  isModalOpen = toSignal(this.modalService.isModalOpen(ModalType.TextEditor), {
+    initialValue: false,
+  });
 
   text = '';
   fontSize = '18px';

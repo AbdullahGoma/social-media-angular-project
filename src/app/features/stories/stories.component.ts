@@ -12,6 +12,7 @@ import { ModalType } from '../../shared/models/modal-type';
 })
 export class StoriesComponent {
   @ViewChild('storiesScroll') storiesScroll!: ElementRef<HTMLDivElement>;
+  @ViewChild('fileInput', { static: false }) fileInput!: ElementRef;
 
   private storyService = inject(StoryService);
   private dragScrollService = inject(DragScrollService);
@@ -34,5 +35,18 @@ export class StoriesComponent {
 
   openAddStoryModal() {
     this.modalService.openModal(ModalType.StoryType);
+  }
+
+  handleFileInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      // Process the selected files
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result as string;
+        this.modalService.openModal(ModalType.TextEditor, { imageUrl });
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
   }
 }

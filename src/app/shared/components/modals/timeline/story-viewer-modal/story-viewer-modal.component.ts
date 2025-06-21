@@ -25,9 +25,10 @@ export class StoryViewerModalComponent implements OnDestroy {
   // State signals
   currentProgress = signal<number>(0);
   private progressInterval: number | null = null;
-  private isDragging = signal<boolean>(false);
+  protected isDragging = signal<boolean>(false);
   private touchStartX = signal<number>(0);
   private touchStartY = signal<number>(0);
+  private imageLoaded = signal<boolean>(false);
 
   // Computed values
   currentUser = computed(() => {
@@ -60,12 +61,9 @@ export class StoryViewerModalComponent implements OnDestroy {
       }));
   });
 
-  readonly isModalOpenSignal = toSignal(
-    this.modalService.isModalOpen(ModalType.StoryViewer),
-    { initialValue: false }
-  );
-
-  readonly isModalOpen = computed(() => this.isModalOpenSignal());
+  isModalOpen = toSignal(this.modalService.isModalOpen(ModalType.StoryViewer), {
+    initialValue: false,
+  });
 
   constructor() {
     // Auto-start progress when viewer becomes active
@@ -129,9 +127,18 @@ export class StoryViewerModalComponent implements OnDestroy {
     }
   }
 
+  onImageLoad() {
+    this.imageLoaded.set(true);
+  }
+
+  onImageError() {
+    this.imageLoaded.set(false);
+  }
+
   // Public methods
   closeStory() {
     this.storyService.closeStory();
+    this.modalService.closeModal(ModalType.StoryViewer);
   }
 
   togglePause() {

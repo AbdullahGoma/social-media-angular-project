@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-story-type-modal',
@@ -10,6 +11,13 @@ import { ModalType } from '../../../../models/modal-type';
 })
 export class StoryTypeModalComponent {
   private modalService = inject(ModalService);
+
+  readonly isModalOpenSignal = toSignal(
+    this.modalService.isModalOpen(ModalType.StoryType),
+    { initialValue: false }
+  );
+
+  readonly isModalOpen = computed(() => this.isModalOpenSignal());
 
   selectType(type: 'image' | 'text' | 'image-text') {
     if (type === 'text') {

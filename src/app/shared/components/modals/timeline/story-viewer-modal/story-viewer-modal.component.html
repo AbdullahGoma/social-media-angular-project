@@ -25,9 +25,9 @@
       <button class="close-story" (click)="closeStory()">&times;</button>
     </div>
 
-    <div class="story-media" [class.loading]="currentStory()?.type === 'image'">
+    <div class="story-media" [class.loading]="!currentStory()">
       @if (currentStory()?.type === 'image' || currentStory()?.type === 'image-text') {
-        <img [src]="currentStory()!.url" alt="Story" />
+        <img [src]="currentStory()!.url" alt="Story" (load)="onImageLoad()" (error)="onImageError()" />
       }
       
       @if (currentStory()?.type === 'text' || currentStory()?.type === 'image-text') {
@@ -45,7 +45,7 @@
     <div class="story-progress">
       @for (bar of progressBars(); track $index) {
         <div class="progress-container">
-          <div class="progress-bar" [style.width]="bar.width"></div>
+          <div class="progress-bar" [style.width]="bar.width" [style.transition]="isDragging() ? 'none' : 'width linear'"></div>
         </div>
       }
     </div>

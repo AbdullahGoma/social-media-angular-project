@@ -1,6 +1,5 @@
 @layer story-type {
   .story-type-modal {
-    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -10,6 +9,15 @@
     z-index: 1001;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .story-type-modal.active {
+    opacity: 1;
+    visibility: visible;
+    display: flex;
   }
 
   .story-type-modal .modal-content {

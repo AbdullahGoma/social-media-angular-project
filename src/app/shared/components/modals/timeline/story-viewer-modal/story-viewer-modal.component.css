@@ -700,4 +700,50 @@
       transform: translate(-50%, -50%) rotate(360deg);
     }
   }
+
+  .story-media {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+  }
+  
+  .story-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .story-progress {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    z-index: 10;
+  }
+  
+  .progress-container {
+    flex: 1;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background: #fff;
+    transition: width linear;
+  }
+  
+  .story-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
 }
