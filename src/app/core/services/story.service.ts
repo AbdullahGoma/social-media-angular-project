@@ -65,23 +65,30 @@ export class StoryService {
 
     if (myStoryIndex >= 0) {
       // Add to existing "Your Story"
-      stories[myStoryIndex].stories.unshift(storyItem);
-      stories[myStoryIndex].viewed = false;
-      stories[myStoryIndex].viewedStories = [];
-    } else {
-      // Create new "Your Story"
-      stories.unshift({
-        id: Date.now().toString(),
-        user: 'Your Story',
-        image: 'https://randomuser.me/api/portraits/men/1.jpg', // Default avatar
-        stories: [storyItem],
+      const updatedStories = [...stories];
+      updatedStories[myStoryIndex] = {
+        ...updatedStories[myStoryIndex],
+        stories: [storyItem, ...updatedStories[myStoryIndex].stories],
         viewed: false,
         viewedStories: [],
-        isMine: true,
-      });
+      };
+      this._stories.set(updatedStories);
+    } else {
+      // Create new "Your Story"
+      this._stories.set([
+        {
+          id: Date.now().toString(),
+          user: 'Your Story',
+          image: 'https://randomuser.me/api/portraits/men/1.jpg',
+          stories: [storyItem],
+          viewed: false,
+          viewedStories: [],
+          isMine: true,
+        },
+        ...stories,
+      ]);
     }
 
-    this._stories.set([...stories]);
     this.saveStoriesData();
   }
 

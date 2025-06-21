@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { StoryService } from '../../../../../core/services/story.service';
 import { StoryItem } from '../../../../models/story';
@@ -29,17 +29,27 @@ export class TextEditorModalComponent {
   storyType: 'text' | 'image' | 'image-text' = 'text';
 
   constructor() {
-    // Get the image URL if passed from the story type modal
-    const data = this.modalData();
-    if (data?.imageUrl) {
-      this.imageUrl = data.imageUrl;
-      this.storyType = 'image-text';
-    } else if (data?.type) {
-      this.storyType = data.type;
-    }
+    // Watch for modal data changes
+    effect(
+      () => {
+        const data = this.modalData();
+        if (data) {
+          if (data.imageUrl) {
+            this.imageUrl = data.imageUrl;
+            this.storyType = 'image-text';
+          } else if (data.type === 'text') {
+            this.storyType = 'text';
+            this.imageUrl = null;
+          }
+        }
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   save() {
+    if (!this.text.trim() && this.storyType === 'text') return;
+
     let newStory: StoryItem;
 
     if (this.storyType === 'text') {
@@ -68,16 +78,25 @@ export class TextEditorModalComponent {
       return;
     }
 
-    // Add to stories
     this.storyService.addStory(newStory);
     this.close();
   }
 
   close() {
     this.modalService.closeModal(ModalType.TextEditor);
+    this.resetForm();
   }
 
   selectPosition(pos: 'top' | 'center' | 'bottom') {
     this.position = pos;
+  }
+
+  private resetForm() {
+    this.text = '';
+    this.fontSize = '18px';
+    this.textColor = '#ffffff';
+    this.bgColor = '#000000';
+    this.position = 'bottom';
+    this.imageUrl = null;
   }
 }

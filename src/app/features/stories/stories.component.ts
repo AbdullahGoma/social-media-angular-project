@@ -48,6 +48,9 @@ export class StoriesComponent {
       setTimeout(() => {
         this.fileInput.nativeElement.click();
       }, 100);
+    } else {
+      // Directly open text editor for text-only stories
+      this.modalService.openModal(ModalType.TextEditor, { type: 'text' });
     }
   }
 
@@ -59,25 +62,24 @@ export class StoriesComponent {
 
       reader.onload = (e) => {
         const imageUrl = e.target?.result as string;
-        const storyType =
-          this.modalService.getModalData<{ type: string }>(
-            ModalType.StoryType
-          )()?.type || 'image';
 
-        if (storyType === 'image') {
+        if (this.selectedType === 'image') {
           // Create image-only story immediately
           const newStory: StoryItem = {
             id: Date.now().toString(),
             type: 'image',
             url: imageUrl,
+            createdAt: new Date().toISOString(),
           };
           this.storyService.addStory(newStory);
-        } else {
+        } else if (this.selectedType === 'image-text') {
           // Open text editor for image with text
-          this.modalService.openModal(ModalType.TextEditor, {
-            imageUrl,
-            type: 'image-text',
-          });
+          setTimeout(() => {
+            this.modalService.openModal(ModalType.TextEditor, {
+              imageUrl: imageUrl,
+              type: 'image-text',
+            });
+          }, 200); // Small delay to ensure stability
         }
       };
 
