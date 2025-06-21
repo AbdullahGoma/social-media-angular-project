@@ -142,14 +142,16 @@ export class StoryService {
 
     if (storyItemIndex < stories[userIndex].stories.length - 1) {
       this._currentStoryItemIndex.update((val) => val + 1);
-      this.startProgress();
     } else if (userIndex < stories.length - 1) {
       this._currentUserIndex.update((val) => val + 1);
       this._currentStoryItemIndex.set(0);
-      this.startProgress();
     } else {
       this.closeStory();
+      return; // Don't start progress if we're closing
     }
+
+    // Only start progress if not closing
+    this.startProgress();
   }
 
   goToPrev() {
@@ -161,14 +163,14 @@ export class StoryService {
 
     if (storyItemIndex > 0) {
       this._currentStoryItemIndex.update((val) => val - 1);
-      this.startProgress();
     } else if (userIndex > 0) {
       this._currentUserIndex.update((val) => val - 1);
       this._currentStoryItemIndex.set(
         stories[userIndex - 1].stories.length - 1
       );
-      this.startProgress();
     }
+
+    this.startProgress();
   }
 
   deleteCurrentStory() {

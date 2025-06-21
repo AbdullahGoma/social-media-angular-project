@@ -1,6 +1,6 @@
 <div class="story-viewer" [class.active]="isModalOpen()">
-  <div 
-    class="story-content" 
+  <div
+    class="story-content"
     (click)="handleClick($event)"
     (touchstart)="handleTouchStart($event)"
     (touchmove)="handleTouchMove($event)"
@@ -9,48 +9,76 @@
     <div class="story-header">
       <div class="user-info">
         @if (currentUser()) {
-          <img
-            class="user-avatar"
-            [src]="currentUser()!.image"
-            [alt]="currentUser()!.user"
-          />
-          <span class="user-name">{{ currentUser()!.user }}</span>
+        <img
+          class="user-avatar"
+          [src]="currentUser()!.image"
+          [alt]="currentUser()!.user"
+        />
+        <span class="user-name">{{ currentUser()!.user }}</span>
         }
       </div>
-      
+
       @if (currentUser().isMine) {
-        <button class="delete-story" title="Delete Story" (click)="deleteStory()">🗑️</button>
+      <button class="delete-story" title="Delete Story" (click)="deleteStory()">
+        🗑️
+      </button>
       }
-      
+
       <button class="close-story" (click)="closeStory()">&times;</button>
     </div>
 
-    <div class="story-media" [class.loading]="!currentStory()">
-      @if (currentStory()?.type === 'image' || currentStory()?.type === 'image-text') {
-        <img [src]="currentStory()!.url" alt="Story" (load)="onImageLoad()" (error)="onImageError()" />
-      }
-      
-      @if (currentStory()?.type === 'text' || currentStory()?.type === 'image-text') {
+    <div class="story-media" [class.loading]="!imageLoaded()">
+      @if (currentStory()?.type === 'image' || currentStory()?.type ===
+      'image-text') {
+      <img
+        [src]="currentStory()!.url"
+        alt="Story"
+        (load)="onImageLoad()"
+        (error)="onImageError()"
+      />
+      } @if (currentStory()?.type === 'text' || currentStory()?.type ===
+      'image-text') {
+      <div
+        class="story-text-content"
+        [class]="'text-' + (currentStory()?.position || 'center')"
+        [style.color]="currentStory()?.color || '#ffffff'"
+        [style.font-size]="currentStory()?.fontSize || '18px'"
+        [style.background]="
+          currentStory()?.background ||
+          'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        "
+        [style.padding]="currentStory()?.type === 'text' ? '16px' : '0'"
+        [style.border-radius]="currentStory()?.type === 'text' ? '8px' : '0'"
+        [style.text-shadow]="
+          currentStory()?.type === 'image-text'
+            ? '0 2px 4px rgba(0,0,0,0.5)'
+            : 'none'
+        "
+      >
         <div
-          class="story-text-content"
-          [class]="'text-' + (currentStory()?.position || 'center')"
-          [style.color]="currentStory()?.color"
-          [style.font-size]="currentStory()?.fontSize"
+          class="text-content"
+          [style.color]="currentStory()?.color || '#ffffff'"
+          [style.font-size]="currentStory()?.fontSize || '28px'"
         >
-          {{ currentStory()?.type === 'text' ? currentStory()?.content : currentStory()?.text }}
+          {{
+            currentStory()?.type === "text"
+              ? currentStory()?.content
+              : currentStory()?.text
+          }}
         </div>
+      </div>
       }
     </div>
 
     <div class="story-progress">
       @for (bar of progressBars(); track $index) {
-        <div class="progress-container">
-          <div 
-            class="progress-bar" 
-            [style.width]="bar.width"
-            [style.transition]="bar.transition"
-          ></div>
-        </div>
+      <div class="progress-container">
+        <div
+          class="progress-bar"
+          [style.width]="bar.width"
+          [style.transition]="bar.transition"
+        ></div>
+      </div>
       }
     </div>
   </div>

@@ -28,8 +28,8 @@ export class StoryViewerModalComponent implements OnDestroy {
   protected isDragging = signal<boolean>(false);
   private touchStartX = signal<number>(0);
   private touchStartY = signal<number>(0);
-  private imageLoaded = signal<boolean>(false);
   private startTime = signal<number>(0);
+  protected imageLoaded = signal<boolean>(false);
 
   // Computed values
   currentUser = computed(() => {
@@ -66,6 +66,16 @@ export class StoryViewerModalComponent implements OnDestroy {
   isModalOpen = this.modalService.isModalOpen(ModalType.StoryViewer);
 
   constructor() {
+    // Handle viewer activation
+    effect(
+      () => {
+        if (this.storyService.isViewerActive()) {
+          this.imageLoaded.set(false); // Reset loaded state when viewer activates
+        }
+      },
+      { allowSignalWrites: true }
+    );
+
     // Auto-start progress when viewer becomes active
     effect(
       () => {
@@ -92,7 +102,11 @@ export class StoryViewerModalComponent implements OnDestroy {
       () => {
         if (this.storyService.isPaused()) {
           untracked(() => this.clearProgressInterval());
-        } else if (this.storyService.isViewerActive() && !this.isDragging()) {
+        } else if (
+          this.storyService.isViewerActive() &&
+          !this.isDragging() &&
+          this.imageLoaded()
+        ) {
           untracked(() => this.startProgress());
         }
       },
@@ -122,12 +136,26 @@ export class StoryViewerModalComponent implements OnDestroy {
       this.currentProgress.set(progress);
 
       if (progress >= 100) {
-        this.goToNext();
+        this.checkAndHandleStoryEnd();
       }
     };
 
     this.progressInterval = window.setInterval(updateProgress, 50);
     updateProgress();
+  }
+
+  private checkAndHandleStoryEnd() {
+    const stories = this.storyService.stories();
+    const userIndex = this.storyService.currentUserIndex();
+    const storyIndex = this.storyService.currentStoryItemIndex();
+
+    if (storyIndex < stories[userIndex].stories.length - 1) {
+      this.storyService.goToNext();
+    } else if (userIndex < stories.length - 1) {
+      this.storyService.goToNext();
+    } else {
+      this.storyService.closeStory();
+    }
   }
 
   private clearProgressInterval() {
@@ -139,10 +167,16 @@ export class StoryViewerModalComponent implements OnDestroy {
 
   onImageLoad() {
     this.imageLoaded.set(true);
+    if (!this.storyService.isPaused()) {
+      this.startProgress();
+    }
   }
 
   onImageError() {
-    this.imageLoaded.set(false);
+    this.imageLoaded.set(true); // Treat error as loaded to prevent hanging
+    if (!this.storyService.isPaused()) {
+      this.startProgress();
+    }
   }
 
   // Public methods
