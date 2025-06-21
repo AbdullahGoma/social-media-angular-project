@@ -29,6 +29,7 @@ export class StoryViewerModalComponent implements OnDestroy {
   private touchStartX = signal<number>(0);
   private touchStartY = signal<number>(0);
   private imageLoaded = signal<boolean>(false);
+  private startTime = signal<number>(0);
 
   // Computed values
   currentUser = computed(() => {
@@ -58,6 +59,7 @@ export class StoryViewerModalComponent implements OnDestroy {
             : i === currentIndex
             ? `${this.currentProgress()}%`
             : '0%',
+        transition: this.isDragging() ? 'none' : 'width linear',
       }));
   });
 
@@ -75,6 +77,15 @@ export class StoryViewerModalComponent implements OnDestroy {
       },
       { allowSignalWrites: true }
     );
+
+    // Handle story index changes
+    effect(() => {
+      const index = this.storyService.currentStoryItemIndex();
+      untracked(() => {
+        this.currentProgress.set(0);
+        this.startProgress();
+      });
+    });
 
     // Handle pause state changes
     effect(
@@ -96,6 +107,7 @@ export class StoryViewerModalComponent implements OnDestroy {
   private startProgress() {
     this.clearProgressInterval();
     this.currentProgress.set(0);
+    this.startTime.set(Date.now());
 
     const duration = 5000; // 5 seconds per story
     const startTime = Date.now();

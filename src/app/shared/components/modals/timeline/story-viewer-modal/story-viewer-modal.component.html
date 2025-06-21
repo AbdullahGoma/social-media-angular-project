@@ -45,7 +45,11 @@
     <div class="story-progress">
       @for (bar of progressBars(); track $index) {
         <div class="progress-container">
-          <div class="progress-bar" [style.width]="bar.width" [style.transition]="isDragging() ? 'none' : 'width linear'"></div>
+          <div 
+            class="progress-bar" 
+            [style.width]="bar.width"
+            [style.transition]="bar.transition"
+          ></div>
         </div>
       }
     </div>

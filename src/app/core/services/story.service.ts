@@ -226,7 +226,7 @@ export class StoryService {
       if (remaining <= 0) {
         this.goToNext();
       }
-    }, 100);
+    }, 50);
   }
 
   private clearProgressInterval() {

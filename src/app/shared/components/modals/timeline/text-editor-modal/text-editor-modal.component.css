@@ -149,4 +149,15 @@
     height: auto;
     object-fit: cover;
   }
+
+  .save-text-btn {
+    background: var(--clr-secondary);
+    color: white;
+    transition: opacity 0.2s;
+  }
+
+  .save-text-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
