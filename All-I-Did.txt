@@ -170,7 +170,7 @@ ng g c shared/components/modals/timeline/text-editor-modal --skip-tests
 
 
 Fifth Day:--------------------------------------------------
-
+ng g c shared/components/create-post-box --skip-tests
 
 
 

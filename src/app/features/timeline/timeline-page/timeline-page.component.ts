@@ -8,16 +8,15 @@ import { PostDetailsModalComponent } from "../../../shared/components/modals/tim
 import { StoriesComponent } from "../../stories/stories.component";
 import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
 import { TextEditorModalComponent } from "../../../shared/components/modals/timeline/text-editor-modal/text-editor-modal.component";
+import { CreatePostBoxComponent } from "../../../shared/components/create-post-box/create-post-box.component";
 
 @Component({
   selector: 'app-timeline-page',
   standalone: true,
   imports: [
-    AddPostModalComponent,
-    PostDetailsModalComponent,
     StoriesComponent,
     StoryViewerModalComponent,
-    TextEditorModalComponent
+    CreatePostBoxComponent
 ],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',
@@ -27,10 +26,6 @@ export class TimelinePageComponent {
   private modalService = inject(ModalService);
 
   posts = toSignal(this.postService.posts$, { initialValue: [] });
-
-  openPostModal() {
-    this.modalService.openModal(ModalType.AddPost);
-  }
 
   toggleExpand(postId: string) {
     this.postService.toggleExpand(postId);

@@ -461,6 +461,19 @@
 
 @layer box-style {
   /* Box Styles */
+  @layer components {
+    /* very important if we use filer with grid, because grid makes it hidden by default  */
+    [hidden] {
+      display: none !important;
+    }
+  
+    .timeline-pt {
+      padding-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+  }
+  
   .box {
     background-color: var(--clr-primary);
     border-radius: 4px;
