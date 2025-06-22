@@ -18,10 +18,6 @@ export class LikeService {
   public readonly postLikes = signal<Like[]>([]);
   public readonly commentLikes = signal<Like[]>([]);
 
-  // Expose as observables
-  postLikesSelected = this.postLikes;
-  commentLikesSelected = this.commentLikes;
-
   constructor(private localStorage: LocalStorageService) {
     this.loadInitialLikes();
   }
@@ -48,18 +44,12 @@ export class LikeService {
     this.localStorage.setItem(this.COMMENT_LIKES_KEY, this.allCommentLikes());
   }
 
-  /**
-   * Load likes for a post - FIXED: Filter from all likes, don't replace them
-   */
   loadPostLikes(postId: string): void {
     const allLikes = this.allPostLikes();
     const postSpecificLikes = allLikes.filter((like) => like.postId === postId);
     this.postLikes.set(postSpecificLikes);
   }
 
-  /**
-   * Load likes for a comment - FIXED: Filter from all likes, don't replace them
-   */
   loadCommentLikes(commentId: string): void {
     const allLikes = this.allCommentLikes();
     const commentSpecificLikes = allLikes.filter(
@@ -68,9 +58,6 @@ export class LikeService {
     this.commentLikes.set(commentSpecificLikes);
   }
 
-  /**
-   * Toggle like on a post - FIXED: Update both all likes and filtered likes
-   */
   togglePostLike(postId: string): void {
     const currentUserId = 'current-user-id';
     const allLikes = this.allPostLikes();
@@ -102,9 +89,6 @@ export class LikeService {
     this.saveLikesToStorage();
   }
 
-  /**
-   * Toggle like on a comment - FIXED: Update both all likes and filtered likes
-   */
   toggleCommentLike(commentId: string): void {
     const currentUserId = 'current-user-id';
     const allLikes = this.allCommentLikes();

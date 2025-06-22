@@ -1,9 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Comment } from '../../shared/models/comment';
-import { toObservable } from '@angular/core/rxjs-interop';
 import { delay, tap } from 'rxjs/operators';
 import { LocalStorageService } from './localtorage.service';
+import { LikeService } from './like.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,10 @@ export class CommentService {
 
   selectedComments = this.commentsSignal;
 
-  constructor(private localStorage: LocalStorageService) {
+  constructor(
+    private localStorage: LocalStorageService,
+    private likeService: LikeService
+  ) {
     this.loadInitialComments();
   }
 
@@ -49,6 +52,15 @@ export class CommentService {
     return of(postComments).pipe(
       tap((comments) => {
         this.commentsSignal.set(comments);
+        // Load likes for each comment
+        comments.forEach((comment) => {
+          this.likeService.loadCommentLikes(comment.id);
+          if (comment.replies) {
+            comment.replies.forEach((reply) => {
+              this.likeService.loadCommentLikes(reply.id);
+            });
+          }
+        });
       })
     );
   }
@@ -102,7 +114,16 @@ export class CommentService {
       comment.likes = comment.likes || 0;
       comment.likes += comment.isLiked ? -1 : 1;
       comment.isLiked = !comment.isLiked;
+
+      // Update like service
+      if (comment.isLiked) {
+        this.likeService.toggleCommentLike(commentId);
+      } else {
+        this.likeService.toggleCommentLike(commentId);
+      }
+
       this.commentsSignal.set(comments);
+      this.saveCommentsToStorage();
     }
   }
 
@@ -112,6 +133,7 @@ export class CommentService {
   clearComments() {
     this.commentsSignal.set([]);
     this.currentPostId = null;
+    this.likeService.clearLikes();
   }
 
   // Private helper methods

@@ -1,6 +1,8 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { Post } from '../../shared/models/post';
 import { LocalStorageService } from './localtorage.service';
+import { CommentService } from './comment.service';
+import { LikeService } from './like.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +23,11 @@ export class PostService {
 
   public selectedPost = this.selectedPostSignal;
 
-  constructor(private localStorage: LocalStorageService) {
+  constructor(
+    private localStorage: LocalStorageService,
+    private commentService: CommentService,
+    private likeService: LikeService
+  ) {
     const initialPosts = this.initializePosts();
     this.allPostsSignal.set(initialPosts);
   }
@@ -82,7 +88,7 @@ export class PostService {
         id: '3',
         type: 'feed',
         author: {
-          name: 'Sarah Johnson',
+          name: 'Abdullah Gomaa',
           avatar: 'https://example.com/avatar4.jpg',
         },
         content:
@@ -123,7 +129,7 @@ export class PostService {
         id: '5',
         type: 'feed',
         author: {
-          name: 'Emily Wilson',
+          name: 'Abdullah Gomaa',
           avatar: 'https://example.com/avatar6.jpg',
         },
         content:
@@ -177,21 +183,37 @@ export class PostService {
 
   selectPost(postId: string) {
     const post = this.allPostsSignal().find((p) => p.id === postId);
-    this.selectedPostSignal.set(post || null);
+    if (post) {
+      this.selectedPostSignal.set(post);
+      this.commentService.loadComments(postId).subscribe();
+      this.likeService.loadPostLikes(postId);
+    }
   }
 
   clearSelectedPost() {
     this.selectedPostSignal.set(null);
+    this.commentService.clearComments();
+    this.likeService.clearLikes();
   }
 
   toggleLike(postId: string): void {
     this.allPostsSignal.update((posts) =>
       posts.map((post) => {
         if (post.id === postId) {
+          const newLikeStatus = !post.isLiked;
+          const likeCount = post.likes + (newLikeStatus ? 1 : -1);
+
+          // Update like service
+          if (newLikeStatus) {
+            this.likeService.togglePostLike(postId);
+          } else {
+            this.likeService.togglePostLike(postId);
+          }
+
           return {
             ...post,
-            likes: post.likes + (post.isLiked ? -1 : 1),
-            isLiked: !post.isLiked,
+            likes: likeCount,
+            isLiked: newLikeStatus,
           };
         }
         return post;
