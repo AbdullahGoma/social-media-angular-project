@@ -36,10 +36,7 @@
     </div>
 
     <div class="post-detail-actions">
-      <button
-        class="action-btn like-btn"
-        (click)="openLikesModal()"
-      >
+      <button class="action-btn like-btn" (click)="openLikesModal()">
         <svg
           stroke="currentColor"
           stroke-width="2"
@@ -90,49 +87,70 @@
     <div class="post-comments">
       <div class="comment-box__items">
         @for (comment of comments; track comment.id) {
-          <app-comment 
-            [comment]="comment"
-            [isActive]="isCommentActive(comment.id)"
-            (replyClicked)="onReplyClicked($event)"
-          ></app-comment>
+        <app-comment
+          [comment]="comment"
+          [isActive]="isCommentActive(comment.id)"
+          (replyClicked)="onReplyClicked($event)"
+        ></app-comment>
         }
       </div>
-      
+
       <!-- Main comment input -->
       <div class="comment-box__reply">
         <div class="comment-box__reply-container">
           @if (replyingToUsername) {
-            <div class="comment-box__replying-to">
-              Replying to {{ replyingToUsername }}
-              <button class="comment-box__cancel-reply" (click)="cancelReply()">
-                ×
-              </button>
-            </div>
+          <div class="comment-box__replying-to">
+            Replying to {{ replyingToUsername }}
+            <button class="comment-box__cancel-reply" (click)="cancelReply()">
+              ×
+            </button>
+          </div>
           }
           <textarea
             class="comment-box__reply-input"
-            [placeholder]="replyingToUsername ? 'Write your reply...' : 'Write a comment...'"
-            [(ngModel)]="newComment"
-            (keydown.enter)="addComment()"
+            [placeholder]="
+              replyingToUsername ? 'Write your reply...' : 'Write a comment...'
+            "
+            [value]="newCommentSignal()"
+            (input)="newCommentSignal.set($any($event.target).value)"
+            (keydown.enter)="onEnter($event)"
           ></textarea>
           <div class="comment-box__reply-actions">
             @if (replyingToUsername) {
-              <button
-                type="button"
-                class="comment-box__cancel-btn"
-                (click)="cancelReply()"
-              >
-                Cancel
-              </button>
+            <button
+              type="button"
+              class="comment-box__cancel-btn"
+              (click)="cancelReply()"
+            >
+              Cancel
+            </button>
             }
             <button
               type="submit"
               class="comment-box__send-btn"
               (click)="addComment()"
             >
-              <svg fill="none" viewBox="0 0 24 24" height="18" width="18" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="var(--clr-text-light)" d="M12 5L12 20"/>
-                <path stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" stroke="var(--clr-text-light)" d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"/>
+              <svg
+                fill="none"
+                viewBox="0 0 24 24"
+                height="18"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  stroke="var(--clr-text-light)"
+                  d="M12 5L12 20"
+                />
+                <path
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                  stroke-width="2.5"
+                  stroke="var(--clr-text-light)"
+                  d="M7 9L11.2929 4.70711C11.6262 4.37377 11.7929 4.20711 12 4.20711C12.2071 4.20711 12.3738 4.37377 12.7071 4.70711L17 9"
+                />
               </svg>
             </button>
           </div>

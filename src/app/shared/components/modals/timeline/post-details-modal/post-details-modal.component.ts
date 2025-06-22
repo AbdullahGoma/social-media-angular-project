@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ export class PostDetailsModalComponent {
   post = this.postService.selectedPost;
   commentsSignal = this.commentService.selectedComments;
   comments = this.commentService.selectedComments();
-  newComment = '';
+  newCommentSignal = signal('');
 
   replyingToId: string | null = null;
   replyingToUsername: string | null = null;
@@ -34,14 +34,18 @@ export class PostDetailsModalComponent {
   private destroyRef = inject(DestroyRef);
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
-  private loadCommentsForPost(postId: string) {
-    this.commentService.loadComments(postId).subscribe({
-      next: (comments) => {
-        // Comments are automatically updated via the comments$ subscription
-      },
-      error: (err) => {
-        console.error('Failed to load comments:', err);
-      },
+  constructor() {
+    effect(() => {
+      this.comments = this.commentsSignal();
+    });
+
+    effect(() => {
+      const isOpen = this.isModalOpen();
+      const post = this.post();
+
+      if (isOpen && post) {
+        this.comments = this.commentsSignal();
+      }
     });
   }
 
@@ -86,11 +90,12 @@ export class PostDetailsModalComponent {
 
   addComment() {
     const currentPost = this.postService.selectedPost();
-    if (this.newComment.trim() && currentPost) {
+    if (this.newCommentSignal().trim() && currentPost) {
       this.commentService
-        .addComment(currentPost.id, this.newComment, this.replyingToId)
+        .addComment(currentPost.id, this.newCommentSignal(), this.replyingToId)
         .subscribe(() => {
-          this.newComment = '';
+          this.commentService.refreshComments();
+          this.newCommentSignal.set('');
           this.replyingToId = null;
           this.replyingToUsername = null;
         });
@@ -104,6 +109,12 @@ export class PostDetailsModalComponent {
 
   isCommentActive(commentId: string): boolean {
     return this.replyingToId === commentId;
+  }
+
+  onEnter(event: Event) {
+    const keyboardEvent = event as KeyboardEvent;
+    keyboardEvent.preventDefault();
+    this.addComment();
   }
 
   previewImage(imageUrl: string) {

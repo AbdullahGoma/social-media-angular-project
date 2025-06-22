@@ -46,23 +46,27 @@ export class CommentService {
 
   loadComments(postId: string): Observable<Comment[]> {
     this.currentPostId = postId;
-    const allComments = this.commentsSignal();
-    const postComments = allComments.filter((c) => c.postId === postId);
 
-    return of(postComments).pipe(
-      tap((comments) => {
-        this.commentsSignal.set(comments);
-        // Load likes for each comment
-        comments.forEach((comment) => {
-          this.likeService.loadCommentLikes(comment.id);
-          if (comment.replies) {
-            comment.replies.forEach((reply) => {
-              this.likeService.loadCommentLikes(reply.id);
-            });
-          }
-        });
-      })
+    // Always get fresh comments from storage
+    const savedComments = this.localStorage.getItem<Comment[]>(
+      this.STORAGE_KEY
     );
+    const allComments = savedComments || this.generateMockComments(postId);
+
+    const postComments = allComments.filter((c) => c.postId === postId);
+    this.commentsSignal.set(postComments);
+
+    // Load likes for each comment
+    postComments.forEach((comment) => {
+      this.likeService.loadCommentLikes(comment.id);
+      if (comment.replies) {
+        comment.replies.forEach((reply) => {
+          this.likeService.loadCommentLikes(reply.id);
+        });
+      }
+    });
+
+    return of(postComments);
   }
 
   /**
@@ -98,8 +102,21 @@ export class CommentService {
           this.addTopLevelComment(newComment);
         }
         this.saveCommentsToStorage();
+
+        // Explicitly update the comments for the current post
+        if (this.currentPostId === postId) {
+          const allComments = this.commentsSignal();
+          const postComments = allComments.filter((c) => c.postId === postId);
+          this.commentsSignal.set(postComments);
+        }
       })
     );
+  }
+
+  refreshComments() {
+    if (this.currentPostId) {
+      this.loadComments(this.currentPostId).subscribe();
+    }
   }
 
   /**
@@ -183,7 +200,10 @@ export class CommentService {
   }
 
   private addTopLevelComment(comment: Comment) {
-    this.commentsSignal.update((comments) => [comment, ...comments]);
+    this.commentsSignal.update((comments) => [
+      comment,
+      ...comments.filter((c) => c.id !== comment.id),
+    ]);
   }
 
   private findCommentById(

@@ -52,8 +52,6 @@ export class LikesModalComponent {
       }>(ModalType.LikesModal)();
 
       if (data && data.id && data.type) {
-        console.log('Opening likes modal for:', data); // Debug log
-
         this.currentId.set(data.id);
         this.modalType.set(data.type);
 
