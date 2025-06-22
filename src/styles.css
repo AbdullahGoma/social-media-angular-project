@@ -647,6 +647,154 @@
   }
 }
 
+/* This is must be in profile header component but it must be before post album layer */
+@layer profile {
+  /* Profile Section */
+  .profile {
+    position: relative;
+    height: 40vh;
+    min-height: 250px;
+    max-height: 350px;
+    z-index: 1;
+  }
+
+  .profile-cover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 4px;
+  }
+
+  .profile:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    background-image: url("https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px);
+    opacity: 0.7;
+  }
+
+  .profile-menu {
+    position: absolute;
+    bottom: 0;
+    padding-left: 200px;
+    background: var(--bg-color);
+    width: 100%;
+    display: flex;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .profile-menu-link {
+    padding: 20px 16px;
+    color: var(--side-title);
+    transition: 0.3s;
+    cursor: pointer;
+    border: none;
+    background: inherit;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-menu > a:hover,
+  .profile-menu > a:focus {
+    color: hsl(var(--clr-white));
+    background-color: var(--clr-bg-light);
+    border-bottom: 1px solid var(--clr-accent);
+  }
+
+  .profile-menu a.active,
+  .profile-menu a.router-link-active {
+    color: hsl(var(--clr-white)) !important;
+    background-color: var(--clr-bg-light) !important;
+    border-bottom: 3px solid var(--clr-accent) !important;
+  }
+
+  .profile-avatar {
+    position: absolute;
+    align-items: center;
+    display: flex;
+    z-index: 1;
+    bottom: 80px;
+    left: 24px;
+    height: 1rem;
+  }
+
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--bg-color);
+  }
+
+  .profile-name {
+    margin-left: 24px;
+    margin-bottom: 24px;
+    font-size: 22px;
+    color: hsl(var(--clr-white));
+    font-weight: 600;
+    font-family: var(--title-font);
+    padding: 0 0.15rem;
+    border-radius: 8px;
+  }
+
+  .add-friend-btn {
+    margin-left: 20px;
+    margin-bottom: 24px;
+    border: none;
+    background: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem;
+    border-radius: 50%;
+    backdrop-filter: blur(1rem);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(173, 216, 230, 0.4);
+    cursor: pointer;
+  }
+
+  .add-friend-btn svg {
+    height: 20px;
+    width: 20px;
+    fill: hsl(var(--clr-white));
+  }
+
+  .message-btn {
+    margin-left: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(1rem);
+    box-shadow: 0 4px 12px rgba(173, 216, 230, 0.4);
+    cursor: pointer;
+  }
+
+  .message-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: hsl(var(--clr-white));
+  }
+}
+
 @layer post-album {
   .profile {
     position: relative;
