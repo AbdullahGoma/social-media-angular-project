@@ -140,6 +140,10 @@ export class PostDetailsModalComponent implements OnInit {
     return this.replyingToId === commentId;
   }
 
+  previewImage(imageUrl: string) {
+    this.modalService.openModal(ModalType.ImagePreview, imageUrl);
+  }
+
   openLikesModal() {
     const currentPost = this.postService.selectedPost();
     if (currentPost) {

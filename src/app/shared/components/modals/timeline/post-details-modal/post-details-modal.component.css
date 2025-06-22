@@ -87,6 +87,7 @@
     border-radius: 8px;
     aspect-ratio: 1/1;
     object-fit: cover;
+    cursor: pointer;
   }
 
   .post-detail-images:has(img:only-child) {

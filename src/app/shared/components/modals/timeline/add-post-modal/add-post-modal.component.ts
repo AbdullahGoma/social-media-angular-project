@@ -9,14 +9,12 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { PostService } from '../../../../../core/services/post.service';
-import { ImagePreviewModalComponent } from "../../settings/image-preview-modal/image-preview-modal.component";
 
 @Component({
   selector: 'app-add-post-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule, ImagePreviewModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './add-post-modal.component.html',
   styleUrls: ['./add-post-modal.component.css'],
 })

@@ -17,7 +17,7 @@
       @if (post()!.images && post()!.images!.length) {
       <div class="post-detail-images">
         @for (image of post()?.images; track $index) {
-        <img [src]="image" alt="Post image" />
+        <img [src]="image" (click)="previewImage(image)" alt="Post image" />
         }
       </div>
       } @if (post()?.feeling || post()?.status) {

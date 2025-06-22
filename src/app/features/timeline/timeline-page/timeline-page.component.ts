@@ -3,12 +3,10 @@ import { ModalService } from '../../../core/services/modal.service';
 import { ModalType } from '../../../shared/models/modal-type';
 import { AddPostModalComponent } from '../../../shared/components/modals/timeline/add-post-modal/add-post-modal.component';
 import { PostService } from '../../../core/services/post.service';
-import { ImagePreviewModalComponent } from '../../../shared/components/modals/settings/image-preview-modal/image-preview-modal.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PostDetailsModalComponent } from "../../../shared/components/modals/timeline/post-details-modal/post-details-modal.component";
 import { StoriesComponent } from "../../stories/stories.component";
 import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
-import { StoryTypeModalComponent } from "../../../shared/components/modals/timeline/story-type-modal/story-type-modal.component";
 import { TextEditorModalComponent } from "../../../shared/components/modals/timeline/text-editor-modal/text-editor-modal.component";
 
 @Component({
@@ -16,11 +14,9 @@ import { TextEditorModalComponent } from "../../../shared/components/modals/time
   standalone: true,
   imports: [
     AddPostModalComponent,
-    ImagePreviewModalComponent,
     PostDetailsModalComponent,
     StoriesComponent,
     StoryViewerModalComponent,
-    StoryTypeModalComponent,
     TextEditorModalComponent
 ],
   templateUrl: './timeline-page.component.html',

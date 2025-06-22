@@ -13,12 +13,11 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
-import { ImagePreviewModalComponent } from "../../settings/image-preview-modal/image-preview-modal.component";
 
 @Component({
   selector: 'app-chat-window-modal',
   standalone: true,
-  imports: [DatePipe, FormsModule, ImagePreviewModalComponent],
+  imports: [DatePipe, FormsModule],
   templateUrl: './chat-window-modal.component.html',
   styleUrl: './chat-window-modal.component.css',
 })
