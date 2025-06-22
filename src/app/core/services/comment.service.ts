@@ -1,31 +1,54 @@
-// comment.service.ts
 import { Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Comment } from '../../shared/models/comment';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { delay, map, tap } from 'rxjs/operators';
+import { delay, tap } from 'rxjs/operators';
+import { LocalStorageService } from './localtorage.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommentService {
+  private readonly STORAGE_KEY = 'social-app-comments';
   private commentsSignal = signal<Comment[]>([]);
   private currentPostId: string | null = null;
 
-  // Public observable for components to subscribe to
-  comments$ = toObservable(this.commentsSignal);
+  selectedComments = this.commentsSignal;
+
+  constructor(private localStorage: LocalStorageService) {
+    this.loadInitialComments();
+  }
 
   /**
    * Load comments for a specific post
    * @param postId The ID of the post to load comments for
    */
+  private loadInitialComments() {
+    const savedComments = this.localStorage.getItem<Comment[]>(
+      this.STORAGE_KEY
+    );
+    if (savedComments) {
+      this.commentsSignal.set(savedComments);
+    } else {
+      // Initialize with some mock comments for demo
+      const mockComments = this.generateMockComments('1');
+      this.commentsSignal.set(mockComments);
+      this.saveCommentsToStorage();
+    }
+  }
+
+  private saveCommentsToStorage() {
+    this.localStorage.setItem(this.STORAGE_KEY, this.commentsSignal());
+  }
+
   loadComments(postId: string): Observable<Comment[]> {
     this.currentPostId = postId;
+    const allComments = this.commentsSignal();
+    const postComments = allComments.filter((c) => c.postId === postId);
 
-    // In a real app, replace this with actual API call
-    return this.fetchCommentsFromAPI(postId).pipe(
+    return of(postComments).pipe(
       tap((comments) => {
-        this.commentsSignal.set(this.transformComments(comments));
+        this.commentsSignal.set(comments);
       })
     );
   }
@@ -41,14 +64,28 @@ export class CommentService {
     content: string,
     parentId: string | null = null
   ): Observable<Comment> {
-    // In a real app, replace this with actual API call
-    return this.postCommentToAPI(postId, content, parentId).pipe(
-      tap((newComment) => {
+    const newComment: Comment = {
+      id: Date.now().toString(),
+      postId,
+      author: {
+        name: 'Current User',
+        avatar: 'assets/images/default-avatar.png',
+      },
+      content,
+      timestamp: new Date().toISOString(),
+      likes: 0,
+      parentId,
+    };
+
+    return of(newComment).pipe(
+      delay(300),
+      tap(() => {
         if (parentId) {
           this.addReplyToComment(parentId, newComment);
         } else {
           this.addTopLevelComment(newComment);
         }
+        this.saveCommentsToStorage();
       })
     );
   }
@@ -142,7 +179,7 @@ export class CommentService {
   }
 
   private generateMockComments(postId: string): Comment[] {
-    return [
+    const baseComments = [
       {
         id: '1',
         postId,
@@ -153,6 +190,7 @@ export class CommentService {
         content: 'This looks amazing! Where was this taken?',
         timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
         likes: 3,
+        isLiked: false,
         replies: [
           {
             id: '2',
@@ -165,6 +203,7 @@ export class CommentService {
             timestamp: new Date(Date.now() - 3600000).toISOString(),
             likes: 1,
             parentId: '1',
+            isLiked: false,
           },
           {
             id: '3',
@@ -177,6 +216,7 @@ export class CommentService {
             timestamp: new Date(Date.now() - 1800000).toISOString(),
             likes: 0,
             parentId: '1',
+            isLiked: false,
           },
         ],
       },
@@ -190,7 +230,37 @@ export class CommentService {
         content: 'The colors in that sunset photo are incredible!',
         timestamp: new Date(Date.now() - 7200000).toISOString(),
         likes: 5,
+        isLiked: false,
+      },
+      {
+        id: '5',
+        postId,
+        author: {
+          name: 'David Smith',
+          avatar: 'assets/images/avatar5.jpg',
+        },
+        content: 'Has anyone been here recently? How were the crowds?',
+        timestamp: new Date(Date.now() - 5400000).toISOString(),
+        likes: 2,
+        isLiked: false,
+        replies: [
+          {
+            id: '6',
+            postId,
+            author: {
+              name: 'Lisa Wong',
+              avatar: 'assets/images/avatar6.jpg',
+            },
+            content: 'Went last week, it was pretty quiet!',
+            timestamp: new Date(Date.now() - 4800000).toISOString(),
+            likes: 0,
+            parentId: '5',
+            isLiked: false,
+          },
+        ],
       },
     ];
+
+    return baseComments;
   }
 }

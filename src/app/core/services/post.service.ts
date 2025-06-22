@@ -13,11 +13,7 @@ export class PostService {
   private selectedPostSignal = signal<Post | null>(null);
 
   // Computed signals for different post types
-  readonly timelinePosts = computed(() =>
-    this.allPostsSignal().filter(
-      (post) => post.type === 'timeline' || !post.type
-    )
-  );
+  readonly timelinePosts = computed(() => this.allPostsSignal());
 
   readonly feedPosts = computed(() =>
     this.allPostsSignal().filter((post) => post.type === 'feed')
@@ -31,12 +27,12 @@ export class PostService {
   }
 
   private initializePosts(): Post[] {
-    // Try to load from local storage
     const savedPosts = this.localStorage.getItem<Post[]>(this.STORAGE_KEY);
     if (savedPosts) return savedPosts;
 
-    // Default mock data if nothing in storage
-    return this.getDefaultPosts();
+    const defaultPosts = this.getDefaultPosts();
+    this.localStorage.setItem(this.STORAGE_KEY, defaultPosts);
+    return defaultPosts;
   }
 
   private getDefaultPosts(): Post[] {
@@ -60,6 +56,7 @@ export class PostService {
         likes: 42,
         comments: 13,
         shares: 7,
+        isLiked: false,
         isExpanded: false,
       },
       {
@@ -71,13 +68,77 @@ export class PostService {
         },
         content:
           'Just finished reading an amazing book! Highly recommend it to everyone who loves science fiction.',
+        images: [
+          'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ],
         date: '10:15 AM • Yesterday',
         likes: 28,
         comments: 5,
         shares: 2,
+        isLiked: true,
         isExpanded: false,
       },
-      // More default posts...
+      {
+        id: '3',
+        type: 'feed',
+        author: {
+          name: 'Sarah Johnson',
+          avatar: 'https://example.com/avatar4.jpg',
+        },
+        content:
+          'My new recipe for vegan chocolate cake was a huge success! Everyone loved it at the potluck dinner.',
+        images: [
+          'https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ],
+        feeling: { emoji: '😋', label: 'Yummy' },
+        date: '5:45 PM • 2 days ago',
+        likes: 36,
+        comments: 8,
+        shares: 4,
+        isLiked: false,
+        isExpanded: false,
+      },
+      {
+        id: '4',
+        type: 'timeline',
+        author: {
+          name: 'Mike Chen',
+          avatar: 'https://example.com/avatar5.jpg',
+        },
+        content:
+          'Just completed my first marathon! The training was tough but so worth it. Who wants to join me for the next one?',
+        images: [
+          'https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+        ],
+        feeling: { emoji: '🏃‍♂️', label: 'Running' },
+        status: { emoji: '🏅', label: 'Achievement' },
+        date: '8:20 AM • 3 days ago',
+        likes: 87,
+        comments: 24,
+        shares: 12,
+        isLiked: false,
+        isExpanded: false,
+      },
+      {
+        id: '5',
+        type: 'feed',
+        author: {
+          name: 'Emily Wilson',
+          avatar: 'https://example.com/avatar6.jpg',
+        },
+        content:
+          'Beautiful sunset at the beach today. Nature never fails to amaze me with its beauty.',
+        images: [
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+        ],
+        feeling: { emoji: '🌅', label: 'Sunset' },
+        date: '7:15 PM • 4 days ago',
+        likes: 65,
+        comments: 9,
+        shares: 5,
+        isLiked: true,
+        isExpanded: false,
+      },
     ];
   }
 
@@ -135,6 +196,17 @@ export class PostService {
         }
         return post;
       })
+    );
+    this.savePostsToStorage();
+  }
+
+  incrementCommentCount(postId: string): void {
+    this.allPostsSignal.update((posts) =>
+      posts.map((post) =>
+        post.id === postId
+          ? { ...post, comments: (post.comments || 0) + 1 }
+          : post
+      )
     );
     this.savePostsToStorage();
   }

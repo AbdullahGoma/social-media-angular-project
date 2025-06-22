@@ -1,13 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { ModalService } from '../../../core/services/modal.service';
 import { ModalType } from '../../../shared/models/modal-type';
-import { AddPostModalComponent } from '../../../shared/components/modals/timeline/add-post-modal/add-post-modal.component';
 import { PostService } from '../../../core/services/post.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { PostDetailsModalComponent } from "../../../shared/components/modals/timeline/post-details-modal/post-details-modal.component";
 import { StoriesComponent } from "../../stories/stories.component";
 import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
-import { TextEditorModalComponent } from "../../../shared/components/modals/timeline/text-editor-modal/text-editor-modal.component";
 import { CreatePostBoxComponent } from "../../../shared/components/create-post-box/create-post-box.component";
 import { PostsListComponent } from "../../../shared/components/posts-list/posts-list.component";
 

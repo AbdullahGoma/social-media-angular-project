@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { CommonModule } from '@angular/common';
@@ -15,6 +9,7 @@ import { CommentService } from '../../../../../core/services/comment.service';
 import { LikeService } from '../../../../../core/services/like.service';
 import { Comment } from '../../../../models/comment';
 import { CommentComponent } from '../../../../../features/comment/comment.component';
+
 @Component({
   selector: 'app-post-details-modal',
   standalone: true,
@@ -22,39 +17,27 @@ import { CommentComponent } from '../../../../../features/comment/comment.compon
   templateUrl: './post-details-modal.component.html',
   styleUrls: ['./post-details-modal.component.css'],
 })
-export class PostDetailsModalComponent implements OnInit {
+export class PostDetailsModalComponent {
   private modalService = inject(ModalService);
   private postService = inject(PostService);
   private commentService = inject(CommentService);
   protected likeService = inject(LikeService);
 
   post = this.postService.selectedPost;
-
-  comments$ = this.commentService.comments$;
-  comments = signal<Comment[] | null>(null);
+  commentsSignal = this.commentService.selectedComments;
+  comments = this.commentService.selectedComments();
   newComment = '';
 
   replyingToId: string | null = null;
   replyingToUsername: string | null = null;
 
-  private destroyReferance = inject(DestroyRef);
-
+  private destroyRef = inject(DestroyRef);
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
-
-  ngOnInit() {
-    const subscriptionComments = this.comments$.subscribe((comments) => {
-      this.comments.set(comments);
-    });
-
-    this.destroyReferance.onDestroy(() => {
-      subscriptionComments.unsubscribe();
-    });
-  }
 
   private loadCommentsForPost(postId: string) {
     this.commentService.loadComments(postId).subscribe({
       next: (comments) => {
-        // Comments are already set in the service
+        // Comments are automatically updated via the comments$ subscription
       },
       error: (err) => {
         console.error('Failed to load comments:', err);
@@ -70,16 +53,13 @@ export class PostDetailsModalComponent implements OnInit {
 
   onReplyClicked(commentId: string) {
     if (this.replyingToId === commentId) {
-      // Clicking reply again cancels the reply
       this.replyingToId = null;
       this.replyingToUsername = null;
     } else {
-      // Find the comment to get the username
-      const comment = this.findCommentById(this.comments() || [], commentId);
+      const comment = this.findCommentById(this.comments || [], commentId);
       if (comment) {
         this.replyingToId = commentId;
         this.replyingToUsername = comment.author.name;
-        // Scroll to the comment input
         setTimeout(() => {
           const input = document.querySelector(
             '.comment-box__reply-input'
@@ -122,7 +102,6 @@ export class PostDetailsModalComponent implements OnInit {
     this.replyingToUsername = null;
   }
 
-  // Helper method to check if a comment is active
   isCommentActive(commentId: string): boolean {
     return this.replyingToId === commentId;
   }
@@ -131,53 +110,56 @@ export class PostDetailsModalComponent implements OnInit {
     this.modalService.openModal(ModalType.ImagePreview, imageUrl);
   }
 
+  // FIXED: Simplified likes modal opening
   openLikesModal() {
-    const currentPost = this.postService.selectedPost();
+    const currentPost = this.post();
     if (currentPost) {
-      this.modalService.openModal(ModalType.LikesModal, currentPost.id);
+      this.modalService.openModal(ModalType.LikesModal, {
+        id: currentPost.id,
+        type: 'post',
+      });
     }
   }
 
-  /**
-   * Toggle like on the current post
-   */
   togglePostLike(): void {
     if (this.post()) {
       this.likeService.togglePostLike(this.post()!.id);
-      // Update local post likes count
-      this.post.update((p) => ({
-        ...p!,
-        likes: p!.likes + (p!.isLiked ? -1 : 1),
-        isLiked: !p!.isLiked,
-      }));
+      this.postService.toggleLike(this.post()!.id);
     }
   }
 
-  /**
-   * Toggle like on a comment
-   * @param commentId The ID of the comment to like/unlike
-   */
   toggleCommentLike(commentId: string): void {
     this.likeService.toggleCommentLike(commentId);
+    this.commentsSignal.update((comments) => {
+      return comments.map((comment) => {
+        if (comment.id === commentId) {
+          return {
+            ...comment,
+            likes: comment.likes + (comment.isLiked ? -1 : 1),
+            isLiked: !comment.isLiked,
+          };
+        }
+        if (comment.replies) {
+          comment.replies = comment.replies.map((reply) => {
+            if (reply.id === commentId) {
+              return {
+                ...reply,
+                likes: reply.likes + (reply.isLiked ? -1 : 1),
+                isLiked: !reply.isLiked,
+              };
+            }
+            return reply;
+          });
+        }
+        return comment;
+      });
+    });
   }
 
-  /**
-   * Open likes modal for a comment
-   * @param commentId The ID of the comment to show likes for
-   */
   openCommentLikes(commentId: string): void {
-    this.likeService.loadCommentLikes(commentId);
-    this.modalService.openModal(ModalType.LikesModal);
-  }
-
-  /**
-   * Open likes modal for a post
-   * @param postId The ID of the post to show likes for
-   */
-  openPostLikes(postId: string): void {
     this.modalService.openModal(ModalType.LikesModal, {
-      id: postId,
-      type: 'post',
+      id: commentId,
+      type: 'comment',
     });
   }
 }

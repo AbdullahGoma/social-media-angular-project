@@ -30,7 +30,7 @@ export class AddPostModalComponent {
   mediaFiles = signal<{ file: File; preview: string }[]>([]);
   MAX_IMAGES = 4;
 
-  postType: 'timeline' | 'feed' = 'timeline'; // Default to timeline
+  postType: 'timeline' | 'feed' = 'feed'; // Default to timeline
 
   isModalOpen = this.modalService.isModalOpen(ModalType.AddPost);
 
@@ -222,10 +222,10 @@ export class AddPostModalComponent {
           }
         : undefined,
       date: this.formatCurrentDate(),
-      type: 'feed' as const,
+      type: this.postType,
     };
 
-    this.postService.addPost(postData);
+    this.postService.addPost(postData, this.postType);
     this.closeModal();
     this.resetForm();
   }
