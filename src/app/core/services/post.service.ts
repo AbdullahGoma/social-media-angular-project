@@ -89,7 +89,8 @@ export class PostService {
         type: 'feed',
         author: {
           name: 'Abdullah Gomaa',
-          avatar: 'https://example.com/avatar4.jpg',
+          avatar:
+            'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg',
         },
         content:
           'My new recipe for vegan chocolate cake was a huge success! Everyone loved it at the potluck dinner.',
@@ -130,7 +131,8 @@ export class PostService {
         type: 'feed',
         author: {
           name: 'Abdullah Gomaa',
-          avatar: 'https://example.com/avatar6.jpg',
+          avatar:
+            'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg',
         },
         content:
           'Beautiful sunset at the beach today. Nature never fails to amaze me with its beauty.',
@@ -142,7 +144,7 @@ export class PostService {
         likes: 65,
         comments: 9,
         shares: 5,
-        isLiked: true,
+        isLiked: false,
         isExpanded: false,
       },
     ];
