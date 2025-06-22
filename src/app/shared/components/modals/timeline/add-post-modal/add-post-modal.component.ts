@@ -222,7 +222,7 @@ export class AddPostModalComponent {
           }
         : undefined,
       date: this.formatCurrentDate(),
-      type: 'feed',
+      type: 'feed' as const,
     };
 
     this.postService.addPost(postData);

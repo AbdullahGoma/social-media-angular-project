@@ -88,7 +88,7 @@ export class PostService {
   // Add new post
   addPost(
     newPost: Omit<Post, 'id' | 'likes' | 'comments' | 'shares'>,
-    type: 'timeline' | 'feed' = 'timeline'
+    type: 'timeline' | 'feed' = 'feed'
   ): Post {
     const post: Post = {
       ...newPost,

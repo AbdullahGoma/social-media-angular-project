@@ -20,5 +20,5 @@ export interface Post {
   shares: number;
   isExpanded?: boolean;
   isLiked?: boolean;
-  type: string;
+  type: 'timeline' | 'feed';
 }
