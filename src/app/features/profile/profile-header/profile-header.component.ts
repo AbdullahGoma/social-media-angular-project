@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-profile-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './profile-header.component.html',
-  styleUrl: './profile-header.component.css'
+  styleUrl: './profile-header.component.css',
 })
 export class ProfileHeaderComponent {
-
+  @Input() userId: number = 1;
 }

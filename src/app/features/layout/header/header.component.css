@@ -24,6 +24,10 @@
       text-decoration: none;
       color: var(--clr-text);
     }
+    
+    a.active {
+      color: var(--clr-text-light);
+    }
 
     li {
       --delay: 0.5s;

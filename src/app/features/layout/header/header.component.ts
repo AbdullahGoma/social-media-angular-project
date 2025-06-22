@@ -1,11 +1,12 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit, signal } from '@angular/core';
 import { SidebarService } from '../../../core/services/sidebar.service';
 import { DOCUMENT } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -16,6 +17,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   protected sidebarService = inject(SidebarService);
   protected isUserMenuOpen = signal(false);
   protected isNotificationsOpen = signal(false);
+
+  @Input() userId: number = 1;
 
   ngOnInit(): void {
     this.clickHandler = (event: Event) => {

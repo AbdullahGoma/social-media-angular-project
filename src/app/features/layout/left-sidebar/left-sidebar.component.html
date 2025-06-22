@@ -35,7 +35,7 @@
   <div class="side-wrapper">
     <div class="side-title">MENU</div>
     <div class="side-menu">
-      <a href="timeline.html">
+      <a routerLink="/timeline" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -50,7 +50,7 @@
         </svg>
         Home
       </a>
-      <a href="Profile.html">
+      <a [routerLink]="['/profile', 1, 'feed']" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -63,7 +63,7 @@
         </svg>
         Profile
       </a>
-      <a href="#">
+      <a routerLink="/explore" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -78,7 +78,7 @@
         </svg>
         Explore
       </a>
-      <a href="Settings.html">
+      <a routerLink="/settings" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
@@ -94,7 +94,7 @@
         </svg>
         Settings
       </a>
-      <a href="#">
+      <a [routerLink]="['/profile', 1, 'photos']" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -110,7 +110,7 @@
         </svg>
         Photos
       </a>
-      <a href="#">
+      <a [routerLink]="['/profile', 1, 'favs']" routerLinkActive="active">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 384 512"
