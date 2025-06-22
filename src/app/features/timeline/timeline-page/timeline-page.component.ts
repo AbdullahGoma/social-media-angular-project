@@ -9,6 +9,7 @@ import { StoriesComponent } from "../../stories/stories.component";
 import { StoryViewerModalComponent } from "../../../shared/components/modals/timeline/story-viewer-modal/story-viewer-modal.component";
 import { TextEditorModalComponent } from "../../../shared/components/modals/timeline/text-editor-modal/text-editor-modal.component";
 import { CreatePostBoxComponent } from "../../../shared/components/create-post-box/create-post-box.component";
+import { PostsListComponent } from "../../../shared/components/posts-list/posts-list.component";
 
 @Component({
   selector: 'app-timeline-page',
@@ -16,7 +17,8 @@ import { CreatePostBoxComponent } from "../../../shared/components/create-post-b
   imports: [
     StoriesComponent,
     StoryViewerModalComponent,
-    CreatePostBoxComponent
+    CreatePostBoxComponent,
+    PostsListComponent
 ],
   templateUrl: './timeline-page.component.html',
   styleUrl: './timeline-page.component.css',
@@ -25,42 +27,9 @@ export class TimelinePageComponent {
   private postService = inject(PostService);
   private modalService = inject(ModalService);
 
-  posts = toSignal(this.postService.posts$, { initialValue: [] });
-
-  toggleExpand(postId: string) {
-    this.postService.toggleExpand(postId);
-  }
-
-  shouldShowSeeMore(content: string): boolean {
-    const approxCharsPerLine = 100; // Approximate characters per line
-
-    // Simple character count estimation
-    return content.length > approxCharsPerLine * 3;
-  }
-
-  getImageGridClass(images?: string[]): string {
-    if (!images) return '';
-    const count = images.length;
-    if (count === 1) return 'single-image';
-    if (count === 2) return 'two-images';
-    if (count === 3) return 'three-images';
-    return 'four-images';
-  }
+  posts = this.postService.timelinePosts;
 
   previewImage(imageUrl: string) {
     this.modalService.openModal(ModalType.ImagePreview, imageUrl);
-  }
-
-  openPostDetails(postId: string) {
-    this.postService.selectPost(postId);
-    this.modalService.openModal(ModalType.PostDetails, postId); // Pass postId as data
-  }
-
-  /**
-   * Toggle like on a post
-   * @param postId The ID of the post to like/unlike
-   */
-  togglePostLike(postId: string): void {
-    this.postService.toggleLike(postId);
   }
 }

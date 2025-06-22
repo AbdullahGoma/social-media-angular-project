@@ -30,6 +30,8 @@ export class AddPostModalComponent {
   mediaFiles = signal<{ file: File; preview: string }[]>([]);
   MAX_IMAGES = 4;
 
+  postType: 'timeline' | 'feed' = 'timeline'; // Default to timeline
+
   isModalOpen = this.modalService.isModalOpen(ModalType.AddPost);
 
   // Dropdown states
@@ -66,6 +68,16 @@ export class AddPostModalComponent {
     { value: 'reading', emoji: '📖', label: 'Reading' },
     { value: 'celebrating', emoji: '🎉', label: 'Celebrating' },
   ];
+
+  ngOnInit() {
+    const modalData = this.modalService.getModalData<{
+      type: 'timeline' | 'feed';
+      onSubmit: (data: any) => void;
+    }>(ModalType.AddPost)();
+    if (modalData?.type) {
+      this.postType = modalData.type;
+    }
+  }
 
   // Check if post can be submitted
   canSubmit() {
@@ -210,6 +222,7 @@ export class AddPostModalComponent {
           }
         : undefined,
       date: this.formatCurrentDate(),
+      type: 'feed',
     };
 
     this.postService.addPost(postData);

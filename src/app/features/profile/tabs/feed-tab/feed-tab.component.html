@@ -113,7 +113,7 @@
     </div>
   </div>
 
-  <app-create-post-box />
+  <app-create-post-box type="feed" />
 
-  <!-- User Posts Added Here -->
+  <app-posts-list [posts]="posts()" />
 </div>

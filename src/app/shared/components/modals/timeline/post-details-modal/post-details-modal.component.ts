@@ -1,6 +1,5 @@
 import {
   Component,
-  computed,
   DestroyRef,
   inject,
   OnInit,
@@ -14,8 +13,6 @@ import { PostService } from '../../../../../core/services/post.service';
 import { LikesModalComponent } from '../likes-modal/likes-modal.component';
 import { CommentService } from '../../../../../core/services/comment.service';
 import { LikeService } from '../../../../../core/services/like.service';
-import { Observable } from 'rxjs';
-import { Post } from '../../../../models/post';
 import { Comment } from '../../../../models/comment';
 import { CommentComponent } from '../../../../../features/comment/comment.component';
 @Component({
@@ -31,8 +28,7 @@ export class PostDetailsModalComponent implements OnInit {
   private commentService = inject(CommentService);
   protected likeService = inject(LikeService);
 
-  post$: Observable<Post | null> = this.postService.selectedPost$;
-  post = signal<Post | null>(null);
+  post = this.postService.selectedPost;
 
   comments$ = this.commentService.comments$;
   comments = signal<Comment[] | null>(null);
@@ -46,20 +42,11 @@ export class PostDetailsModalComponent implements OnInit {
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
   ngOnInit() {
-    const subscription = this.post$.subscribe((post) => {
-      this.post.set(post);
-
-      if (post) {
-        this.loadCommentsForPost(post.id);
-      }
-    });
-
     const subscriptionComments = this.comments$.subscribe((comments) => {
       this.comments.set(comments);
     });
 
     this.destroyReferance.onDestroy(() => {
-      subscription.unsubscribe();
       subscriptionComments.unsubscribe();
     });
   }
