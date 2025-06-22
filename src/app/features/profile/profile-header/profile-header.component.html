@@ -2,17 +2,44 @@
   <div class="profile-avatar">
     <img
       src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
-      (click)="previewImage('https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg')"
+      (click)="
+        previewImage(
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg'
+        )
+      "
       alt="Profile picture"
       class="profile-img"
     />
     <div class="profile-name glitch">Abdullah Gomaa</div>
-    <button class="add-friend-btn" aria-label="Add Friend">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+    <button
+      class="add-friend-btn"
+      aria-label="Add Friend"
+      (click)="toggleFriendStatus()"
+      [class.animating]="isAnimating()"
+    >
+      @if (isFriend()) {
+      <!-- Add Friend SVG -->
+      <svg
+        class="add-friend"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 640 512"
+      >
         <path
           d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM504 312l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"
         />
       </svg>
+      } @else {
+      <!-- Remove Friend SVG -->
+      <svg
+        class="remove-friend"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 640 512"
+      >
+        <path
+          d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304l91.4 0C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7L29.7 512C13.3 512 0 498.7 0 482.3zM471 143c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+        />
+      </svg>
+      }
     </button>
 
     <button class="message-btn" aria-label="Send Message" (click)="openChat()">
@@ -27,11 +54,15 @@
     src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg"
     alt="Profile cover"
     class="profile-cover"
-    (click)="previewImage('https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg')"
+    (click)="
+      previewImage(
+        'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg'
+      )
+    "
   />
   <div class="profile-menu" role="tablist" aria-label="profile menu">
-    <a 
-      [routerLink]="['/profile', userId, 'feed']" 
+    <a
+      [routerLink]="['/profile', userId, 'feed']"
       routerLinkActive="active"
       #feedLink="routerLinkActive"
       [class.active]="feedLink.isActive"
@@ -40,8 +71,8 @@
     >
       Feed
     </a>
-    <a 
-      [routerLink]="['/profile', userId, 'about']" 
+    <a
+      [routerLink]="['/profile', userId, 'about']"
       routerLinkActive="active"
       #aboutLink="routerLinkActive"
       [class.active]="aboutLink.isActive"
@@ -50,8 +81,8 @@
     >
       About
     </a>
-    <a 
-      [routerLink]="['/profile', userId, 'friends']" 
+    <a
+      [routerLink]="['/profile', userId, 'friends']"
       routerLinkActive="active"
       #friendsLink="routerLinkActive"
       [class.active]="friendsLink.isActive"
@@ -60,8 +91,8 @@
     >
       Friends
     </a>
-    <a 
-      [routerLink]="['/profile', userId, 'photos']" 
+    <a
+      [routerLink]="['/profile', userId, 'photos']"
       routerLinkActive="active"
       #photosLink="routerLinkActive"
       [class.active]="photosLink.isActive"
@@ -70,8 +101,8 @@
     >
       Photos
     </a>
-    <a 
-      [routerLink]="['/profile', userId, 'favs']" 
+    <a
+      [routerLink]="['/profile', userId, 'favs']"
       routerLinkActive="active"
       #favsLink="routerLinkActive"
       [class.active]="favsLink.isActive"

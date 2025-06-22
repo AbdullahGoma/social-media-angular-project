@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ChatService } from '../../../core/services/chat.service';
 import { ModalType } from '../../../shared/models/modal-type';
@@ -19,6 +19,21 @@ export class ProfileHeaderComponent {
 
   private chatService = inject(ChatService);
   private modalService = inject(ModalService);
+
+  isFriend = signal(false);
+  isAnimating = signal(false);
+
+  toggleFriendStatus() {
+    if (this.isAnimating()) return;
+
+    this.isAnimating.set(true);
+    this.isFriend.update((val) => !val);
+
+    // Simulate API call
+    setTimeout(() => {
+      this.isAnimating.set(false);
+    }, 300); 
+  }
 
   openChat() {
     this.chatService.openChat(this.userName, this.userImage);
