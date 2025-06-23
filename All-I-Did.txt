@@ -175,6 +175,28 @@ ng g c shared/components/posts-list --skip-tests
 ng g s core/services/localStorage --skip-tests
 
 
+Sixth Day:--------------------------------------------------
+ng g c shared/components/profile-info-box --skip-tests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Install required dependencies
 ng add @ngrx/store@latest
 ng add @ngrx/effects@latest
