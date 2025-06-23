@@ -221,7 +221,11 @@ export class CommentService {
   }
 
   private generateMockComments(postId: string): Comment[] {
-    const baseComments = [
+    if (postId !== '1') {
+      return [];
+    }
+
+    return [
       {
         id: '1',
         postId,
@@ -231,7 +235,7 @@ export class CommentService {
         },
         content: 'This looks amazing! Where was this taken?',
         timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-        likes: 3,
+        likes: 1, // Matches the 1 like in generateMockCommentLikes for comment 1
         isLiked: false,
         replies: [
           {
@@ -243,7 +247,7 @@ export class CommentService {
             },
             content: "I think it's the Blue Ridge Mountains",
             timestamp: new Date(Date.now() - 3600000).toISOString(),
-            likes: 1,
+            likes: 1, // Matches the 1 like in generateMockCommentLikes for comment 2
             parentId: '1',
             isLiked: false,
           },
@@ -271,7 +275,7 @@ export class CommentService {
         },
         content: 'The colors in that sunset photo are incredible!',
         timestamp: new Date(Date.now() - 7200000).toISOString(),
-        likes: 5,
+        likes: 0,
         isLiked: false,
       },
       {
@@ -283,7 +287,7 @@ export class CommentService {
         },
         content: 'Has anyone been here recently? How were the crowds?',
         timestamp: new Date(Date.now() - 5400000).toISOString(),
-        likes: 2,
+        likes: 0,
         isLiked: false,
         replies: [
           {
@@ -302,7 +306,5 @@ export class CommentService {
         ],
       },
     ];
-
-    return baseComments;
   }
 }

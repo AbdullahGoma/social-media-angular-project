@@ -125,7 +125,6 @@ export class LikeService {
     this.commentLikes.set([]);
   }
 
-  // FIXED: Generate mock data for multiple posts/comments
   private generateMockPostLikes(): Like[] {
     return [
       {
@@ -146,11 +145,35 @@ export class LikeService {
       },
       {
         id: '3',
-        postId: '2',
+        postId: '1',
         userId: 'user3',
         userName: 'Alex Johnson',
         userAvatar: 'assets/images/avatar3.jpg',
         timestamp: new Date(Date.now() - 3600000 * 1).toISOString(),
+      },
+      {
+        id: '4',
+        postId: '1',
+        userId: 'user4',
+        userName: 'Emily Wilson',
+        userAvatar: 'assets/images/avatar4.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
+      },
+      {
+        id: '5',
+        postId: '1',
+        userId: 'user5',
+        userName: 'David Brown',
+        userAvatar: 'assets/images/avatar5.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 5).toISOString(),
+      },
+      {
+        id: '6',
+        postId: '2',
+        userId: 'user6',
+        userName: 'Lisa Wong',
+        userAvatar: 'assets/images/avatar6.jpg',
+        timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
       },
     ];
   }
@@ -158,19 +181,19 @@ export class LikeService {
   private generateMockCommentLikes(): Like[] {
     return [
       {
-        id: '4',
+        id: '7',
         commentId: '1',
-        userId: 'user4',
-        userName: 'Emily Wilson',
-        userAvatar: 'assets/images/avatar4.jpg',
+        userId: 'user7',
+        userName: 'Robert Taylor',
+        userAvatar: 'assets/images/avatar7.jpg',
         timestamp: new Date(Date.now() - 3600000).toISOString(),
       },
       {
-        id: '5',
+        id: '8',
         commentId: '2',
-        userId: 'user5',
-        userName: 'David Brown',
-        userAvatar: 'assets/images/avatar5.jpg',
+        userId: 'user8',
+        userName: 'Jennifer Lee',
+        userAvatar: 'assets/images/avatar8.jpg',
         timestamp: new Date(Date.now() - 3600000 * 3).toISOString(),
       },
     ];

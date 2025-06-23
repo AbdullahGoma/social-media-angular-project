@@ -59,9 +59,9 @@ export class PostService {
         feeling: { emoji: '😊', label: 'Happy' },
         status: { emoji: '📺', label: 'Watching' },
         date: '2:30 PM • Today',
-        likes: 42,
-        comments: 13,
-        shares: 7,
+        likes: 5, // Matches the 5 likes in generateMockPostLikes for post 1
+        comments: 6, // Matches the 6 comments in generateMockComments for post 1
+        shares: 2,
         isLiked: false,
         isExpanded: false,
       },
@@ -78,9 +78,9 @@ export class PostService {
           'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
         ],
         date: '10:15 AM • Yesterday',
-        likes: 28,
-        comments: 5,
-        shares: 2,
+        likes: 1, // Matches the 1 like in generateMockPostLikes for post 2
+        comments: 0, // No comments generated for post 2
+        shares: 0,
         isLiked: true,
         isExpanded: false,
       },
@@ -99,9 +99,9 @@ export class PostService {
         ],
         feeling: { emoji: '😋', label: 'Yummy' },
         date: '5:45 PM • 2 days ago',
-        likes: 36,
-        comments: 8,
-        shares: 4,
+        likes: 0, // No likes generated for post 3
+        comments: 0, // No comments generated for post 3
+        shares: 0,
         isLiked: false,
         isExpanded: false,
       },
@@ -120,9 +120,9 @@ export class PostService {
         feeling: { emoji: '🏃‍♂️', label: 'Running' },
         status: { emoji: '🏅', label: 'Achievement' },
         date: '8:20 AM • 3 days ago',
-        likes: 87,
-        comments: 24,
-        shares: 12,
+        likes: 0, // No likes generated for post 4
+        comments: 0, // No comments generated for post 4
+        shares: 0,
         isLiked: false,
         isExpanded: false,
       },
@@ -141,9 +141,9 @@ export class PostService {
         ],
         feeling: { emoji: '🌅', label: 'Sunset' },
         date: '7:15 PM • 4 days ago',
-        likes: 65,
-        comments: 9,
-        shares: 5,
+        likes: 0, // No likes generated for post 5
+        comments: 0, // No comments generated for post 5
+        shares: 0,
         isLiked: false,
         isExpanded: false,
       },
