@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Comment } from '../../shared/models/comment';
 import { delay, tap } from 'rxjs/operators';
@@ -13,7 +13,7 @@ export class CommentService {
   private commentsSignal = signal<Comment[]>([]);
   private currentPostId: string | null = null;
 
-  selectedComments = this.commentsSignal;
+  selectedComments = computed(() => this.commentsSignal);
 
   constructor(
     private localStorage: LocalStorageService,

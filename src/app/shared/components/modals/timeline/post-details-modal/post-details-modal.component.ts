@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { CommonModule } from '@angular/common';
@@ -24,30 +24,13 @@ export class PostDetailsModalComponent {
   protected likeService = inject(LikeService);
 
   post = this.postService.selectedPost;
-  commentsSignal = this.commentService.selectedComments;
   comments = this.commentService.selectedComments();
   newCommentSignal = signal('');
 
   replyingToId: string | null = null;
   replyingToUsername: string | null = null;
-
-  private destroyRef = inject(DestroyRef);
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
-  constructor() {
-    effect(() => {
-      this.comments = this.commentsSignal();
-    });
-
-    effect(() => {
-      const isOpen = this.isModalOpen();
-      const post = this.post();
-
-      if (isOpen && post) {
-        this.comments = this.commentsSignal();
-      }
-    });
-  }
 
   closeModal() {
     this.modalService.closeModal(ModalType.PostDetails);
@@ -60,7 +43,7 @@ export class PostDetailsModalComponent {
       this.replyingToId = null;
       this.replyingToUsername = null;
     } else {
-      const comment = this.findCommentById(this.comments || [], commentId);
+      const comment = this.findCommentById(this.comments() || [], commentId);
       if (comment) {
         this.replyingToId = commentId;
         this.replyingToUsername = comment.author.name;
@@ -93,11 +76,19 @@ export class PostDetailsModalComponent {
     if (this.newCommentSignal().trim() && currentPost) {
       this.commentService
         .addComment(currentPost.id, this.newCommentSignal(), this.replyingToId)
-        .subscribe(() => {
-          this.commentService.refreshComments();
-          this.newCommentSignal.set('');
-          this.replyingToId = null;
-          this.replyingToUsername = null;
+        .subscribe({
+          next: (createdComment) => {
+            // Only increment after successful creation
+            this.postService.incrementCommentCount(currentPost.id);
+            // this.cdr.detectChanges();
+            this.commentService.refreshComments();
+            this.newCommentSignal.set('');
+            this.replyingToId = null;
+            this.replyingToUsername = null;
+          },
+          error: (err) => {
+            console.error('Failed to add comment', err);
+          },
         });
     }
   }
@@ -141,7 +132,7 @@ export class PostDetailsModalComponent {
 
   toggleCommentLike(commentId: string): void {
     this.likeService.toggleCommentLike(commentId);
-    this.commentsSignal.update((comments) => {
+    this.comments.update((comments) => {
       return comments.map((comment) => {
         if (comment.id === commentId) {
           return {

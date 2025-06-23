@@ -232,6 +232,13 @@ export class PostService {
           : post
       )
     );
+
+    this.selectedPostSignal.update((post) => {
+      if (post && post.id === postId) {
+        return { ...post, comments: (post.comments || 0) + 1 };
+      }
+      return post;
+    });
     this.savePostsToStorage();
   }
 
