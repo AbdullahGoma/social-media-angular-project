@@ -11,9 +11,13 @@ import { LikeService } from './like.service';
 export class CommentService {
   private readonly STORAGE_KEY = 'social-app-comments';
   private commentsSignal = signal<Comment[]>([]);
-  private currentPostId: string | null = null;
+  private currentPostId = signal<string | null>(null);
 
-  selectedComments = computed(() => this.commentsSignal);
+  selectedComments = computed(() => {
+    const currentPostId = this.currentPostId();
+    if (!currentPostId) return [];
+    return this.commentsSignal().filter((c) => c.postId === currentPostId);
+  });
 
   constructor(
     private localStorage: LocalStorageService,
@@ -30,11 +34,15 @@ export class CommentService {
     const savedComments = this.localStorage.getItem<Comment[]>(
       this.STORAGE_KEY
     );
-    if (savedComments) {
-      this.commentsSignal.set(savedComments);
+
+    if (savedComments && savedComments.length > 0) {
+      const validComments = savedComments.filter(
+        (comment) => comment && comment.postId && comment.id
+      );
+      this.commentsSignal.set(validComments);
     } else {
-      // Initialize with some mock comments for demo
-      const mockComments = this.generateMockComments('1');
+      // Initialize with mock comments
+      const mockComments = this.allComments();
       this.commentsSignal.set(mockComments);
       this.saveCommentsToStorage();
     }
@@ -45,25 +53,26 @@ export class CommentService {
   }
 
   loadComments(postId: string): Observable<Comment[]> {
-    this.currentPostId = postId;
+    this.currentPostId.set(postId);
 
-    // Always get fresh comments from storage
-    const savedComments = this.localStorage.getItem<Comment[]>(
-      this.STORAGE_KEY
-    );
-    const allComments = savedComments || this.generateMockComments(postId);
+    let allComments = this.commentsSignal();
+
+    // If no comments exist, initialize with mock comments
+    if (allComments.length === 0) {
+      allComments = this.allComments();
+      this.commentsSignal.set(allComments);
+      this.saveCommentsToStorage();
+    }
 
     const postComments = allComments.filter((c) => c.postId === postId);
     this.commentsSignal.set(postComments);
 
-    // Load likes for each comment
+    // Load likes for comments
     postComments.forEach((comment) => {
       this.likeService.loadCommentLikes(comment.id);
-      if (comment.replies) {
-        comment.replies.forEach((reply) => {
-          this.likeService.loadCommentLikes(reply.id);
-        });
-      }
+      comment.replies?.forEach((reply) =>
+        this.likeService.loadCommentLikes(reply.id)
+      );
     });
 
     return of(postComments);
@@ -104,7 +113,7 @@ export class CommentService {
         this.saveCommentsToStorage();
 
         // Explicitly update the comments for the current post
-        if (this.currentPostId === postId) {
+        if (this.currentPostId() === postId) {
           const allComments = this.commentsSignal();
           const postComments = allComments.filter((c) => c.postId === postId);
           this.commentsSignal.set(postComments);
@@ -114,9 +123,35 @@ export class CommentService {
   }
 
   refreshComments() {
-    if (this.currentPostId) {
-      this.loadComments(this.currentPostId).subscribe();
+    if (this.currentPostId()) {
+      this.loadComments(this.currentPostId()!).subscribe();
     }
+  }
+
+  updateComment(
+    commentId: string,
+    updateFn: (comment: Comment) => Comment
+  ): void {
+    this.commentsSignal.update((comments) => {
+      return comments.map((comment) => {
+        // Update the main comment if it matches
+        if (comment.id === commentId) {
+          return updateFn(comment);
+        }
+
+        // Check and update replies if they exist
+        if (comment.replies) {
+          const updatedReplies = comment.replies.map((reply) =>
+            reply.id === commentId ? updateFn(reply) : reply
+          );
+          return { ...comment, replies: updatedReplies };
+        }
+
+        return comment;
+      });
+    });
+
+    this.saveCommentsToStorage();
   }
 
   /**
@@ -149,36 +184,8 @@ export class CommentService {
    */
   clearComments() {
     this.commentsSignal.set([]);
-    this.currentPostId = null;
+    this.currentPostId.set(null);
     this.likeService.clearLikes();
-  }
-
-  // Private helper methods
-
-  private fetchCommentsFromAPI(postId: string): Observable<Comment[]> {
-    // Simulate API call with delay
-    return of(this.generateMockComments(postId)).pipe(delay(500));
-  }
-
-  private postCommentToAPI(
-    postId: string,
-    content: string,
-    parentId: string | null
-  ): Observable<Comment> {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      postId,
-      author: {
-        name: 'Current User',
-        avatar: 'assets/images/default-avatar.png',
-      },
-      content,
-      timestamp: new Date().toISOString(),
-      likes: 0,
-      parentId,
-    };
-
-    return of(newComment).pipe(delay(300));
   }
 
   private transformComments(comments: Comment[]): Comment[] {
@@ -220,15 +227,11 @@ export class CommentService {
     return undefined;
   }
 
-  private generateMockComments(postId: string): Comment[] {
-    if (postId !== '1') {
-      return [];
-    }
-
+  private allComments(): Comment[] {
     return [
       {
         id: '1',
-        postId,
+        postId: '1',
         author: {
           name: 'Alex Johnson',
           avatar: 'assets/images/avatar1.jpg',
@@ -240,7 +243,7 @@ export class CommentService {
         replies: [
           {
             id: '2',
-            postId,
+            postId: '1',
             author: {
               name: 'Sarah Miller',
               avatar: 'assets/images/avatar2.jpg',
@@ -253,7 +256,7 @@ export class CommentService {
           },
           {
             id: '3',
-            postId,
+            postId: '1',
             author: {
               name: 'Mike Chen',
               avatar: 'assets/images/avatar3.jpg',
@@ -268,7 +271,7 @@ export class CommentService {
       },
       {
         id: '4',
-        postId,
+        postId: '2',
         author: {
           name: 'Emily Wilson',
           avatar: 'assets/images/avatar4.jpg',
@@ -280,7 +283,7 @@ export class CommentService {
       },
       {
         id: '5',
-        postId,
+        postId: '3',
         author: {
           name: 'David Smith',
           avatar: 'assets/images/avatar5.jpg',
@@ -292,7 +295,7 @@ export class CommentService {
         replies: [
           {
             id: '6',
-            postId,
+            postId: '3',
             author: {
               name: 'Lisa Wong',
               avatar: 'assets/images/avatar6.jpg',

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ModalService } from '../../../../../core/services/modal.service';
 import { ModalType } from '../../../../models/modal-type';
 import { CommonModule } from '@angular/common';
@@ -24,13 +24,36 @@ export class PostDetailsModalComponent {
   protected likeService = inject(LikeService);
 
   post = this.postService.selectedPost;
-  comments = this.commentService.selectedComments();
+  comments = this.commentService.selectedComments;
   newCommentSignal = signal('');
 
   replyingToId: string | null = null;
   replyingToUsername: string | null = null;
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
+  private lastLoadedPostId: string | null = null;
+
+  constructor() {
+    effect(
+      () => {
+        const post = this.post();
+        const isOpen = this.isModalOpen();
+
+        if (post && isOpen && post.id !== this.lastLoadedPostId) {
+          this.lastLoadedPostId = post.id;
+          this.commentService.loadComments(post.id).subscribe({
+            next: (comments) => {
+              console.log('Loaded comments:', comments);
+            },
+            error: (err) => {
+              console.error('Error loading comments:', err);
+            },
+          });
+        }
+      },
+      { allowSignalWrites: true }
+    );
+  }
 
   closeModal() {
     this.modalService.closeModal(ModalType.PostDetails);
@@ -132,30 +155,12 @@ export class PostDetailsModalComponent {
 
   toggleCommentLike(commentId: string): void {
     this.likeService.toggleCommentLike(commentId);
-    this.comments.update((comments) => {
-      return comments.map((comment) => {
-        if (comment.id === commentId) {
-          return {
-            ...comment,
-            likes: comment.likes + (comment.isLiked ? -1 : 1),
-            isLiked: !comment.isLiked,
-          };
-        }
-        if (comment.replies) {
-          comment.replies = comment.replies.map((reply) => {
-            if (reply.id === commentId) {
-              return {
-                ...reply,
-                likes: reply.likes + (reply.isLiked ? -1 : 1),
-                isLiked: !reply.isLiked,
-              };
-            }
-            return reply;
-          });
-        }
-        return comment;
-      });
-    });
+
+    this.commentService.updateComment(commentId, (comment) => ({
+      ...comment,
+      likes: comment.likes + (comment.isLiked ? -1 : 1),
+      isLiked: !comment.isLiked,
+    }));
   }
 
   openCommentLikes(commentId: string): void {

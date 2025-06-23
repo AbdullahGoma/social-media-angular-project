@@ -60,7 +60,7 @@ export class PostService {
         status: { emoji: '📺', label: 'Watching' },
         date: '2:30 PM • Today',
         likes: 5, // Matches the 5 likes in generateMockPostLikes for post 1
-        comments: 6, // Matches the 6 comments in generateMockComments for post 1
+        comments: 3, // Matches the 3 comments in generateMockComments for post 1
         shares: 2,
         isLiked: false,
         isExpanded: false,
@@ -79,7 +79,7 @@ export class PostService {
         ],
         date: '10:15 AM • Yesterday',
         likes: 1, // Matches the 1 like in generateMockPostLikes for post 2
-        comments: 0, // No comments generated for post 2
+        comments: 1, // 1 comment generated for post 2
         shares: 0,
         isLiked: true,
         isExpanded: false,
@@ -100,7 +100,7 @@ export class PostService {
         feeling: { emoji: '😋', label: 'Yummy' },
         date: '5:45 PM • 2 days ago',
         likes: 0, // No likes generated for post 3
-        comments: 0, // No comments generated for post 3
+        comments: 2, // 2 comments generated for post 3
         shares: 0,
         isLiked: false,
         isExpanded: false,
