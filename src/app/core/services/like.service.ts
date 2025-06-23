@@ -31,10 +31,8 @@ export class LikeService {
     );
 
     // Load ALL likes into storage signals
-    this.allPostLikes.set(savedPostLikes || this.generateMockPostLikes());
-    this.allCommentLikes.set(
-      savedCommentLikes || this.generateMockCommentLikes()
-    );
+    this.allPostLikes.set(savedPostLikes || this.getPostLikes());
+    this.allCommentLikes.set(savedCommentLikes || this.getCommentLikes());
 
     this.saveLikesToStorage();
   }
@@ -90,7 +88,7 @@ export class LikeService {
   }
 
   toggleCommentLike(commentId: string): void {
-    const currentUserId = 'current-user-id';
+    const currentUserId = 'current-user-id'; // Replace with actual user ID
     const allLikes = this.allCommentLikes();
 
     const existingLikeIndex = allLikes.findIndex(
@@ -115,9 +113,16 @@ export class LikeService {
       this.allCommentLikes.set([...allLikes, newLike]);
     }
 
-    // Update filtered likes for current comment
+    // Force update the specific comment likes
     this.loadCommentLikes(commentId);
     this.saveLikesToStorage();
+  }
+
+  isCommentLikedByUser(commentId: string): boolean {
+    const currentUserId = 'current-user-id'; // Replace with actual user ID
+    return this.allCommentLikes().some(
+      (like) => like.commentId === commentId && like.userId === currentUserId
+    );
   }
 
   clearLikes(): void {
@@ -125,7 +130,7 @@ export class LikeService {
     this.commentLikes.set([]);
   }
 
-  private generateMockPostLikes(): Like[] {
+  private getPostLikes(): Like[] {
     return [
       {
         id: '1',
@@ -178,7 +183,7 @@ export class LikeService {
     ];
   }
 
-  private generateMockCommentLikes(): Like[] {
+  private getCommentLikes(): Like[] {
     return [
       {
         id: '7',

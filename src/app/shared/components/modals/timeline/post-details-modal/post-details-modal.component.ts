@@ -131,8 +131,10 @@ export class PostDetailsModalComponent {
   }
 
   toggleCommentLike(commentId: string): void {
+    // Update the like service first
     this.likeService.toggleCommentLike(commentId);
 
+    // Then update the comment state
     this.commentService.updateComment(commentId, (comment) => ({
       ...comment,
       likes: comment.likes + (comment.isLiked ? -1 : 1),

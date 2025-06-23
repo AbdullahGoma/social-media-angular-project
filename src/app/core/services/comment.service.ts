@@ -34,7 +34,7 @@ export class CommentService {
     const savedComments = this.localStorage.getItem<Comment[]>(
       this.STORAGE_KEY
     );
-    
+
     if (savedComments && savedComments.length > 0) {
       const validComments = savedComments.filter(
         (comment) => comment && comment.postId && comment.id
@@ -64,9 +64,14 @@ export class CommentService {
     // Load likes
     postComments.forEach((comment) => {
       this.likeService.loadCommentLikes(comment.id);
-      comment.replies?.forEach((reply) =>
-        this.likeService.loadCommentLikes(reply.id)
-      );
+      // Sync the like state
+      comment.isLiked = this.likeService.isCommentLikedByUser(comment.id);
+
+      // Handle replies
+      comment.replies?.forEach((reply) => {
+        this.likeService.loadCommentLikes(reply.id);
+        reply.isLiked = this.likeService.isCommentLikedByUser(reply.id);
+      });
     });
 
     return of(postComments);
@@ -154,16 +159,13 @@ export class CommentService {
     const comment = this.findCommentById(comments, commentId);
 
     if (comment) {
+      // Update like count and state
       comment.likes = comment.likes || 0;
       comment.likes += comment.isLiked ? -1 : 1;
       comment.isLiked = !comment.isLiked;
 
       // Update like service
-      if (comment.isLiked) {
-        this.likeService.toggleCommentLike(commentId);
-      } else {
-        this.likeService.toggleCommentLike(commentId);
-      }
+      this.likeService.toggleCommentLike(commentId);
 
       this.commentsSignal.set(comments);
       this.saveCommentsToStorage();
