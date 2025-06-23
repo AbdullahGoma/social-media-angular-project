@@ -177,21 +177,17 @@ ng g s core/services/localStorage --skip-tests
 
 Sixth Day:--------------------------------------------------
 ng g c shared/components/profile-info-box --skip-tests
+ng g c shared/components/events --skip-tests
+ng g c shared/components/pages --skip-tests
 
+ng g c shared/components/modals/profile/about-modal --skip-tests 
 
+ng g s core/services/user --skip-tests
 
-
-
-
-
-
-
-
-
-
-
-
-
+ng g s core/services/about --skip-tests
+ng g s core/services/photos --skip-tests
+ng g s core/services/friends --skip-tests
+ng g s core/services/favorites --skip-tests
 
 
 

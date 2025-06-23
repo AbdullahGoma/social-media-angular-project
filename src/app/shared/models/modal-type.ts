@@ -17,4 +17,5 @@ export enum ModalType {
   LikesModal = 'likesModal',
   StoryType = 'storyType',
   TextEditor = 'textEditor',
+  AboutUser = 'aboutUser',
 }

@@ -1,23 +1,19 @@
 <div class="profile">
   <div class="profile-avatar">
     <img
-      src="https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg"
-      (click)="
-        previewImage(
-          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg'
-        )
-      "
+      [src]="headerData().avatar"
+      (click)="previewImage(headerData().avatar)"
       alt="Profile picture"
       class="profile-img"
     />
-    <div class="profile-name glitch">Abdullah Gomaa</div>
+    <div class="profile-name glitch">{{ headerData().name }}</div>
     <button
       class="add-friend-btn"
       aria-label="Add Friend"
       (click)="toggleFriendStatus()"
       [class.animating]="isAnimating()"
     >
-      @if (isFriend()) {
+      @if (headerData().isFriend) {
       <!-- Add Friend SVG -->
       <svg
         class="add-friend"
