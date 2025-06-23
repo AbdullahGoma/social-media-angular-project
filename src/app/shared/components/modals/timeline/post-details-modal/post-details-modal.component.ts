@@ -31,34 +31,11 @@ export class PostDetailsModalComponent {
   replyingToUsername: string | null = null;
   isModalOpen = this.modalService.isModalOpen(ModalType.PostDetails);
 
-  private lastLoadedPostId: string | null = null;
-
-  constructor() {
-    effect(
-      () => {
-        const post = this.post();
-        const isOpen = this.isModalOpen();
-
-        if (post && isOpen && post.id !== this.lastLoadedPostId) {
-          this.lastLoadedPostId = post.id;
-          this.commentService.loadComments(post.id).subscribe({
-            next: (comments) => {
-              console.log('Loaded comments:', comments);
-            },
-            error: (err) => {
-              console.error('Error loading comments:', err);
-            },
-          });
-        }
-      },
-      { allowSignalWrites: true }
-    );
-  }
-
   closeModal() {
     this.modalService.closeModal(ModalType.PostDetails);
     this.postService.clearSelectedPost();
     this.commentService.clearComments();
+    this.newCommentSignal.set('');
   }
 
   onReplyClicked(commentId: string) {

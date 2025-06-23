@@ -34,17 +34,16 @@ export class CommentService {
     const savedComments = this.localStorage.getItem<Comment[]>(
       this.STORAGE_KEY
     );
-
+    
     if (savedComments && savedComments.length > 0) {
       const validComments = savedComments.filter(
         (comment) => comment && comment.postId && comment.id
       );
       this.commentsSignal.set(validComments);
     } else {
-      // Initialize with mock comments
       const mockComments = this.allComments();
       this.commentsSignal.set(mockComments);
-      this.saveCommentsToStorage();
+      this.localStorage.setItem(this.STORAGE_KEY, mockComments);
     }
   }
 
@@ -55,19 +54,14 @@ export class CommentService {
   loadComments(postId: string): Observable<Comment[]> {
     this.currentPostId.set(postId);
 
-    let allComments = this.commentsSignal();
-
-    // If no comments exist, initialize with mock comments
-    if (allComments.length === 0) {
-      allComments = this.allComments();
-      this.commentsSignal.set(allComments);
-      this.saveCommentsToStorage();
-    }
+    // Always get fresh from localStorage to avoid staleness
+    const allComments =
+      this.localStorage.getItem<Comment[]>(this.STORAGE_KEY) || [];
+    this.commentsSignal.set(allComments); // Keep signal in sync
 
     const postComments = allComments.filter((c) => c.postId === postId);
-    this.commentsSignal.set(postComments);
 
-    // Load likes for comments
+    // Load likes
     postComments.forEach((comment) => {
       this.likeService.loadCommentLikes(comment.id);
       comment.replies?.forEach((reply) =>
@@ -111,20 +105,17 @@ export class CommentService {
           this.addTopLevelComment(newComment);
         }
         this.saveCommentsToStorage();
-
-        // Explicitly update the comments for the current post
-        if (this.currentPostId() === postId) {
-          const allComments = this.commentsSignal();
-          const postComments = allComments.filter((c) => c.postId === postId);
-          this.commentsSignal.set(postComments);
-        }
       })
     );
   }
 
   refreshComments() {
     if (this.currentPostId()) {
-      this.loadComments(this.currentPostId()!).subscribe();
+      const postId = this.currentPostId()!;
+      const postComments = this.commentsSignal().filter(
+        (c) => c.postId === postId
+      );
+      this.commentsSignal.set([...this.commentsSignal()]); // Trigger change detection
     }
   }
 
