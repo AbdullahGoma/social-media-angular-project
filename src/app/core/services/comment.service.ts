@@ -64,12 +64,19 @@ export class CommentService {
     // Load likes
     postComments.forEach((comment) => {
       this.likeService.loadCommentLikes(comment.id);
-      // Sync the like state
+
+      // Get the actual like count from LikeService
+      const commentLikes = this.likeService.getCommentLikesCount(comment.id);
+
+      // Update both like count and state
+      comment.likes = commentLikes;
       comment.isLiked = this.likeService.isCommentLikedByUser(comment.id);
 
       // Handle replies
       comment.replies?.forEach((reply) => {
         this.likeService.loadCommentLikes(reply.id);
+        const replyLikes = this.likeService.getCommentLikesCount(reply.id);
+        reply.likes = replyLikes;
         reply.isLiked = this.likeService.isCommentLikedByUser(reply.id);
       });
     });
@@ -159,13 +166,15 @@ export class CommentService {
     const comment = this.findCommentById(comments, commentId);
 
     if (comment) {
-      // Update like count and state
-      comment.likes = comment.likes || 0;
-      comment.likes += comment.isLiked ? -1 : 1;
-      comment.isLiked = !comment.isLiked;
-
-      // Update like service
+      // First toggle in LikeService
       this.likeService.toggleCommentLike(commentId);
+
+      // Then get the updated count
+      const newLikeCount = this.likeService.getCommentLikesCount(commentId);
+
+      // Update both count and state
+      comment.likes = newLikeCount;
+      comment.isLiked = this.likeService.isCommentLikedByUser(commentId);
 
       this.commentsSignal.set(comments);
       this.saveCommentsToStorage();

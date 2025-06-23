@@ -125,6 +125,11 @@ export class LikeService {
     );
   }
 
+  getCommentLikesCount(commentId: string): number {
+    return this.allCommentLikes().filter((like) => like.commentId === commentId)
+      .length;
+  }
+
   clearLikes(): void {
     this.postLikes.set([]);
     this.commentLikes.set([]);
