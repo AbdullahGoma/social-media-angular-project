@@ -1,1 +1,223 @@
-<p>friends-tab works!</p>
+<!-- friends-tab.component.html -->
+<div class="timeline-pt">
+  <!-- Friend Requests -->
+  <div class="intro box">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="title-text">Friend Requests</span>
+        <div class="title-underline"></div>
+      </div>
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="requestsSearchTerm"
+          placeholder="Search requests..."
+          class="search-input"
+        />
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="user-list-grid">
+      @for (request of paginatedRequests(); track request.id) { @if
+      (getUserDetails(request.friendId); as user) {
+      <div class="user">
+        <img [src]="user.avatar" class="user-img" />
+        <div class="friend-request-row">
+          <div>
+            <span>{{ user.name }}</span>
+            <div class="mutual-friends">
+              {{ user.mutualFriends }} mutual friends
+            </div>
+          </div>
+          <div class="request-actions">
+            <button class="accept-btn" (click)="acceptRequest(request.id)">
+              Accept
+            </button>
+            <button class="decline-btn" (click)="declineRequest(request.id)">
+              Decline
+            </button>
+          </div>
+        </div>
+      </div>
+      } } @empty {
+      <div class="no-results">No friend requests found</div>
+      }
+    </div>
+
+    <div class="pagination">
+      <button
+        class="pagination-btn prev-btn"
+        (click)="prevRequestsPage()"
+        [disabled]="requestsCurrentPage() === 1"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+        >
+          <path
+            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <div class="page-numbers">
+        @for (page of [].constructor(totalRequestsPages()); track $index) {
+        <button
+          class="page-number"
+          [class.active]="$index + 1 === requestsCurrentPage()"
+          (click)="requestsCurrentPage.set($index + 1)"
+        >
+          {{ $index + 1 }}
+        </button>
+        }
+      </div>
+      <button
+        class="pagination-btn next-btn"
+        (click)="nextRequestsPage()"
+        [disabled]="requestsCurrentPage() === totalRequestsPages()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+        >
+          <path
+            d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Friends List -->
+  <div class="intro box">
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="title-text">Friends</span>
+        <div class="title-underline"></div>
+      </div>
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="friendsSearchTerm"
+          placeholder="Search friends..."
+          class="search-input"
+        />
+        <svg
+          class="search-icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <div class="user-list-grid">
+      @for (friend of paginatedFriends(); track friend.id) { @if
+      (getUserDetails(friend.friendId); as user) {
+      <div class="user">
+        <img [src]="user.avatar" class="user-img" />
+        <div class="friend-row">
+          <div>
+            <span>{{ user.name }}</span>
+            <div class="mutual-friends">
+              {{ user.mutualFriends }} mutual friends
+            </div>
+          </div>
+          <div class="friend-actions">
+            <button class="friend-menu-btn">
+              <svg xmlns="http://www.w3.org/2000/svg">
+                <circle cx="5" cy="12" r="2" />
+                <circle cx="12" cy="12" r="2" />
+                <circle cx="19" cy="12" r="2" />
+              </svg>
+            </button>
+            <div class="friend-menu-dropdown">
+              <button
+                class="friend-menu-item remove-friend"
+                (click)="removeFriend(friend.friendId)"
+              >
+                Remove Friend
+              </button>
+              <button
+                class="friend-menu-item block-friend"
+                (click)="blockUser(friend.friendId)"
+              >
+                Block
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      } } @empty {
+      <div class="no-results">No friends found</div>
+      }
+    </div>
+
+    <div class="pagination">
+      <button
+        class="pagination-btn prev-btn"
+        (click)="prevFriendsPage()"
+        [disabled]="friendsCurrentPage() === 1"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+        >
+          <path
+            d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <div class="page-numbers">
+        @for (page of [].constructor(totalFriendsPages()); track $index) {
+        <button
+          class="page-number"
+          [class.active]="$index + 1 === friendsCurrentPage()"
+          (click)="friendsCurrentPage.set($index + 1)"
+        >
+          {{ $index + 1 }}
+        </button>
+        }
+      </div>
+      <button
+        class="pagination-btn next-btn"
+        (click)="nextFriendsPage()"
+        [disabled]="friendsCurrentPage() === totalFriendsPages()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+        >
+          <path
+            d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<app-confirmation-modal />

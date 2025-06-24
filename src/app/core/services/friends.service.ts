@@ -16,14 +16,28 @@ export class FriendsService {
   friends = computed(() => {
     const currentUser = this.userService.currentUser();
     return (
-      currentUser?.friendships.filter((f) => f.status === 'accepted') || []
+      currentUser?.friendships?.filter((f) => f.status === 'accepted') || []
     );
   });
+
+  // Get friend's name
+  getFriendName(friendId: string): string | undefined {
+    const user = this.userService.getUserById(friendId);
+    return user?.name;
+  }
+
+  // Get friend's avatar
+  getFriendAvatar(friendId: string): string | undefined {
+    const user = this.userService.getUserById(friendId);
+    return user?.avatar;
+  }
 
   // Get pending friend requests
   pendingRequests = computed(() => {
     const currentUser = this.userService.currentUser();
-    return currentUser?.friendships.filter((f) => f.status === 'pending') || [];
+    return (
+      currentUser?.friendships?.filter((f) => f.status === 'pending') || []
+    );
   });
 
   // Get followers
@@ -41,8 +55,8 @@ export class FriendsService {
     if (savedFriends) {
       this.friendsSignal.set(savedFriends);
     } else {
-      const defaultFriends = this.generateDefaultFriends();
-      this.friendsSignal.set(defaultFriends);
+      const friends = this.getFriends();
+      this.friendsSignal.set(friends);
       this.saveFriendsToStorage();
     }
   }
@@ -51,7 +65,7 @@ export class FriendsService {
     this.localStorage.setItem(this.STORAGE_KEY, this.friendsSignal());
   }
 
-  private generateDefaultFriends(): Friend[] {
+  private getFriends(): Friend[] {
     return [
       {
         id: '1',
@@ -69,30 +83,82 @@ export class FriendsService {
   }
 
   sendFriendRequest(friendId: string) {
-    this.userService.sendFriendRequest(friendId);
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId || currentUserId === friendId) return;
+
+    this.userService.updateUserFriendships(currentUserId, (friendships) => [
+      ...friendships,
+      {
+        id: `${currentUserId}-${friendId}`,
+        userId: currentUserId,
+        friendId,
+        status: 'pending',
+        since: new Date(),
+      },
+    ]);
   }
 
   acceptFriendRequest(friendshipId: string) {
-    this.userService.acceptFriendRequest(friendshipId);
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId) return;
+
+    this.userService.updateUserFriendships(currentUserId, (friendships) => {
+      const updatedFriendships = friendships.map((f) => {
+        if (f.id === friendshipId) {
+          return { ...f, status: 'accepted' as const };
+        }
+        return f;
+      });
+
+      // Add follower relationship
+      const friendship = friendships.find((f) => f.id === friendshipId);
+      if (friendship) {
+        this.userService.addFollower(currentUserId, {
+          id: `${friendship.userId}-${currentUserId}`,
+          userId: currentUserId,
+          followerId: friendship.userId,
+          since: new Date(),
+        });
+      }
+
+      return updatedFriendships;
+    });
   }
 
   rejectFriendRequest(friendshipId: string) {
-    // Similar to accept but with 'rejected' status
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId) return;
+
+    this.userService.updateUserFriendships(currentUserId, (friendships) =>
+      friendships.filter((f) => f.id !== friendshipId)
+    );
   }
 
-  removeFriend(userId: string) {
-    this.friendsSignal.update((friends) =>
-      friends.filter((f) => f.userId !== userId)
+  removeFriend(friendId: string) {
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId) return;
+
+    this.userService.updateUserFriendships(currentUserId, (friendships) =>
+      friendships.filter(
+        (f) => !(f.friendId === friendId && f.status === 'accepted')
+      )
     );
-    this.saveFriendsToStorage();
   }
 
   isFriend(userId: string): boolean {
     const currentUser = this.userService.currentUser();
     if (!currentUser) return false;
-
     return currentUser.friendships.some(
       (f) => f.friendId === userId && f.status === 'accepted'
     );
+  }
+
+  getMutualFriendsCount(userId: string): number {
+    // Implement actual mutual friends logic here
+    const currentUser = this.userService.currentUser();
+    if (!currentUser) return 0;
+
+    // This is a placeholder - implement your actual mutual friends logic
+    return Math.floor(Math.random() * 10) + 1;
   }
 }

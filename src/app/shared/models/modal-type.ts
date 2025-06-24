@@ -18,4 +18,5 @@ export enum ModalType {
   StoryType = 'storyType',
   TextEditor = 'textEditor',
   AboutUser = 'aboutUser',
+  Confiramation = 'confirmation'
 }

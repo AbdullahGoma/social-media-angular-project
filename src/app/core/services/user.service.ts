@@ -73,7 +73,7 @@ export class UserService {
   }
 
   private generateDefaultUsers(): User[] {
-    return [
+    const defaultUsers = [
       {
         id: '1',
         name: 'Abdullah Gomaa',
@@ -93,7 +93,30 @@ export class UserService {
         },
         photos: [],
         friends: [],
-        friendships: [],
+        friendships: [
+          {
+            id: '1-2',
+            userId: '1',
+            friendId: '2',
+            status: 'accepted',
+            since: new Date(Date.now() - 86400000 * 7), // 7 days ago
+          },
+          {
+            id: '1-3',
+            userId: '1',
+            friendId: '3',
+            status: 'accepted',
+            since: new Date(Date.now() - 86400000 * 14), // 14 days ago
+          },
+          // Add some pending requests
+          {
+            id: '4-1',
+            userId: '4',
+            friendId: '1',
+            status: 'pending',
+            since: new Date(Date.now() - 86400000 * 2), // 2 days ago
+          },
+        ],
         favorites: [],
         followers: [],
         posts: [],
@@ -104,7 +127,85 @@ export class UserService {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-    ];
+      // Add some friends
+      {
+        id: '2',
+        name: 'Ahmed Shtewy',
+        bio: 'Be Strong!',
+        avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+        email: 'ahmed@example.com',
+        about: {
+          userId: '2',
+          job: 'Doctor',
+          workplace: 'Tech Company',
+          location: 'Cairo, Egypt',
+          playerName: 'Ahmed',
+          status: 'single',
+          education: 'Cairo University',
+          phoneNumber: '+20123456789',
+        },
+        photos: [],
+        friends: [],
+        friendships: [
+          {
+            id: '2-1',
+            userId: '2',
+            friendId: '1',
+            status: 'accepted',
+            since: new Date(Date.now() - 86400000 * 7), // 7 days ago
+          },
+        ],
+        favorites: [],
+        followers: [],
+        posts: [],
+        comments: [],
+        likes: [],
+        chats: [],
+        stories: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '3',
+        name: 'Mohamed Ali',
+        bio: 'UI/UX Designer',
+        avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
+        email: 'mohamed@example.com',
+        about: {
+          userId: '3',
+          job: 'UI/UX Designer',
+          workplace: 'Design Studio',
+          location: 'Alexandria, Egypt',
+          playerName: 'Mohamed',
+          status: 'married',
+          education: 'Alexandria University',
+          phoneNumber: '+20123456790',
+        },
+        photos: [],
+        friends: [],
+        friendships: [
+          {
+            id: '3-1',
+            userId: '3',
+            friendId: '1',
+            status: 'accepted',
+            since: new Date(Date.now() - 86400000 * 14), // 14 days ago
+          },
+        ],
+        favorites: [],
+        followers: [],
+        posts: [],
+        comments: [],
+        likes: [],
+        chats: [],
+        stories: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      // Add more friends as needed
+    ] as const satisfies User[];
+
+    return defaultUsers;
   }
 
   updateProfile(profileData: Partial<User>): void {
@@ -284,6 +385,35 @@ export class UserService {
               photos: [newPhoto, ...user.photos],
               updatedAt: new Date(),
             }
+          : user
+      )
+    );
+    this.saveUsersToStorage();
+  }
+
+  currentUserId(): string | null {
+    return this.currentUserIdSignal();
+  }
+
+  updateUserFriendships(
+    userId: string,
+    updateFn: (friendships: Friendship[]) => Friendship[]
+  ) {
+    this.usersSignal.update((users) =>
+      users.map((user) =>
+        user.id === userId
+          ? { ...user, friendships: updateFn(user.friendships) }
+          : user
+      )
+    );
+    this.saveUsersToStorage();
+  }
+
+  addFollower(userId: string, follower: Follower) {
+    this.usersSignal.update((users) =>
+      users.map((user) =>
+        user.id === userId
+          ? { ...user, followers: [...user.followers, follower] }
           : user
       )
     );
