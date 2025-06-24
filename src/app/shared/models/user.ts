@@ -25,13 +25,15 @@ export interface User {
   updatedAt: Date;
 }
 
+export type AboutStatus = 'single' | 'married' | 'divorced' | 'widowed' | 'other';
+
 export interface About {
   userId?: string;
   job?: string;
   workplace?: string;
   location?: string;
   playerName?: string;
-  status?: 'single' | 'married' | 'divorced' | 'widowed' | 'other';
+  status?: AboutStatus;
   education?: string;
   phoneNumber?: string;
 }
@@ -44,12 +46,13 @@ export interface Photo {
   createdAt: Date;
   postId?: string; 
 }
+export type FriendshipStatus = 'pending' | 'accepted' | 'rejected';
 
 export interface Friendship {
   id: string;
   userId: string; // The user who initiated the friendship
   friendId: string; // The user who is being friended
-  status: 'pending' | 'accepted' | 'rejected';
+  status: FriendshipStatus;
   since: Date;
 }
 

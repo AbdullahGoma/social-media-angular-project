@@ -28,6 +28,11 @@ export class FriendsTabComponent {
   requestsCurrentPage = signal(1);
   itemsPerPage = 4;
 
+  ngOnInit() {
+    console.log('Friends:', this.friendsService.friends());
+    console.log('Pending requests:', this.friendsService.pendingRequests());
+  }
+
   // Filtered and paginated data
   filteredFriends = computed(() => {
     const term = this.friendsSearchTerm().toLowerCase();
@@ -46,7 +51,7 @@ export class FriendsTabComponent {
     if (!requests) return [];
 
     return requests.filter((request) => {
-      const user = this.userService.getUserById(request.friendId);
+      const user = this.userService.getUserById(request.userId);
       return user?.name?.toLowerCase().includes(term);
     });
   });

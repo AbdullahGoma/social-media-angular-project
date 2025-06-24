@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ModalType } from '../../../models/modal-type';
 import { ModalService } from '../../../../core/services/modal.service';
 
@@ -14,9 +14,19 @@ export class ConfirmationModalComponent {
 
   isModalOpen = this.modalService.isModalOpen(ModalType.Confiramation);
   modalData = this.modalService.getModalData<{
-    message?: string;
+    message: '';
     action: () => void;
   }>(ModalType.Confiramation);
+
+  modalMessage = signal<string>('');
+
+  constructor() {
+    effect(() => {
+      if (this.isModalOpen()) {
+        this.modalMessage.set(this.modalData().message);
+      }
+    })
+  }
 
   confirm() {
     const data = this.modalData();

@@ -1,5 +1,12 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { About, Follower, Friendship, Photo, User, UserProfile } from '../../shared/models/user';
+import {
+  About,
+  Follower,
+  Friendship,
+  Photo,
+  User,
+  UserProfile,
+} from '../../shared/models/user';
 import { LocalStorageService } from './localtorage.service';
 
 @Injectable({
@@ -93,30 +100,7 @@ export class UserService {
         },
         photos: [],
         friends: [],
-        friendships: [
-          {
-            id: '1-2',
-            userId: '1',
-            friendId: '2',
-            status: 'accepted',
-            since: new Date(Date.now() - 86400000 * 7), // 7 days ago
-          },
-          {
-            id: '1-3',
-            userId: '1',
-            friendId: '3',
-            status: 'accepted',
-            since: new Date(Date.now() - 86400000 * 14), // 14 days ago
-          },
-          // Add some pending requests
-          {
-            id: '4-1',
-            userId: '4',
-            friendId: '1',
-            status: 'pending',
-            since: new Date(Date.now() - 86400000 * 2), // 2 days ago
-          },
-        ],
+        friendships: [],
         favorites: [],
         followers: [],
         posts: [],
@@ -132,7 +116,7 @@ export class UserService {
         id: '2',
         name: 'Ahmed Shtewy',
         bio: 'Be Strong!',
-        avatar: 'https://randomuser.me/api/portraits/men/1.jpg',
+        avatar: 'assets/images/default-avatar.png',
         email: 'ahmed@example.com',
         about: {
           userId: '2',
@@ -146,15 +130,7 @@ export class UserService {
         },
         photos: [],
         friends: [],
-        friendships: [
-          {
-            id: '2-1',
-            userId: '2',
-            friendId: '1',
-            status: 'accepted',
-            since: new Date(Date.now() - 86400000 * 7), // 7 days ago
-          },
-        ],
+        friendships: [],
         favorites: [],
         followers: [],
         posts: [],
@@ -169,7 +145,7 @@ export class UserService {
         id: '3',
         name: 'Mohamed Ali',
         bio: 'UI/UX Designer',
-        avatar: 'https://randomuser.me/api/portraits/men/2.jpg',
+        avatar: 'assets/images/default-avatar.png',
         email: 'mohamed@example.com',
         about: {
           userId: '3',
@@ -183,15 +159,65 @@ export class UserService {
         },
         photos: [],
         friends: [],
-        friendships: [
-          {
-            id: '3-1',
-            userId: '3',
-            friendId: '1',
-            status: 'accepted',
-            since: new Date(Date.now() - 86400000 * 14), // 14 days ago
-          },
-        ],
+        friendships: [],
+        favorites: [],
+        followers: [],
+        posts: [],
+        comments: [],
+        likes: [],
+        chats: [],
+        stories: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '4',
+        name: 'Amar Ali',
+        bio: 'UI/UX Designer',
+        avatar: 'assets/images/default-avatar.png',
+        email: 'amar@example.com',
+        about: {
+          userId: '4',
+          job: 'UI/UX Designer',
+          workplace: 'Design Studio',
+          location: 'Alexandria, Egypt',
+          playerName: 'Mohamed',
+          status: 'married',
+          education: 'Alexandria University',
+          phoneNumber: '+20123456790',
+        },
+        photos: [],
+        friends: [],
+        friendships: [],
+        favorites: [],
+        followers: [],
+        posts: [],
+        comments: [],
+        likes: [],
+        chats: [],
+        stories: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: '5',
+        name: 'Sayed Basyouny',
+        bio: 'UI/UX Designer',
+        avatar: 'assets/images/default-avatar.png',
+        email: 'amar@example.com',
+        about: {
+          userId: '4',
+          job: 'UI/UX Designer',
+          workplace: 'Design Studio',
+          location: 'Alexandria, Egypt',
+          playerName: 'Mohamed',
+          status: 'married',
+          education: 'Alexandria University',
+          phoneNumber: '+20123456790',
+        },
+        photos: [],
+        friends: [],
+        friendships: [],
         favorites: [],
         followers: [],
         posts: [],
@@ -280,11 +306,6 @@ export class UserService {
     };
   }
 
-  getFriends(userId: string): Friendship[] {
-    const user = this.getUserById(userId);
-    return user?.friendships.filter((f) => f.status === 'accepted') || [];
-  }
-
   getFollowers(userId: string): Follower[] {
     const user = this.getUserById(userId);
     return user?.followers || [];
@@ -297,74 +318,6 @@ export class UserService {
     return currentUser.friendships.some(
       (f) => f.friendId === userId && f.status === 'accepted'
     );
-  }
-
-  sendFriendRequest(friendId: string) {
-    const currentUserId = this.currentUserIdSignal();
-    if (!currentUserId || currentUserId === friendId) return;
-
-    this.usersSignal.update((users) =>
-      users.map((user) => {
-        if (user.id === currentUserId) {
-          // Add friendship request
-          const newFriendship: Friendship = {
-            id: `${currentUserId}-${friendId}`,
-            userId: currentUserId,
-            friendId,
-            status: 'pending',
-            since: new Date(),
-          };
-          return {
-            ...user,
-            friendships: [...user.friendships, newFriendship],
-          };
-        }
-        return user;
-      })
-    );
-    this.saveUsersToStorage();
-  }
-
-  acceptFriendRequest(friendshipId: string) {
-    const currentUserId = this.currentUserIdSignal();
-    if (!currentUserId) return;
-
-    this.usersSignal.update((users) =>
-      users.map((user) => {
-        if (user.id === currentUserId) {
-          // Type-safe update of friendships
-          const updatedFriendships = user.friendships.map((f) => {
-            if (f.id === friendshipId) {
-              return {
-                ...f,
-                status: 'accepted' as const, // Explicitly type the status
-              };
-            }
-            return f;
-          });
-
-          // Find the friendship with proper typing
-          const friendship = user.friendships.find(
-            (f) => f.id === friendshipId
-          );
-          if (friendship) {
-            const newFollower: Follower = {
-              id: `${friendship.userId}-${currentUserId}`,
-              userId: currentUserId,
-              followerId: friendship.userId,
-              since: new Date(),
-            };
-            return {
-              ...user,
-              friendships: updatedFriendships,
-              followers: [...user.followers, newFollower],
-            };
-          }
-        }
-        return user;
-      })
-    );
-    this.saveUsersToStorage();
   }
 
   addPhoto(photo: Omit<Photo, 'id' | 'createdAt'>) {
