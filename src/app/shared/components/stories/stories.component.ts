@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild, inject } from '@angular/core';
-import { StoryService } from '../../core/services/story.service';
-import { DragScrollService } from '../../core/services/drag-scroll.service';
-import { ModalService } from '../../core/services/modal.service';
-import { ModalType } from '../../shared/models/modal-type';
-import { StoryItem } from '../../shared/models/story';
-import { StoryTypeModalComponent } from "../../shared/components/modals/timeline/story-type-modal/story-type-modal.component";
+import { StoryService } from '../../../core/services/story.service';
+import { DragScrollService } from '../../../core/services/drag-scroll.service';
+import { ModalService } from '../../../core/services/modal.service';
+import { ModalType } from '../../models/modal-type';
+import { StoryItem } from '../../models/story';
+import { StoryTypeModalComponent } from '../modals/timeline/story-type-modal/story-type-modal.component';
 
 @Component({
   selector: 'app-stories',

@@ -8,7 +8,7 @@ import { LikesModalComponent } from '../likes-modal/likes-modal.component';
 import { CommentService } from '../../../../../core/services/comment.service';
 import { LikeService } from '../../../../../core/services/like.service';
 import { Comment } from '../../../../models/comment';
-import { CommentComponent } from '../../../../../features/comment/comment.component';
+import { CommentComponent } from '../../../comment/comment.component';
 
 @Component({
   selector: 'app-post-details-modal',

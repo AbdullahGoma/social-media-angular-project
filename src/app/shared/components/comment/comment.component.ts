@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Comment } from '../../shared/models/comment';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { LikeService } from '../../core/services/like.service';
-import { ModalService } from '../../core/services/modal.service';
-import { ModalType } from '../../shared/models/modal-type';
+import { LikeService } from '../../../core/services/like.service';
+import { ModalService } from '../../../core/services/modal.service';
+import { Comment } from '../../models/comment';
+import { ModalType } from '../../models/modal-type';
 
 @Component({
   selector: 'app-comment',
