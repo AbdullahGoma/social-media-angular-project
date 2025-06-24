@@ -194,6 +194,11 @@ ng g s core/services/favorites --skip-tests
 Seventh Day:--------------------------------------------------
 ng g c features/landing --skip-tests 
 
+ng g g core/guards/no-auth --skip-tests
+
+ng g c features/not-found --skip-tests
+
+
 
 # Install required dependencies
 ng add @ngrx/store@latest

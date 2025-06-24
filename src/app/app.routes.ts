@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { LandingComponent } from './features/landing/landing.component';
 import { noAuthGuard } from './core/guards/no-auth.guard';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const APP_ROUTES: Routes = [
   // {
@@ -18,5 +19,12 @@ export const APP_ROUTES: Routes = [
     loadChildren: () =>
       import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: 'not-found',
+    component: NotFoundComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'not-found',
+  },
 ];
