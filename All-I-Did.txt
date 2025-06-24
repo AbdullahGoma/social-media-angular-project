@@ -191,6 +191,8 @@ ng g s core/services/favorites --skip-tests
 
 
 
+Seventh Day:--------------------------------------------------
+ng g c features/landing --skip-tests 
 
 
 # Install required dependencies
