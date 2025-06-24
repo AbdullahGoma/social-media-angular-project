@@ -762,7 +762,7 @@
     height: 28px;
     border-radius: 50%;
     transform: translate(-50%, -50%);
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -773,14 +773,33 @@
     z-index: 2;
   }
 
-  .nav-planet:hover {
-    transform: translate(-50%, -50%) scale(1.8);
+  .nav-planet::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -40px;
+    left: 30%;
+    transform: translateX(-50%);
+    background: var(--clr-bg-light);
+    backdrop-filter: blur(10px);
     color: var(--clr-text-light);
+    padding: 4px 8px;
+    border-radius: var(--radius-lg);
     font-size: 0.8rem;
-    width: auto;
-    height: auto;
-    padding: 0.6rem 1rem;
     white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-planet:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  .nav-planet:hover {
+    transform: translate(-50%, -50%) scale(1.5);
     box-shadow: 0 0 25px currentColor;
   }
 
@@ -982,28 +1001,7 @@
   }
 
   /* Gravity Well CTA */
-  .cta-gravity-well {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin: 2rem auto;
-    border-radius: 50%;
-    background: radial-gradient(
-      circle at center,
-      rgba(27, 134, 248, 0.3),
-      transparent 70%
-    );
-    animation: gravity-pulse 8s ease infinite;
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-
-  .cta-gravity-well:hover {
-    transform: scale(1.05);
-    animation: gravity-pulse 4s ease infinite;
-  }
-
-  .cta-event-horizon {
+.cta-event-horizon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1017,10 +1015,12 @@
       transparent 70%
     );
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 3rem;
   }
-
+  
   .cta-singularity {
     padding: 1rem 2rem;
     background: var(--clr-accent);
@@ -1035,8 +1035,17 @@
     border: none;
     cursor: pointer;
     font-size: 1.1rem;
+    width: 200px;
+    text-align: center;
   }
-
+  
+  .cta-singularity.secondary {
+    background: transparent;
+    color: var(--clr-text-light);
+    border: 2px solid var(--clr-accent-2);
+    box-shadow: 0 0 20px rgba(226, 185, 108, 0.5);
+  }
+  
   .cta-singularity:hover {
     transform: scale(1.1);
     box-shadow: 0 0 40px rgba(27, 134, 248, 0.9);
@@ -1045,6 +1054,27 @@
       var(--clr-accent),
       var(--clr-accent-2)
     );
+  }
+  
+  .cta-singularity.secondary:hover {
+    background: rgba(226, 185, 108, 0.2);
+    box-shadow: 0 0 30px rgba(226, 185, 108, 0.7);
+  }
+  
+  /* Adjust gravity well size to accommodate both buttons */
+  .cta-gravity-well {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    margin: 2rem auto;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at center,
+      rgba(27, 134, 248, 0.3),
+      transparent 70%
+    );
+    animation: gravity-pulse 8s ease infinite;
+    transition: all 0.3s ease;
   }
 
   .gravity-particles {
