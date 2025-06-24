@@ -14,18 +14,21 @@ export class ConfirmationModalComponent {
 
   isModalOpen = this.modalService.isModalOpen(ModalType.Confiramation);
   modalData = this.modalService.getModalData<{
-    message: '';
+    message: string;
     action: () => void;
   }>(ModalType.Confiramation);
 
   modalMessage = signal<string>('');
 
   constructor() {
-    effect(() => {
-      if (this.isModalOpen()) {
-        this.modalMessage.set(this.modalData().message);
-      }
-    })
+    effect(
+      () => {
+        if (this.isModalOpen()) {
+          this.modalMessage.set(this.modalData().message);
+        }
+      },
+      { allowSignalWrites: true } 
+    );
   }
 
   confirm() {

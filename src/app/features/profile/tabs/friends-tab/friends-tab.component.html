@@ -140,24 +140,32 @@
               {{ user.mutualFriends }} mutual friends
             </div>
           </div>
-          <div class="friend-actions">
-            <button class="friend-menu-btn">
+          <div class="friend-actions" #dropdownContainer>
+            <button
+              class="friend-menu-btn"
+              (click)="toggleDropdown(friend.friendId, $event)"
+            >
               <svg xmlns="http://www.w3.org/2000/svg">
                 <circle cx="5" cy="12" r="2" />
                 <circle cx="12" cy="12" r="2" />
                 <circle cx="19" cy="12" r="2" />
               </svg>
             </button>
-            <div class="friend-menu-dropdown">
+            <div
+              class="friend-menu-dropdown"
+              [class.show]="isDropdownOpen(friend.friendId)"
+            >
               <button
                 class="friend-menu-item remove-friend"
-                (click)="removeFriend(friend.friendId)"
+                (click)="
+                  removeFriend(friend.friendId); $event.stopPropagation()
+                "
               >
                 Remove Friend
               </button>
               <button
                 class="friend-menu-item block-friend"
-                (click)="blockUser(friend.friendId)"
+                (click)="blockUser(friend.friendId); $event.stopPropagation()"
               >
                 Block
               </button>

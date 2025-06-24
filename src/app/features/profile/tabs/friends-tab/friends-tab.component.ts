@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import { ModalType } from '../../../../shared/models/modal-type';
 import { FriendsService } from '../../../../core/services/friends.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -15,6 +15,15 @@ import { ConfirmationModalComponent } from '../../../../shared/components/modals
   styleUrl: './friends-tab.component.css',
 })
 export class FriendsTabComponent {
+  @ViewChild('dropdownContainer') dropdownContainer!: ElementRef;
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    if (!this.dropdownContainer.nativeElement.contains(event.target)) {
+      this.activeDropdownId.set(null);
+    }
+  }
+
   private friendsService = inject(FriendsService);
   private userService = inject(UserService);
   private modalService = inject(ModalService);
@@ -28,9 +37,21 @@ export class FriendsTabComponent {
   requestsCurrentPage = signal(1);
   itemsPerPage = 4;
 
-  ngOnInit() {
-    console.log('Friends:', this.friendsService.friends());
-    console.log('Pending requests:', this.friendsService.pendingRequests());
+  activeDropdownId = signal<string | null>(null);
+
+  toggleDropdown(friendId: string, event?: Event) {
+    event?.stopPropagation(); // Prevent event bubbling
+    this.activeDropdownId.update((current) =>
+      current === friendId ? null : friendId
+    );
+  }
+
+  isDropdownOpen(friendId: string) {
+    return this.activeDropdownId() === friendId;
+  }
+
+  closeDropdown() {
+    this.activeDropdownId.set(null);
   }
 
   // Filtered and paginated data
@@ -135,6 +156,7 @@ export class FriendsTabComponent {
   }
 
   removeFriend(userId: string) {
+    this.closeDropdown();
     this.modalService.openModal(ModalType.Confiramation, {
       message: 'Are you sure you want to remove this friend?',
       action: () => this.friendsService.removeFriend(userId),
@@ -142,6 +164,7 @@ export class FriendsTabComponent {
   }
 
   blockUser(userId: string) {
+    this.closeDropdown();
     this.modalService.openModal(ModalType.Confiramation, {
       message:
         "Are you sure you want to block this user? You will no longer be able to see each other's activities.",
