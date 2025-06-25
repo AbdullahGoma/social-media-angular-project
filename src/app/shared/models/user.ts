@@ -9,6 +9,7 @@ export interface User {
   name: string;
   bio?: string;
   avatar: string;
+  coverImage: string;
   email: string;
   about: About;
   photos: Photo[];
@@ -72,10 +73,16 @@ export interface Follower {
 }
 
 export interface Favorite {
-  userId: string;
-  type: 'post' | 'photo' | 'user' | 'page';
-  itemId: string;
-  addedAt: Date;
+  id: string;
+  type: 'photo' | 'post'; 
+  author: {
+    name: string;
+    avatar: string;
+    link: string;
+  };
+  date: string;
+  imageUrl: string;
+  content?: string; 
 }
 
 export interface UserProfile {

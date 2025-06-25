@@ -20,14 +20,12 @@ export class FriendsTabComponent {
 
   @HostListener('document:click', ['$event'])
   onClick(event: MouseEvent) {
-    if (!this.dropdownContainer.nativeElement.contains(event.target)) {
+    const target = event.target as HTMLElement;
+
+    // If click was outside any .friend-actions block, close dropdown
+    if (!target.closest('.friend-actions')) {
       this.activeDropdownId.set(null);
     }
-  }
-
-  constructor() {
-    console.log(this.paginatedFriends());
-    console.log(this.filteredRequests());
   }
 
   private friendsService = inject(FriendsService);

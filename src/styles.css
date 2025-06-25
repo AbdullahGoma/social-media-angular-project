@@ -299,6 +299,38 @@
       fill: var(--clr-text-muted);
     }
   }
+
+  @layer brand {
+    .brand-name {
+      font-family: var(--font-title);
+      font-size: 5rem;
+      font-weight: 700;
+      color: var(--clr-text-light);
+      margin-bottom: var(--space-sm);
+      background: linear-gradient(
+        to right,
+        var(--clr-accent),
+        var(--clr-accent-2)
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradientShift 8s ease infinite;
+      background-size: 200% 200%;
+    }
+
+    @keyframes gradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  }
 }
 
 @layer account-user {

@@ -87,6 +87,8 @@ export class UserService {
         bio: 'Web Developer | Angular Specialist',
         avatar:
           'https://res.cloudinary.com/dzqc5nfai/image/upload/v1743787413/tasiqt2dkqhjjmomflna.jpg',
+        coverImage:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg',
         email: 'abdullah@example.com',
         about: {
           userId: '1',
@@ -117,6 +119,8 @@ export class UserService {
         name: 'Ahmed Shtewy',
         bio: 'Be Strong!',
         avatar: 'assets/images/default-avatar.png',
+        coverImage:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg',
         email: 'ahmed@example.com',
         about: {
           userId: '2',
@@ -146,6 +150,8 @@ export class UserService {
         name: 'Mohamed Ali',
         bio: 'UI/UX Designer',
         avatar: 'assets/images/default-avatar.png',
+        coverImage:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg',
         email: 'mohamed@example.com',
         about: {
           userId: '3',
@@ -175,6 +181,8 @@ export class UserService {
         name: 'Amar Ali',
         bio: 'UI/UX Designer',
         avatar: 'assets/images/default-avatar.png',
+        coverImage:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg',
         email: 'amar@example.com',
         about: {
           userId: '4',
@@ -204,6 +212,8 @@ export class UserService {
         name: 'Sayed Basyouny',
         bio: 'UI/UX Designer',
         avatar: 'assets/images/default-avatar.png',
+        coverImage:
+          'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg',
         email: 'amar@example.com',
         about: {
           userId: '4',
@@ -300,8 +310,7 @@ export class UserService {
     return {
       name: user.name,
       avatar: user.avatar,
-      coverImage:
-        'https://res.cloudinary.com/dzqc5nfai/image/upload/v1742965630/footer_gcr56t.jpg', // You might want to add this to your User model
+      coverImage: user.coverImage,
       isFriend: this.isFriend(userId),
     };
   }
