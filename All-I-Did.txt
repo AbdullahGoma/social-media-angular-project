@@ -201,6 +201,38 @@ ng g c shared/components/modals/confirmation-modal --skip-tests
 
 
 
+
+
+Eighth Day:--------------------------------------------------
+
+
+ng g c shared/components/modals/profile/favorite-detail-modal --skip-tests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Install required dependencies
 ng add @ngrx/store@latest
 ng add @ngrx/effects@latest

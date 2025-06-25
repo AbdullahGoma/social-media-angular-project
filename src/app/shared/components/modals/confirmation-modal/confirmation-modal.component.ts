@@ -24,6 +24,8 @@ export class ConfirmationModalComponent {
     effect(
       () => {
         if (this.isModalOpen()) {
+          console.log(this.isModalOpen());
+          
           this.modalMessage.set(this.modalData().message);
         }
       },

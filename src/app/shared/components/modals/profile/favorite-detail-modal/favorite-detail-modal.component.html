@@ -1,0 +1,55 @@
+<!-- favorite-detail-modal.component.html -->
+@if (favorite()) {
+<div class="fav-detail-modal" [class.active]="isModalOpen()">
+  <div class="modal-content">
+    <button class="close-modal" (click)="closeModal()">&times;</button>
+    <div class="post-detail-header">
+      <img [src]="favorite()!.author.avatar" class="profile-pic" />
+      <div>
+        <h3 class="fav-author">{{ favorite()!.author.name }}</h3>
+        <div class="post-time">Saved {{ favorite()!.date }}</div>
+      </div>
+    </div>
+
+    <div class="post-detail-content">
+      @if (favorite()!.content) {
+      <p class="fav-content">{{ favorite()!.content }}</p>
+      }
+      <div class="post-detail-images">
+        <img
+          [src]="favorite()!.imageUrl"
+          alt="Saved content"
+          class="modal-image"
+        />
+      </div>
+      <div class="post-tags">
+        <span class="post-tag">⭐ Favorite</span>
+        <span class="post-tag type-tag">{{ favorite()!.type }}</span>
+      </div>
+    </div>
+
+    <div class="post-detail-actions">
+      <button class="action-btn like-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+          />
+        </svg>
+        <span>42</span>
+      </button>
+      <button class="action-btn comment-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+        </svg>
+        <span>13</span>
+      </button>
+      <button class="action-btn share-btn" (click)="downloadImage()">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+        </svg>
+        <span>Download</span>
+      </button>
+    </div>
+  </div>
+</div>
+}

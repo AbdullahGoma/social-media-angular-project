@@ -5,13 +5,12 @@ import { UserService } from '../../../../core/services/user.service';
 import { ModalService } from '../../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ConfirmationModalComponent } from '../../../../shared/components/modals/confirmation-modal/confirmation-modal.component';
 import { Friendship } from '../../../../shared/models/user';
 
 @Component({
   selector: 'app-friends-tab',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmationModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './friends-tab.component.html',
   styleUrl: './friends-tab.component.css',
 })

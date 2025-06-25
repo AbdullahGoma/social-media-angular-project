@@ -1,77 +1,93 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { Favorite } from '../../shared/models/user';
-import { LocalStorageService } from './localtorage.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FavoritesService {
-  private readonly STORAGE_KEY = 'social-app-user-favorites';
-  private localStorage = inject(LocalStorageService);
 
-  private favoritesSignal = signal<Favorite[]>([]);
-  favorites = this.favoritesSignal.asReadonly();
+export class FavoriteService {
+  private favorites = signal<Favorite[]>([]);
+  private searchTerm = signal<string>('');
+  public currentPage = signal<number>(1);
+  private itemsPerPage = 6; // Adjust based on your layout
+
+  // Computed values
+  filteredFavorites = computed(() => {
+    const term = this.searchTerm().toLowerCase();
+    if (!term) return this.favorites();
+
+    return this.favorites().filter(
+      (fav) =>
+        fav.author.name.toLowerCase().includes(term) ||
+        fav.type.toLowerCase().includes(term) ||
+        fav.content?.toLowerCase().includes(term)
+    );
+  });
+
+  paginatedFavorites = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage;
+    return this.filteredFavorites().slice(
+      startIndex,
+      startIndex + this.itemsPerPage
+    );
+  });
+
+  totalPages = computed(() =>
+    Math.ceil(this.filteredFavorites().length / this.itemsPerPage)
+  );
 
   constructor() {
-    this.loadInitialFavorites();
+    // Load initial data - in a real app, this would come from an API
+    this.loadFavorites();
   }
 
-  private loadInitialFavorites() {
-    const savedFavorites = this.localStorage.getItem<Favorite[]>(
-      this.STORAGE_KEY
-    );
-    if (savedFavorites) {
-      this.favoritesSignal.set(savedFavorites);
-    } else {
-      const defaultFavorites = this.generateDefaultFavorites();
-      this.favoritesSignal.set(defaultFavorites);
-      this.saveFavoritesToStorage();
+  private loadFavorites() {
+    // Mock data - replace with actual API call
+    const mockFavorites: Favorite[] = [
+      {
+        id: '1',
+        type: 'photo',
+        author: {
+          name: 'Jane Doe',
+          avatar: 'assets/pic.jpg',
+          link: '#',
+        },
+        date: '2 days ago',
+        imageUrl: 'assets/pic.jpg',
+      },
+      // Add more mock favorites as needed
+    ];
+    this.favorites.set(mockFavorites);
+  }
+
+  addFavorite(favorite: Favorite) {
+    this.favorites.update((favs) => [...favs, favorite]);
+  }
+
+  removeFavorite(id: string) {
+    this.favorites.update((favs) => favs.filter((f) => f.id !== id));
+  }
+
+  setSearchTerm(term: string) {
+    this.searchTerm.set(term);
+    this.currentPage.set(1); // Reset to first page when searching
+  }
+
+  setPage(page: number) {
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
     }
   }
 
-  private saveFavoritesToStorage() {
-    this.localStorage.setItem(this.STORAGE_KEY, this.favoritesSignal());
+  nextPage() {
+    if (this.currentPage() < this.totalPages()) {
+      this.currentPage.update((p) => p + 1);
+    }
   }
 
-  private generateDefaultFavorites(): Favorite[] {
-    return [
-      {
-        userId: '1',
-        type: 'post',
-        itemId: '1',
-        addedAt: new Date(),
-      },
-    ];
-  }
-
-  addFavorite(favorite: Omit<Favorite, 'addedAt'>) {
-    if (
-      this.favoritesSignal().some(
-        (f) => f.type === favorite.type && f.itemId === favorite.itemId
-      )
-    )
-      return;
-
-    const newFavorite: Favorite = {
-      ...favorite,
-      addedAt: new Date(),
-    };
-    this.favoritesSignal.update((favorites) => [...favorites, newFavorite]);
-    this.saveFavoritesToStorage();
-  }
-
-  removeFavorite(favorite: Omit<Favorite, 'addedAt'>) {
-    this.favoritesSignal.update((favorites) =>
-      favorites.filter(
-        (f) => !(f.type === favorite.type && f.itemId === favorite.itemId)
-      )
-    );
-    this.saveFavoritesToStorage();
-  }
-
-  isFavorite(favorite: Omit<Favorite, 'addedAt'>): boolean {
-    return this.favoritesSignal().some(
-      (f) => f.type === favorite.type && f.itemId === favorite.itemId
-    );
+  prevPage() {
+    if (this.currentPage() > 1) {
+      this.currentPage.update((p) => p - 1);
+    }
   }
 }
