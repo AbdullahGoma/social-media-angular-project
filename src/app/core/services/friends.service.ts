@@ -12,13 +12,14 @@ export class FriendsService {
   private localStorage = inject(LocalStorageService);
 
   private friendShipsSignal = signal<Friendship[]>([]);
+
   // Get accepted friendships
   friends = computed(() => {
     const currentUser = this.userService.currentUser();
     if (!currentUser) return [];
 
-    console.log((this.friendShipsSignal()));
-    
+    console.log(this.friendShipsSignal());
+
     return this.friendShipsSignal().filter(
       (fs) => fs.status === 'accepted' && fs.userId === currentUser.id
     );
@@ -42,7 +43,6 @@ export class FriendsService {
     if (!currentUser) return [];
 
     console.log(this.friendShipsSignal());
-    
 
     return this.friendShipsSignal().filter(
       (fs) => fs.status === 'pending' && fs.friendId === currentUser.id
@@ -98,20 +98,6 @@ export class FriendsService {
         since: fourteenDaysAgo,
       },
       {
-        id: '3',
-        userId: '2',
-        friendId: '1',
-        status: 'accepted',
-        since: twoDaysAgo,
-      },
-      {
-        id: '4',
-        userId: '3',
-        friendId: '1',
-        status: 'accepted',
-        since: sevenDaysAgo,
-      },
-      {
         id: '5',
         userId: '4',
         friendId: '1',
@@ -132,23 +118,26 @@ export class FriendsService {
     const currentUserId = this.userService.currentUserId();
     if (!currentUserId || currentUserId === friendId) return;
 
-    this.userService.updateUserFriendships(currentUserId, (friendships) => [
+    const newFriendship: Friendship = {
+      id: `${currentUserId}-${friendId}`,
+      userId: currentUserId,
+      friendId,
+      status: 'pending',
+      since: new Date(),
+    };
+
+    this.friendShipsSignal.update((friendships) => [
       ...friendships,
-      {
-        id: `${currentUserId}-${friendId}`,
-        userId: currentUserId,
-        friendId,
-        status: 'pending',
-        since: new Date(),
-      },
+      newFriendship,
     ]);
+    this.saveFriendsToStorage();
   }
 
   acceptFriendRequest(friendshipId: string) {
     const currentUserId = this.userService.currentUserId();
     if (!currentUserId) return;
 
-    this.userService.updateUserFriendships(currentUserId, (friendships) => {
+    this.friendShipsSignal.update((friendships) => {
       const updatedFriendships = friendships.map((f) => {
         if (f.id === friendshipId) {
           return { ...f, status: 'accepted' as const };
@@ -156,59 +145,78 @@ export class FriendsService {
         return f;
       });
 
-      // Add follower relationship
+      // Add reciprocal friendship if it doesn't exist
       const friendship = friendships.find((f) => f.id === friendshipId);
       if (friendship) {
-        this.userService.addFollower(currentUserId, {
-          id: `${friendship.userId}-${currentUserId}`,
-          userId: currentUserId,
-          followerId: friendship.userId,
-          since: new Date(),
-        });
+        const reciprocalExists = updatedFriendships.some(
+          (f) => f.userId === currentUserId && f.friendId === friendship.userId
+        );
+
+        if (!reciprocalExists) {
+          updatedFriendships.push({
+            id: `${currentUserId}-${friendship.userId}`,
+            userId: currentUserId,
+            friendId: friendship.userId,
+            status: 'accepted',
+            since: new Date(),
+          });
+        }
       }
 
       return updatedFriendships;
     });
+
+    this.saveFriendsToStorage();
   }
 
   rejectFriendRequest(friendshipId: string) {
     const currentUserId = this.userService.currentUserId();
     if (!currentUserId) return;
 
-    this.userService.updateUserFriendships(currentUserId, (friendships) =>
+    this.friendShipsSignal.update((friendships) =>
       friendships.filter((f) => f.id !== friendshipId)
     );
+    this.saveFriendsToStorage();
   }
 
   removeFriend(friendId: string) {
     const currentUserId = this.userService.currentUserId();
     if (!currentUserId) return;
 
-    this.userService.updateUserFriendships(currentUserId, (friendships) =>
+    this.friendShipsSignal.update((friendships) =>
       friendships.filter(
-        (f) => !(f.friendId === friendId && f.status === 'accepted')
+        (f) =>
+          !(
+            (f.userId === currentUserId && f.friendId === friendId) ||
+            (f.userId === friendId && f.friendId === currentUserId)
+          )
       )
     );
+    this.saveFriendsToStorage();
   }
 
   isFriend(userId: string): boolean {
-    const currentUser = this.userService.currentUser();
-    if (!currentUser) return false;
-    return currentUser.friendships.some(
-      (f) => f.friendId === userId && f.status === 'accepted'
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId) return false;
+
+    return this.friendShipsSignal().some(
+      (f) =>
+        f.userId === currentUserId &&
+        f.friendId === userId &&
+        f.status === 'accepted'
     );
   }
 
   getMutualFriendsCount(userId: string): number {
-    const currentUser = this.userService.currentUser();
-    if (!currentUser) return 0;
+    const currentUserId = this.userService.currentUserId();
+    if (!currentUserId) return 0;
 
-    const targetUser = this.userService.getUserById(userId);
-    if (!targetUser) return 0;
+    const currentUserFriends = this.friendShipsSignal()
+      .filter((f) => f.userId === currentUserId && f.status === 'accepted')
+      .map((f) => f.friendId);
 
-    const currentUserFriends = this.friends().map((f) => f.friendId);
-    const targetUserFriends = targetUser.friendships
-      .filter((f) => f.status === 'accepted')
+    const targetUserFriends = this.friendShipsSignal()
+      .filter((f) => f.userId === userId && f.status === 'accepted')
       .map((f) => f.friendId);
 
     return currentUserFriends.filter((id) => targetUserFriends.includes(id))
