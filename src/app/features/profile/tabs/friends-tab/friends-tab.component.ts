@@ -6,6 +6,7 @@ import { ModalService } from '../../../../core/services/modal.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ConfirmationModalComponent } from '../../../../shared/components/modals/confirmation-modal/confirmation-modal.component';
+import { Friendship } from '../../../../shared/models/user';
 
 @Component({
   selector: 'app-friends-tab',
@@ -22,6 +23,11 @@ export class FriendsTabComponent {
     if (!this.dropdownContainer.nativeElement.contains(event.target)) {
       this.activeDropdownId.set(null);
     }
+  }
+
+  constructor() {
+    console.log(this.paginatedFriends());
+    console.log(this.filteredRequests());
   }
 
   private friendsService = inject(FriendsService);
@@ -57,22 +63,30 @@ export class FriendsTabComponent {
   // Filtered and paginated data
   filteredFriends = computed(() => {
     const term = this.friendsSearchTerm().toLowerCase();
+    const currentUser = this.userService.currentUser();
     const friends = this.friendsService.friends();
-    if (!friends) return [];
+
+    if (!currentUser || !friends) return [];
 
     return friends.filter((friend) => {
-      const user = this.userService.getUserById(friend.friendId);
+      const otherUserId =
+        friend.userId === currentUser.id ? friend.friendId : friend.userId;
+
+      const user = this.userService.getUserById(otherUserId);
       return user?.name?.toLowerCase().includes(term);
     });
   });
 
   filteredRequests = computed(() => {
     const term = this.requestsSearchTerm().toLowerCase();
+    const currentUser = this.userService.currentUser();
     const requests = this.friendsService.pendingRequests();
-    if (!requests) return [];
+
+    if (!currentUser || !requests) return [];
 
     return requests.filter((request) => {
-      const user = this.userService.getUserById(request.userId);
+      const senderId = request.userId; // the one who sent the request
+      const user = this.userService.getUserById(senderId);
       return user?.name?.toLowerCase().includes(term);
     });
   });
@@ -97,9 +111,17 @@ export class FriendsTabComponent {
     Math.ceil(this.filteredRequests().length / this.itemsPerPage)
   );
 
-  // FIXED: Added getUserDetails method that your template expects
-  getUserDetails(friendId: string) {
+  getUserDetails(friendship: Friendship) {
+    const currentUser = this.userService.currentUser();
+    if (!currentUser) return null;
+
+    // Get the correct friend ID (the other user in the friendship)
+    const friendId =
+      friendship.userId === currentUser.id
+        ? friendship.friendId
+        : friendship.userId;
     const user = this.userService.getUserById(friendId);
+
     return {
       name: user?.name || 'Unknown User',
       avatar: user?.avatar || 'default-avatar.png',

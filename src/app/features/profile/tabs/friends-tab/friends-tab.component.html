@@ -28,7 +28,7 @@
 
     <div class="user-list-grid">
       @for (request of paginatedRequests(); track request.id) { @if
-      (getUserDetails(request.userId); as user) {
+      (getUserDetails(request); as user) {
       <div class="user">
         <img [src]="user.avatar" class="user-img" />
         <div class="friend-request-row">
@@ -130,7 +130,7 @@
 
     <div class="user-list-grid">
       @for (friend of paginatedFriends(); track friend.id) { @if
-      (getUserDetails(friend.friendId); as user) {
+      (getUserDetails(friend); as user) {
       <div class="user">
         <img [src]="user.avatar" class="user-img" />
         <div class="friend-row">

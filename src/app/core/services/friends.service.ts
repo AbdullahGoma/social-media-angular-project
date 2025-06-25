@@ -18,10 +18,10 @@ export class FriendsService {
     const currentUser = this.userService.currentUser();
     if (!currentUser) return [];
 
-    console.log(this.friendShipsSignal());
-
     return this.friendShipsSignal().filter(
-      (fs) => fs.status === 'accepted' && fs.userId === currentUser.id
+      (fs) =>
+        fs.status === 'accepted' &&
+        (fs.userId === currentUser.id || fs.friendId === currentUser.id)
     );
   });
 
@@ -42,10 +42,10 @@ export class FriendsService {
     const currentUser = this.userService.currentUser();
     if (!currentUser) return [];
 
-    console.log(this.friendShipsSignal());
-
     return this.friendShipsSignal().filter(
-      (fs) => fs.status === 'pending' && fs.friendId === currentUser.id
+      (fs) =>
+        fs.status === 'pending' &&
+        (fs.userId === currentUser.id || fs.friendId === currentUser.id)
     );
   });
 
@@ -138,29 +138,27 @@ export class FriendsService {
     if (!currentUserId) return;
 
     this.friendShipsSignal.update((friendships) => {
-      const updatedFriendships = friendships.map((f) => {
-        if (f.id === friendshipId) {
-          return { ...f, status: 'accepted' as const };
-        }
-        return f;
-      });
-
-      // Add reciprocal friendship if it doesn't exist
       const friendship = friendships.find((f) => f.id === friendshipId);
-      if (friendship) {
-        const reciprocalExists = updatedFriendships.some(
-          (f) => f.userId === currentUserId && f.friendId === friendship.userId
-        );
+      if (!friendship) return friendships;
 
-        if (!reciprocalExists) {
-          updatedFriendships.push({
-            id: `${currentUserId}-${friendship.userId}`,
-            userId: currentUserId,
-            friendId: friendship.userId,
-            status: 'accepted',
-            since: new Date(),
-          });
-        }
+      const updatedFriendships = friendships.map((f) =>
+        f.id === friendshipId ? { ...f, status: 'accepted' as const } : f
+      );
+
+      const reciprocalExists = friendships.some(
+        (f) =>
+          (f.userId === currentUserId && f.friendId === friendship.userId && f.status === 'accepted') ||
+          (f.userId === friendship.userId && f.friendId === currentUserId && f.status === 'accepted')
+      );
+
+      if (!reciprocalExists) {
+        updatedFriendships.push({
+          id: `${currentUserId}-${friendship.userId}`,
+          userId: currentUserId,
+          friendId: friendship.userId,
+          status: 'accepted',
+          since: new Date(),
+        });
       }
 
       return updatedFriendships;
