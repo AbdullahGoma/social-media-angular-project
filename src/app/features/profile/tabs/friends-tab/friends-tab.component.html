@@ -143,7 +143,7 @@
           <div class="friend-actions" #dropdownContainer>
             <button
               class="friend-menu-btn"
-              (click)="toggleDropdown(friend.friendId, $event)"
+              (click)="toggleDropdown(user.friendId, $event)"
             >
               <svg xmlns="http://www.w3.org/2000/svg">
                 <circle cx="5" cy="12" r="2" />
@@ -153,19 +153,19 @@
             </button>
             <div
               class="friend-menu-dropdown"
-              [class.show]="isDropdownOpen(friend.friendId)"
+              [class.show]="isDropdownOpen(user.friendId)"
             >
               <button
                 class="friend-menu-item remove-friend"
                 (click)="
-                  removeFriend(friend.friendId); $event.stopPropagation()
+                  removeFriend(user.friendId); $event.stopPropagation()
                 "
               >
                 Remove Friend
               </button>
               <button
                 class="friend-menu-item block-friend"
-                (click)="blockUser(friend.friendId); $event.stopPropagation()"
+                (click)="blockUser(user.friendId); $event.stopPropagation()"
               >
                 Block
               </button>

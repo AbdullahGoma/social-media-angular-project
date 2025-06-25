@@ -123,6 +123,7 @@ export class FriendsTabComponent {
     const user = this.userService.getUserById(friendId);
 
     return {
+      friendId: friendId,
       name: user?.name || 'Unknown User',
       avatar: user?.avatar || 'default-avatar.png',
       mutualFriends: this.friendsService.getMutualFriendsCount(friendId),
