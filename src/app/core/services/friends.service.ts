@@ -147,8 +147,8 @@ export class FriendsService {
 
       const reciprocalExists = friendships.some(
         (f) =>
-          (f.userId === currentUserId && f.friendId === friendship.userId && f.status === 'accepted') ||
-          (f.userId === friendship.userId && f.friendId === currentUserId && f.status === 'accepted')
+          (f.userId === currentUserId && f.friendId === friendship.userId) ||
+          (f.userId === friendship.userId && f.friendId === currentUserId)
       );
 
       if (!reciprocalExists) {
