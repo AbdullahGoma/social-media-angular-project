@@ -1,1 +1,79 @@
-<p>two-factor-auth-modal works!</p>
+<div class="modal active">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Two-Factor Authentication</h3>
+      <button class="close-modal" (click)="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+          <path
+            d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      @if (!twoFactorEnabled()) {
+      <div>
+        <p>
+          Two-factor authentication adds an extra layer of security to your
+          account.
+        </p>
+        <div class="two-factor-qr">
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=otpauth://totp/YourApp:user@example.com?secret=JBSWY3DPEHPK3PXP&issuer=YourApp"
+            alt="QR Code"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Enter 6-digit code</label>
+          <input
+            type="text"
+            [value]="verificationCode()"
+            (input)="onCodeInput($event)"
+            class="form-input"
+            placeholder="123456"
+            maxlength="6"
+          />
+        </div>
+        <button
+          class="modal-btn modal-btn-primary"
+          style="width: 100%; margin-top: 1rem"
+          (click)="toggleTwoFactor()"
+        >
+          Enable Two-Factor
+        </button>
+      </div>
+      } @else {
+      <div>
+        <p>Two-factor authentication is currently enabled for your account.</p>
+        <div class="form-group">
+          <label class="form-label">Enter 6-digit code to disable</label>
+          <input
+            type="text"
+            [value]="verificationCode()"
+            (input)="onCodeInput($event)"
+            class="form-input"
+            placeholder="123456"
+            maxlength="6"
+          />
+        </div>
+        <button
+          class="modal-btn modal-btn-primary"
+          style="
+            width: 100%;
+            margin-top: 1rem;
+            background-color: var(--clr-accent-4);
+          "
+          (click)="toggleTwoFactor()"
+        >
+          Disable Two-Factor
+        </button>
+      </div>
+      }
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn modal-btn-secondary" (click)="closeModal()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>

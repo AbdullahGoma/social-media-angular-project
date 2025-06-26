@@ -1,1 +1,145 @@
-<p>settings-page works!</p>
+<div class="main-container">
+  <div class="setting-box">
+    <h1 class="settings-title">Account Settings</h1>
+
+    <!-- Profile Image Section -->
+    <div class="profile-image-section">
+      <div class="profile-image-container" (click)="profileImageInput.click()">
+        <img [src]="profileImage()" alt="Profile Image" class="profile-image" />
+        <button
+          class="delete-image-btn"
+          (click)="deleteImage(); $event.stopPropagation()"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+            <path
+              d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+            />
+          </svg>
+        </button>
+      </div>
+      <input
+        type="file"
+        #profileImageInput
+        accept="image/*"
+        (change)="handleImageUpload($event)"
+        style="display: none"
+      />
+    </div>
+  </div>
+
+  <!-- Settings Grid -->
+  <div class="settings-grid">
+    <!-- Profile Locking -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Profile Locking</div>
+        <div class="settings-item-value">
+          Your profile is currently {{ profileLockStatus() }}
+        </div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('profileLock')">
+        Manage
+      </button>
+    </div>
+
+    <!-- Blocking -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Blocking</div>
+        <div class="settings-item-value">
+          {{ blockedUsersCount() }} users blocked
+        </div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('blocking')">
+        Manage
+      </button>
+    </div>
+
+    <!-- Email -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Email</div>
+        <div class="settings-item-value">{{ email() }}</div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('email')">
+        Change
+      </button>
+    </div>
+
+    <!-- Password -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Password</div>
+        <div class="settings-item-value">••••••••</div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('password')">
+        Change
+      </button>
+    </div>
+
+    <!-- Two Factor Auth -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Two Factor Auth</div>
+        <div class="settings-item-value">
+          {{ twoFactorStatus() ? "Enabled" : "Not enabled" }}
+        </div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('twoFactor')">
+        Manage
+      </button>
+    </div>
+
+    <!-- Name -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Name</div>
+        <div class="settings-item-value">{{ name() }}</div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('name')">
+        Change
+      </button>
+    </div>
+
+    <!-- Username -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Username</div>
+        <div class="settings-item-value">{{ username() }}</div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('username')">
+        Change
+      </button>
+    </div>
+
+    <!-- Contact Us -->
+    <div class="settings-item">
+      <div>
+        <div class="settings-item-label">Contact Us</div>
+        <div class="settings-item-value">Need help? Send us a message</div>
+      </div>
+      <button class="settings-action-btn" (click)="openModal('contact')">
+        Contact
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modals -->
+@if (showProfileLockModal()) {
+<app-profile-lock-modal (close)="showProfileLockModal.set(false)" />
+} @if (showBlockingModal()) {
+<app-blocking-modal (close)="showBlockingModal.set(false)" />
+} @if (showEmailModal()) {
+<app-email-change-modal (close)="showEmailModal.set(false)" />
+} @if (showPasswordModal()) {
+<app-password-change-modal (close)="showPasswordModal.set(false)" />
+} @if (showTwoFactorModal()) {
+<app-two-factor-auth-modal (close)="showTwoFactorModal.set(false)" />
+} @if (showNameModal()) {
+<app-name-change-modal (close)="showNameModal.set(false)" />
+} @if (showUsernameModal()) {
+<app-username-change-modal (close)="showUsernameModal.set(false)" />
+} @if (showContactModal()) {
+<app-contact-us-modal (close)="showContactModal.set(false)" />
+}
