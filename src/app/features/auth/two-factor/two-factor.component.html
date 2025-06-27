@@ -6,8 +6,30 @@
     />
   </picture>
   <div class="social-auth-content">
+    @if (isSubmitted()) {
+    <div class="success-message">
+      <h1 class="social-auth-title">Verification Successful!</h1>
+      <p>Your account has been successfully verified.</p>
+
+      <div class="social-feature-list">
+        <div class="social-feature-item">
+          <span class="social-feature-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+              />
+            </svg>
+          </span>
+          <span>Your account is now fully secured</span>
+        </div>
+      </div>
+
+      <a href="/dashboard" class="social-btn">Continue to Dashboard</a>
+    </div>
+    } @else {
     <h1 class="social-auth-title">Two-Factor Authentication</h1>
     <p>Please enter the 6-digit code sent to your email or phone.</p>
+
     <ul role="list" class="social-feature-list">
       <li>
         <span class="social-feature-icon">
@@ -41,86 +63,127 @@
       </li>
     </ul>
 
-    <form class="social-form" id="twoFactorForm">
-      <div class="social-form-group-two-auth with-error-field">
+    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="social-form">
+      <div class="social-form-group-two-auth">
         <label for="twoFactorCode">Authentication Code</label>
         <div class="otp-container">
           <input
+            #digit1
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit1"
+            (input)="onInput(0, $event)"
+            (keydown)="onKeyDown(0, $event)"
+            [class.invalid]="
+              otpForm.get('digit1')?.invalid && otpForm.get('digit1')?.touched
+            "
           />
           <input
+            #digit2
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit2"
+            (input)="onInput(1, $event)"
+            (keydown)="onKeyDown(1, $event)"
+            [class.invalid]="
+              otpForm.get('digit2')?.invalid && otpForm.get('digit2')?.touched
+            "
           />
           <input
+            #digit3
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit3"
+            (input)="onInput(2, $event)"
+            (keydown)="onKeyDown(2, $event)"
+            [class.invalid]="
+              otpForm.get('digit3')?.invalid && otpForm.get('digit3')?.touched
+            "
           />
           <input
+            #digit4
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit4"
+            (input)="onInput(3, $event)"
+            (keydown)="onKeyDown(3, $event)"
+            [class.invalid]="
+              otpForm.get('digit4')?.invalid && otpForm.get('digit4')?.touched
+            "
           />
           <input
+            #digit5
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit5"
+            (input)="onInput(4, $event)"
+            (keydown)="onKeyDown(4, $event)"
+            [class.invalid]="
+              otpForm.get('digit5')?.invalid && otpForm.get('digit5')?.touched
+            "
           />
           <input
+            #digit6
             type="text"
             inputmode="numeric"
             pattern="[0-9]"
             maxlength="1"
             class="otp-input"
-            required
-            placeholder="0"
+            formControlName="digit6"
+            (input)="onInput(5, $event)"
+            (keydown)="onKeyDown(5, $event)"
+            [class.invalid]="
+              otpForm.get('digit6')?.invalid && otpForm.get('digit6')?.touched
+            "
           />
         </div>
 
-        <!-- Hidden field to hold final code -->
-        <input
-          type="hidden"
-          id="twoFactorCode"
-          name="twoFactorCode"
-          pattern="^[0-9]{6}$"
-          required
-          title="Enter the 6-digit code"
-        />
-
-        <span class="social-form-error custom-tooltip"
-          >Please enter a valid 6-digit code</span
-        >
+        @if (otpForm.invalid && otpForm.touched) {
+        <div class="control-error">
+          <span>Please enter a valid 6-digit code</span>
+        </div>
+        }
       </div>
 
       <div class="social-form-links">
-        <a href="#">Didn't receive the code? Send again.</a>
+        <button
+          type="button"
+          class="text-button"
+          (click)="onResend()"
+          [disabled]="isResendDisabled()"
+        >
+          @if (isResendDisabled()) { Didn't receive the code? Resend in
+          {{ resendCountdown() }}s } @else { Didn't receive the code? Send again
+          }
+        </button>
         <a href="sign-in.html">Back to Sign In</a>
       </div>
-      <button class="social-btn">Verify</button>
+
+      <button
+        type="submit"
+        class="social-btn"
+        [disabled]="otpForm.invalid || isLoading()"
+      >
+        @if (isLoading()) {
+        <span class="spinner"></span>
+        } @else { Verify }
+      </button>
     </form>
+    }
   </div>
 </div>
