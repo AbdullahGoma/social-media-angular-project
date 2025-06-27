@@ -30,6 +30,7 @@
     --clr-accent-2: #e2b96c;
     --clr-accent-3: #7fd222;
     --clr-accent-4: #dd1c20;
+    --error: #ff9966;
 
     --clr-text: #ccc8db;
     --clr-text-muted: #9c9cab;
@@ -239,7 +240,7 @@
     border: 1px solid var(--clr-neutral-200);
     background-color: var(--clr-bg-light);
     color: var(--clr-text);
-    max-width: 40rem;
+    width: 100%;
   }
 
   input::placeholder {
@@ -259,7 +260,7 @@
 
   .social-form-group {
     display: grid;
-    gap: var(--space-xs);
+    gap: var(--space-md);
     font-size: var(--fs-300);
     font-weight: var(--fw-bold);
   }
@@ -332,6 +333,10 @@
 
   .social-form {
     isolation: isolate;
+  }
+
+  .social-form > * + * {
+    margin-top: 0.75rem;
   }
 
   .social-btn:hover::after,
@@ -419,6 +424,180 @@
     .social-auth-container > .social-auth-content {
       margin-inline: 0.25rem;
     }
+  }
+
+  .form-group > * + * {
+    margin-top: 2rem;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .social-form-group {
+    position: relative;
+  }
+
+  .social-form-group.no-margin {
+    margin-bottom: 0;
+  }
+
+  .social-form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.1rem;
+    transition: var(--transition);
+  }
+
+  .social-form-group input,
+  .social-form-group select {
+    display: block;
+    width: 100%;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: 2px solid var(--input-border);
+    transition: var(--transition);
+    font-family: "Lato", sans-serif;
+  }
+
+  .social-form-group input:focus,
+  .social-form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(24, 40, 38, 0.4),
+      0 4px 12px rgba(25, 78, 74, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .social-form-group input.invalid,
+  .social-form-group select.invalid {
+    border-color: var(--error);
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 0;
+  }
+
+  .control-error {
+    color: var(--error);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    min-height: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    padding-left: 0.5rem;
+    border-left: 3px solid var(--error);
+    position: absolute;
+    bottom: -1.5rem;
+    left: 0;
+    width: 100%;
+  }
+
+  .control-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    background: rgba(255, 153, 102, 0.1);
+    border-left: 3px solid var(--error);
+    border-radius: 0 0 6px 6px;
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    margin-top: -2px;
+    left: 0;
+    animation: fadeIn 0.2s ease-out;
+    line-height: 1.4;
+    white-space: normal;
+    min-height: 3rem;
+    overflow-y: auto; /* Adds scroll if too many errors */
+    scrollbar-width: thin;
+  }
+
+  /* Add these styles to your existing CSS */
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: var(--clr-text-light);
+    font-weight: normal;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--clr-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--clr-bg-light);
+    cursor: pointer;
+    position: relative;
+    transition: var(--transition);
+    flex-shrink: 0;
+  }
+
+  .checkbox-label input[type="checkbox"]:checked {
+    background-color: var(--clr-accent);
+    border-color: var(--clr-accent);
+  }
+
+  .checkbox-label input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 0.9rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .checkbox-label input[type="checkbox"]:focus {
+    outline: 2px solid var(--clr-accent-2);
+    outline-offset: 2px;
+  }
+
+  .checkbox-error {
+    color: var(--error);
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 153, 102, 0.1);
+    border-left: 3px solid var(--error);
+    border-radius: var(--radius-sm);
+    margin-top: 0.5rem;
+    margin-left: 2rem;
+  }
+
+  .social-form-group {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+
+  .input-wrapper {
+    position: relative;
+  }
+
+  .social-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: var(--clr-bg-light);
+  }
+
+  .social-btn:disabled:hover {
+    background: var(--clr-bg-light);
+    background-image: none;
   }
 }
 

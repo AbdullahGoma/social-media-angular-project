@@ -1,10 +1,11 @@
 <div class="social-auth-container">
   <picture>
-    <img src="assets/images/sign-up.png" alt="" />
+    <img src="assets/images/sign-up.png" alt="Sign up illustration" />
   </picture>
   <div class="social-auth-content">
     <h1 class="social-auth-title">Create an account</h1>
     <p>Sign up to start connecting with friends and communities.</p>
+
     <ul role="list" class="social-feature-list">
       <li>
         <span class="social-feature-icon">
@@ -38,68 +39,190 @@
       </li>
     </ul>
 
-    <form class="social-form">
-      <div class="social-form-group with-error-field">
-        <label for="name">Full Name</label>
-        <input
-          placeholder="Your full name"
-          type="text"
-          id="name"
-          name="name"
-          required
-          pattern=".{2,}"
-          title="Please enter your full name"
-        />
-        <span class="social-form-error">Please enter your full name</span>
+    <form
+      [formGroup]="reactiveForm"
+      (ngSubmit)="onSubmit()"
+      class="social-form"
+    >
+      <!-- Name Fields -->
+      <div formGroupName="name" class="form-group">
+        <!-- First Name -->
+        <div class="social-form-group">
+          <label for="firstName">First Name</label>
+          <div class="input-wrapper">
+            <input
+              placeholder="First name"
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              [class.invalid]="firstNameIsInvalid"
+              title="Please enter your first name"
+            />
+          </div>
+
+          @if (firstNameIsInvalid) {
+          <div class="control-error">
+            @if (firstName?.errors?.['required']) {
+            <span>First name is required</span>
+            } @if (firstName?.errors?.['minlength']) {
+            <span>Minimum 2 characters</span>
+            } @if (firstName?.errors?.['maxlength']) {
+            <span>Maximum 50 characters</span>
+            } @if (firstName?.errors?.['invalidName']) {
+            <span>Please enter a valid name</span>
+            } @if (firstName?.errors?.['containsInvalidChars']) {
+            <span>Cannot contain numbers or special characters</span>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Last Name -->
+        <div class="social-form-group">
+          <label for="lastName">Last Name</label>
+          <div class="input-wrapper">
+            <input
+              placeholder="Last name"
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              [class.invalid]="lastNameIsInvalid"
+              title="Please enter your last name"
+            />
+          </div>
+
+          @if (lastNameIsInvalid) {
+          <div class="control-error">
+            @if (lastName?.errors?.['required']) {
+            <span>Last name is required</span>
+            } @if (lastName?.errors?.['minlength']) {
+            <span>Minimum 2 characters</span>
+            } @if (lastName?.errors?.['maxlength']) {
+            <span>Maximum 50 characters</span>
+            } @if (lastName?.errors?.['invalidName']) {
+            <span>Please enter a valid name</span>
+            } @if (lastName?.errors?.['containsInvalidChars']) {
+            <span>Cannot contain numbers or special characters</span>
+            }
+          </div>
+          }
+        </div>
       </div>
 
-      <div class="social-form-group with-error-field">
+      <!-- Email Field -->
+      <div class="social-form-group">
         <label for="email">Email address</label>
-        <input
-          placeholder="email@company.com"
-          type="email"
-          id="email"
-          name="email"
-          required
-          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$"
-          title="Please enter a valid email address"
-        />
-        <span class="social-form-error"
-          >Please enter a valid email address</span
-        >
+        <div class="input-wrapper">
+          <input
+            placeholder="email@company.com"
+            type="email"
+            id="email"
+            formControlName="email"
+            [class.invalid]="emailIsInvalid"
+            title="Please enter a valid email address"
+          />
+        </div>
+
+        @if (emailIsInvalid) {
+        <div class="control-error">
+          @if (email?.errors?.['required']) {
+          <span>Email is required</span>
+          } @if (email?.errors?.['invalidEmail']) {
+          <span>Please enter a valid email address</span>
+          }
+        </div>
+        }
       </div>
 
-      <div class="social-form-group with-error-field">
-        <label for="password">Password</label>
-        <input
-          placeholder="Password"
-          type="password"
-          id="password"
-          name="password"
-          required
-          pattern=".{8,}"
-          title="Password must be at least 8 characters"
-        />
-        <span class="social-form-error"
-          >Password must be at least 8 characters</span
-        >
+      <!-- Password Field -->
+      <div formGroupName="passwords" class="form-group">
+        <div class="social-form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input
+              placeholder="Password"
+              type="password"
+              id="password"
+              formControlName="password"
+              [class.invalid]="passwordIsInvalid"
+              title="Password must be at least 8 characters"
+            />
+          </div>
+
+          @if (passwordIsInvalid) {
+          <div class="control-error">
+            @if (password?.errors?.['required']) {
+            <span>Password is required</span>
+            } @if (password?.errors?.['minlength']) {
+            <span>Password must be at least 8 characters</span>
+            } @if (password?.errors?.['missingUpperCase']) {
+            <span>Must contain at least one uppercase letter</span>
+            } @if (password?.errors?.['missingLowerCase']) {
+            <span>Must contain at least one lowercase letter</span>
+            } @if (password?.errors?.['missingNumber']) {
+            <span>Must contain at least one number</span>
+            } @if (password?.errors?.['missingSpecialChar']) {
+            <span>Must contain at least one special character</span>
+            }
+          </div>
+          }
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="social-form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <div class="input-wrapper">
+            <input
+              placeholder="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              [class.invalid]="confirmPasswordIsInvalid || (passwords?.errors?.['passwordMismatch'] && confirmPassword?.touched)"
+              title="Please confirm your password"
+            />
+          </div>
+
+          @if (confirmPasswordIsInvalid) {
+          <div class="control-error">
+            @if (confirmPassword?.errors?.['required']) {
+            <span>Please confirm your password</span>
+            }
+          </div>
+          } @if (passwords?.errors?.['passwordMismatch'] &&
+          confirmPassword?.touched) {
+          <div class="control-error">
+            <span>Passwords do not match</span>
+          </div>
+          }
+        </div>
       </div>
 
-      <div class="social-form-group with-error-field">
-        <label for="confirm-password">Confirm Password</label>
-        <input
-          placeholder="Confirm Password"
-          type="password"
-          id="confirm-password"
-          name="confirm-password"
-          required
-          pattern=".{8,}"
-          title="Please confirm your password"
-        />
-        <span class="social-form-error">Please confirm your password</span>
+      <!-- Terms Checkbox -->
+      <div class="social-form-group">
+        <label for="terms" class="checkbox-label">
+          <input
+            type="checkbox"
+            id="terms"
+            formControlName="terms"
+            [class.invalid]="termsIsInvalid"
+          />
+          <span>I agree to the terms and conditions</span>
+        </label>
+
+        @if (termsIsInvalid) {
+        <div class="checkbox-error">
+          <span>You must accept the terms and conditions</span>
+        </div>
+        }
       </div>
 
-      <button class="social-btn">Sign up</button>
+      <button
+        type="submit"
+        class="social-btn"
+        [disabled]="reactiveForm.invalid"
+      >
+        Sign up
+      </button>
     </form>
   </div>
 </div>
