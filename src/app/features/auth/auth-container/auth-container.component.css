@@ -580,11 +580,6 @@
     margin-left: 2rem;
   }
 
-  .social-form-group {
-    position: relative;
-    margin-bottom: 3rem;
-  }
-
   .input-wrapper {
     position: relative;
   }
@@ -646,6 +641,66 @@
     .social-form-links {
       align-items: flex-start;
       text-align: left;
+    }
+  }
+
+  .success-message {
+    text-align: center;
+  }
+  
+  .success-message .social-auth-title {
+    margin-bottom: 1rem;
+  }
+  
+  .success-message p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .success-message .social-feature-list {
+    margin: 2rem 0;
+  }
+  
+  .social-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .back-to-login {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .back-to-login a {
+    color: var(--clr-accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .back-to-login a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Loading spinner */
+  .spinner {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .success-message {
+      padding: 0 1rem;
     }
   }
 }
