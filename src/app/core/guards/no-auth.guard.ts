@@ -6,7 +6,7 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   // if (authService.isLoggedIn()) {
-    return router.parseUrl('/app/timeline');
+    // return router.parseUrl('/app/timeline');
   // }
-  // return true;
+  return true;
 };

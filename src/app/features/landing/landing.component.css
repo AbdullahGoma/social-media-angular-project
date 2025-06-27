@@ -3,7 +3,6 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--clr-primary);
     color: var(--clr-text);
     position: relative;
     overflow: hidden;
@@ -1001,7 +1000,7 @@
   }
 
   /* Gravity Well CTA */
-.cta-event-horizon {
+  .cta-event-horizon {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1020,7 +1019,7 @@
     justify-content: center;
     gap: 3rem;
   }
-  
+
   .cta-singularity {
     padding: 1rem 2rem;
     background: var(--clr-accent);
@@ -1038,14 +1037,14 @@
     width: 200px;
     text-align: center;
   }
-  
+
   .cta-singularity.secondary {
     background: transparent;
     color: var(--clr-text-light);
     border: 2px solid var(--clr-accent-2);
     box-shadow: 0 0 20px rgba(226, 185, 108, 0.5);
   }
-  
+
   .cta-singularity:hover {
     transform: scale(1.1);
     box-shadow: 0 0 40px rgba(27, 134, 248, 0.9);
@@ -1055,12 +1054,12 @@
       var(--clr-accent-2)
     );
   }
-  
+
   .cta-singularity.secondary:hover {
     background: rgba(226, 185, 108, 0.2);
     box-shadow: 0 0 30px rgba(226, 185, 108, 0.7);
   }
-  
+
   /* Adjust gravity well size to accommodate both buttons */
   .cta-gravity-well {
     position: relative;

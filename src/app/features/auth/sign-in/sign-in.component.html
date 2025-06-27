@@ -1,1 +1,85 @@
-<p>sign-in works!</p>
+<div class="social-auth-container">
+  <picture>
+    <img src="assets/images/sign-in.png" alt="Sign In" />
+  </picture>
+  <div class="social-auth-content">
+    <h1 class="social-auth-title">Sign in to your account</h1>
+    <p>Welcome back! Please enter your details below to continue.</p>
+    <ul role="list" class="social-feature-list">
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Connect with friends and communities
+      </li>
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Share photos, stories, and updates
+      </li>
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Discover trending posts and events
+      </li>
+    </ul>
+
+    <form
+      class="social-form"
+      method="POST"
+      action="two-factor-authentication.html"
+    >
+      <div class="social-form-group with-error-field">
+        <label for="email">Email address</label>
+        <input
+          placeholder="email@company.com"
+          type="email"
+          id="email"
+          required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$"
+          title="Please enter a valid email address"
+        />
+        <span class="social-form-error"
+          >Please enter a valid email address</span
+        >
+      </div>
+      <div class="social-form-group with-error-field">
+        <label for="password">Password</label>
+        <input
+          placeholder="Password"
+          type="password"
+          id="password"
+          name="password"
+          required
+          pattern=".{8,}"
+          title="Password must be at least 8 characters"
+        />
+        <span class="social-form-error">Please enter a valid password</span>
+      </div>
+
+      <div class="social-form-links">
+        <a href="confrmation-email.html"
+          >Didn't receive the confirmation email?</a
+        >
+        <a href="forget-password.html">Forgot password?</a>
+
+        <a href="sign-up.html">Sign up?</a>
+      </div>
+      <button type="submit" class="social-btn">Sign in</button>
+    </form>
+  </div>
+</div>

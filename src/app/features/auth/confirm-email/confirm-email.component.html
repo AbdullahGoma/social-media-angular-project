@@ -1,1 +1,60 @@
-<p>confirm-email works!</p>
+<div class="social-auth-container">
+  <picture>
+    <img src="assets/images/confirmation-email.png" alt="Email Confirmation" />
+  </picture>
+  <div class="social-auth-content">
+    <h1 class="social-auth-title">Didn't receive the confirmation email?</h1>
+    <p>Enter your email address and we'll resend your confirmation link.</p>
+    <ul role="list" class="social-feature-list">
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Secure confirmation link
+      </li>
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Reactivate your access
+      </li>
+      <li>
+        <span class="social-feature-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"
+            />
+          </svg>
+        </span>
+        Quick resend process
+      </li>
+    </ul>
+
+    <form class="social-form">
+      <div class="social-form-group with-error-field">
+        <label for="email">Email address</label>
+        <input
+          placeholder="email@company.com"
+          type="email"
+          id="email"
+          required
+          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$"
+          title="Please enter a valid email address"
+        />
+        <span class="social-form-error"
+          >Please enter a valid email address</span
+        >
+      </div>
+
+      <button class="social-btn">Resend Confirmation</button>
+    </form>
+  </div>
+</div>

@@ -4,13 +4,13 @@ import { noAuthGuard } from './core/guards/no-auth.guard';
 import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const APP_ROUTES: Routes = [
-  // {
-  //   path: '',
-  //   component: LandingComponent,
-  //   canActivate: [noAuthGuard],
-  // },
   {
     path: '',
+    component: LandingComponent,
+    canActivate: [noAuthGuard],
+  },
+  {
+    path: 'app',
     loadChildren: () =>
       import('./features/layout/layout.routes').then((m) => m.LAYOUT_ROUTES),
   },
