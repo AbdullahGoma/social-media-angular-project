@@ -5,6 +5,7 @@
   <div class="social-auth-content">
     <h1 class="social-auth-title">Sign in to your account</h1>
     <p>Welcome back! Please enter your details below to continue.</p>
+
     <ul role="list" class="social-feature-list">
       <li>
         <span class="social-feature-icon">
@@ -39,47 +40,87 @@
     </ul>
 
     <form
+      [formGroup]="reactiveForm"
+      (ngSubmit)="onSubmit()"
       class="social-form"
-      method="POST"
-      action="two-factor-authentication.html"
     >
-      <div class="social-form-group with-error-field">
+      <!-- Email Field -->
+      <div class="social-form-group">
         <label for="email">Email address</label>
-        <input
-          placeholder="email@company.com"
-          type="email"
-          id="email"
-          required
-          pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,}$"
-          title="Please enter a valid email address"
-        />
-        <span class="social-form-error"
-          >Please enter a valid email address</span
-        >
-      </div>
-      <div class="social-form-group with-error-field">
-        <label for="password">Password</label>
-        <input
-          placeholder="Password"
-          type="password"
-          id="password"
-          name="password"
-          required
-          pattern=".{8,}"
-          title="Password must be at least 8 characters"
-        />
-        <span class="social-form-error">Please enter a valid password</span>
+        <div class="input-wrapper">
+          <input
+            placeholder="email@company.com"
+            type="email"
+            id="email"
+            formControlName="email"
+            [class.invalid]="emailIsInvalid"
+            title="Please enter a valid email address"
+          />
+        </div>
+
+        @if (emailIsInvalid) {
+        <div class="control-error">
+          @if (email?.errors?.['required']) {
+          <span>Email is required</span>
+          } @if (email?.errors?.['invalidEmail']) {
+          <span>Please enter a valid email address</span>
+          }
+        </div>
+        }
       </div>
 
+      <!-- Password Field -->
+      <div class="social-form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <input
+            placeholder="Password"
+            type="password"
+            id="password"
+            formControlName="password"
+            [class.invalid]="passwordIsInvalid"
+            title="Password must be at least 8 characters"
+          />
+        </div>
+
+        @if (passwordIsInvalid) {
+        <div class="control-error">
+          @if (password?.errors?.['required']) {
+          <span>Password is required</span>
+          } @if (password?.errors?.['minlength']) {
+          <span>Password must be at least 8 characters</span>
+          }
+        </div>
+        }
+      </div>
+
+      <!-- Remember Me & Forgot Password -->
+      <div class="social-form-options">
+        <label for="rememberMe" class="checkbox-label">
+          <input type="checkbox" id="rememberMe" formControlName="rememberMe" />
+          <span>Remember me</span>
+        </label>
+
+        <a href="forget-password.html" class="forgot-password"
+          >Forgot password?</a
+        >
+      </div>
+
+      <!-- Action Links -->
       <div class="social-form-links">
-        <a href="confrmation-email.html"
+        <a href="confirmation-email.html"
           >Didn't receive the confirmation email?</a
         >
-        <a href="forget-password.html">Forgot password?</a>
-
-        <a href="sign-up.html">Sign up?</a>
+        <a href="sign-up.html">Don't have an account? Sign up</a>
       </div>
-      <button type="submit" class="social-btn">Sign in</button>
+
+      <button
+        type="submit"
+        class="social-btn"
+        [disabled]="reactiveForm.invalid"
+      >
+        Sign in
+      </button>
     </form>
   </div>
 </div>
