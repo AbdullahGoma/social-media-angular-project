@@ -8,12 +8,12 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router'; 
+import { Router, } from '@angular/router'; 
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'],
 })
