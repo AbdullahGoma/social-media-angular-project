@@ -101,25 +101,27 @@
           <span>Remember me</span>
         </label>
 
-        <a href="forget-password.html" class="forgot-password"
-          >Forgot password?</a
-        >
+        <a routerLink="/auth/forgot-password" class="forgot-password">
+          Forgot password?
+        </a>
       </div>
 
       <!-- Action Links -->
       <div class="social-form-links">
-        <a href="confirmation-email.html"
-          >Didn't receive the confirmation email?</a
-        >
-        <a href="sign-up.html">Don't have an account? Sign up</a>
+        <a routerLink="/auth/confirm-email">
+          Didn't receive the confirmation email?
+        </a>
+        <a routerLink="/auth/sign-up"> Don't have an account? Sign up </a>
       </div>
 
       <button
         type="submit"
         class="social-btn"
-        [disabled]="reactiveForm.invalid"
+        [disabled]="reactiveForm.invalid || isLoading"
       >
-        Sign in
+        @if (isLoading) {
+        <span class="spinner"></span>
+        } @else { Sign in }
       </button>
     </form>
   </div>

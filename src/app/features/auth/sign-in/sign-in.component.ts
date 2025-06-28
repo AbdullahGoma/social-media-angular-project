@@ -9,6 +9,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 
 // Load initial values from localStorage
 let initialFormData: any = {
@@ -25,11 +26,12 @@ if (savedForm) {
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css'],
 })
 export class SignInComponent implements OnInit {
+  isLoading = false;
   reactiveForm = new FormGroup({
     email: new FormControl(initialFormData.email, {
       validators: [Validators.required, this.emailFormatValidator],
@@ -41,6 +43,7 @@ export class SignInComponent implements OnInit {
   });
 
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   ngOnInit() {
     const subscription = this.reactiveForm.valueChanges
@@ -93,8 +96,13 @@ export class SignInComponent implements OnInit {
     return emailRegex.test(value) ? null : { invalidEmail: true };
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.reactiveForm.invalid) return;
+
+    this.isLoading = true; // Start loading
+
+    // Simulate API call with delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     console.log('Form submitted:', this.reactiveForm.value);
 
@@ -103,7 +111,9 @@ export class SignInComponent implements OnInit {
       localStorage.removeItem('saved-login-form');
     }
 
-    // Handle login logic here
-    // this.authService.login(this.reactiveForm.value);
+    // Redirect to timeline after successful login
+    this.router.navigateByUrl('/app/timeline', { replaceUrl: true });
+
+    this.isLoading = false; // Stop loading
   }
 }
