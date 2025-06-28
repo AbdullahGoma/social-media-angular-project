@@ -68,17 +68,17 @@
         <ul role="list">
           <li>
             <a
-              [routerLink]="['/profile', userId, 'feed']"
+              [routerLink]="['/app/profile', userId, 'feed']"
               routerLinkActive="active"
               >My Profile</a
             >
           </li>
           <li>
-            <a [routerLink]="['/settings']" routerLinkActive="active"
+            <a [routerLink]="['/app/settings']" routerLinkActive="active"
               >Settings</a
             >
           </li>
-          <li><a [routerLink]="['/signIn']">Sign Out</a></li>
+          <li><a [routerLink]="['/auth/sign-in']">Sign Out</a></li>
         </ul>
       </nav>
     </div>

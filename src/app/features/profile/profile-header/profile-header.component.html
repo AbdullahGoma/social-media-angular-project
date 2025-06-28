@@ -58,7 +58,7 @@
   />
   <div class="profile-menu" role="tablist" aria-label="profile menu">
     <a
-      [routerLink]="['/profile', userId, 'feed']"
+      [routerLink]="['/app/profile', userId, 'feed']"
       routerLinkActive="active"
       #feedLink="routerLinkActive"
       [class.active]="feedLink.isActive"
@@ -68,7 +68,7 @@
       Feed
     </a>
     <a
-      [routerLink]="['/profile', userId, 'about']"
+      [routerLink]="['/app/profile', userId, 'about']"
       routerLinkActive="active"
       #aboutLink="routerLinkActive"
       [class.active]="aboutLink.isActive"
@@ -78,7 +78,7 @@
       About
     </a>
     <a
-      [routerLink]="['/profile', userId, 'friends']"
+      [routerLink]="['/app/profile', userId, 'friends']"
       routerLinkActive="active"
       #friendsLink="routerLinkActive"
       [class.active]="friendsLink.isActive"
@@ -88,7 +88,7 @@
       Friends
     </a>
     <a
-      [routerLink]="['/profile', userId, 'photos']"
+      [routerLink]="['/app/profile', userId, 'photos']"
       routerLinkActive="active"
       #photosLink="routerLinkActive"
       [class.active]="photosLink.isActive"
@@ -98,7 +98,7 @@
       Photos
     </a>
     <a
-      [routerLink]="['/profile', userId, 'favs']"
+      [routerLink]="['/app/profile', userId, 'favs']"
       routerLinkActive="active"
       #favsLink="routerLinkActive"
       [class.active]="favsLink.isActive"
