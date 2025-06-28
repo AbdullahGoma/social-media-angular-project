@@ -112,7 +112,7 @@ export class SignInComponent implements OnInit {
     }
 
     // Redirect to timeline after successful login
-    this.router.navigateByUrl('/app/timeline', { replaceUrl: true });
+    this.router.navigateByUrl('/auth/two-factor');
 
     this.isLoading = false; // Stop loading
   }

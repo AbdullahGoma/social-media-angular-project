@@ -6,6 +6,7 @@ import {
   viewChild,
   ElementRef,
   afterNextRender,
+  inject,
 } from '@angular/core';
 import {
   FormControl,
@@ -13,11 +14,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-two-factor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './two-factor.component.html',
   styleUrls: ['./two-factor.component.css'],
 })
@@ -27,6 +29,9 @@ export class TwoFactorComponent {
   isLoading = signal(false);
   isResendDisabled = signal(false);
   resendCountdown = signal(30);
+
+  private router = inject(Router);
+  
 
   // Form group for the OTP
   otpForm = new FormGroup({
@@ -141,6 +146,8 @@ export class TwoFactorComponent {
 
     // Simulate API verification
     await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    this.router.navigateByUrl('/app/timeline', { replaceUrl: true });
 
     this.isLoading.set(false);
     this.isSubmitted.set(true);
