@@ -37,7 +37,11 @@ export class SignInComponent implements OnInit {
       validators: [Validators.required, this.emailFormatValidator],
     }),
     password: new FormControl(initialFormData.password, {
-      validators: [Validators.required, Validators.minLength(8)],
+      validators: [
+        Validators.required,
+        Validators.minLength(8),
+        this.passwordStrengthValidator,
+      ],
     }),
     rememberMe: new FormControl(initialFormData.rememberMe),
   });
@@ -94,6 +98,26 @@ export class SignInComponent implements OnInit {
     const value = control.value || '';
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(value) ? null : { invalidEmail: true };
+  }
+
+  private passwordStrengthValidator(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    const value = control.value || '';
+
+    const hasUpperCase = /[A-Z]/.test(value);
+    const hasLowerCase = /[a-z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(value);
+
+    const errors: ValidationErrors = {};
+
+    if (!hasUpperCase) errors['missingUpperCase'] = true;
+    if (!hasLowerCase) errors['missingLowerCase'] = true;
+    if (!hasNumber) errors['missingNumber'] = true;
+    if (!hasSpecialChar) errors['missingSpecialChar'] = true;
+
+    return Object.keys(errors).length ? errors : null;
   }
 
   async onSubmit() {

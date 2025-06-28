@@ -84,14 +84,22 @@
         </div>
 
         @if (passwordIsInvalid) {
-        <div class="control-error">
-          @if (password?.errors?.['required']) {
-          <span>Password is required</span>
-          } @if (password?.errors?.['minlength']) {
-          <span>Password must be at least 8 characters</span>
+          <div class="control-error">
+            @if (password?.errors?.['required']) {
+            <span>Password is required</span>
+            } @if (password?.errors?.['minlength']) {
+            <span>Password must be at least 8 characters</span>
+            } @if (password?.errors?.['missingUpperCase']) {
+            <span>Must contain at least one uppercase letter</span>
+            } @if (password?.errors?.['missingLowerCase']) {
+            <span>Must contain at least one lowercase letter</span>
+            } @if (password?.errors?.['missingNumber']) {
+            <span>Must contain at least one number</span>
+            } @if (password?.errors?.['missingSpecialChar']) {
+            <span>Must contain at least one special character</span>
+            }
+          </div>
           }
-        </div>
-        }
       </div>
 
       <!-- Remember Me & Forgot Password -->
