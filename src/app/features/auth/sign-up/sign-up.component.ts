@@ -10,6 +10,7 @@ import {
   FormArray,
   ValidatorFn,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router'; 
 import { debounceTime } from 'rxjs';
 
 // Load initial values from localStorage
@@ -30,11 +31,12 @@ if (savedForm) {
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent implements OnInit {
+  isLoading = false;
   reactiveForm = new FormGroup({
     email: new FormControl(initialFormData.email, {
       validators: [Validators.required, this.emailFormatValidator],
@@ -84,6 +86,7 @@ export class SignUpComponent implements OnInit {
   });
 
   private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
 
   ngOnInit() {
     const subscription = this.reactiveForm.valueChanges
@@ -100,6 +103,20 @@ export class SignUpComponent implements OnInit {
       });
 
     this.destroyRef.onDestroy(() => subscription.unsubscribe());
+
+    const saved = localStorage.getItem('saved-signup-form');
+    if (saved) {
+      const savedValues = JSON.parse(saved);
+
+      this.reactiveForm.patchValue({
+        email: savedValues.email,
+        name: {
+          firstName: savedValues.name?.firstName ?? '',
+          lastName: savedValues.name?.lastName ?? '',
+        },
+        terms: savedValues.terms,
+      });
+    }
   }
 
   // Form control getters
@@ -225,25 +242,20 @@ export class SignUpComponent implements OnInit {
     return null;
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.reactiveForm.invalid) return;
+
+    this.isLoading = true; // Start loading
+
+    // Simulate API call with delay
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     console.log('Form submitted:', this.reactiveForm.value);
     localStorage.removeItem('saved-signup-form');
-    this.reactiveForm.reset();
-  }
 
-  onReset() {
-    this.reactiveForm.reset({
-      passwords: {
-        password: '',
-        confirmPassword: '',
-      },
-      name: {
-        firstName: '',
-        lastName: '',
-      },
-      terms: false,
-    });
+    // Redirect to timeline with replaceUrl: true
+    this.router.navigateByUrl('/app/timeline', { replaceUrl: true });
+
+    this.isLoading = false; // Stop loading
   }
 }

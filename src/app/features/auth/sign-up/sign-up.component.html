@@ -216,12 +216,18 @@
         }
       </div>
 
+      <div class="social-form-links">
+        <a routerLink="/auth/sign-in">Already have an account? Sign in</a>
+      </div>
+
       <button
         type="submit"
         class="social-btn"
-        [disabled]="reactiveForm.invalid"
+        [disabled]="reactiveForm.invalid || isLoading"
       >
-        Sign up
+        @if (isLoading) {
+        <span class="spinner"></span>
+        } @else { Sign up }
       </button>
     </form>
   </div>
