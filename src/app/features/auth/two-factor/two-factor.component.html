@@ -11,8 +11,8 @@
       <h1 class="social-auth-title">Verification Successful!</h1>
       <p>Your account has been successfully verified.</p>
 
-      <div class="social-feature-list">
-        <div class="social-feature-item">
+      <ul class="social-feature-list">
+        <li class="social-feature-item">
           <span class="social-feature-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
               <path
@@ -21,8 +21,8 @@
             </svg>
           </span>
           <span>Your account is now fully secured</span>
-        </div>
-      </div>
+        </li>
+      </ul>
 
       <a href="/dashboard" class="social-btn">Continue to Dashboard</a>
     </div>
@@ -64,7 +64,7 @@
     </ul>
 
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()" class="social-form">
-      <div class="social-form-group-two-auth">
+      <div class="social-form-group">
         <label for="twoFactorCode">Authentication Code</label>
         <div class="otp-container">
           <input
