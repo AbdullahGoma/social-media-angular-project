@@ -1,8 +1,8 @@
 /* Enhanced Font Faces with better fallbacks */
 @font-face {
   font-family: "Roboto";
-  src: local("Roboto Regular"), local("Roboto-Regular"), 
-       url("/assets/fonts/Roboto-Regular.ttf") format("truetype");
+  src: local("Roboto Regular"), local("Roboto-Regular"),
+    url("/assets/fonts/Roboto-Regular.ttf") format("truetype");
   font-weight: 400;
   font-display: swap;
 }
@@ -10,7 +10,7 @@
 @font-face {
   font-family: "Roboto";
   src: local("Roboto Bold"), local("Roboto-Bold"),
-       url("/assets/fonts/Roboto-Bold.ttf") format("truetype");
+    url("/assets/fonts/Roboto-Bold.ttf") format("truetype");
   font-weight: 700;
   font-display: swap;
 }
@@ -93,14 +93,17 @@
   /* Transitions */
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  
+
   /* Z-index */
   --z-below: -1;
   --z-base: 1;
@@ -136,8 +139,11 @@ body {
   font-weight: var(--fw-regular);
   color: var(--clr-text-light);
   background-color: var(--clr-bg-dark);
-  background-image: 
-    radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 0.13) 0px, transparent 50%),
+  background-image: radial-gradient(
+      at 80% 0%,
+      hsla(189, 100%, 56%, 0.13) 0px,
+      transparent 50%
+    ),
     radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 0.13) 0px, transparent 50%);
   background-attachment: fixed;
 }
@@ -251,10 +257,12 @@ ol[role="list"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, 
-    rgba(27, 134, 248, 0.1) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(27, 134, 248, 0.1) 0%,
     rgba(27, 134, 248, 0.05) 50%,
-    rgba(127, 210, 34, 0.1) 100%);
+    rgba(127, 210, 34, 0.1) 100%
+  );
   position: relative;
   overflow: hidden;
 }
@@ -326,7 +334,6 @@ ol[role="list"] {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    
   }
 }
 
@@ -387,35 +394,63 @@ ol[role="list"] {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .social-auth-title {
   font-size: var(--fs-800);
   font-weight: var(--fw-bold);
   line-height: 1.2;
-  background: linear-gradient(to right, var(--clr-text-light), var(--clr-accent));
+  background: linear-gradient(
+    to right,
+    var(--clr-text-light),
+    var(--clr-accent)
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -480,9 +515,7 @@ ol[role="list"] {
   border-radius: var(--radius-md);
   padding: 2px;
   background: linear-gradient(135deg, var(--clr-accent), var(--clr-accent-3));
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
@@ -936,6 +969,10 @@ input:not(:focus):not(:placeholder-shown):invalid {
   cursor: not-allowed;
   text-decoration: none;
   background: none;
+}
+
+.social-form-links a {
+  cursor: pointer;
 }
 
 /* Utility Classes */

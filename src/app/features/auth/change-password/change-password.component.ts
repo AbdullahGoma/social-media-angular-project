@@ -8,11 +8,12 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router'; 
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'],
 })
@@ -20,6 +21,8 @@ export class ChangePasswordComponent {
   // UI state signals
   isSubmitted = signal(false);
   isLoading = signal(false);
+
+  constructor(private router: Router) {}
 
   // Reactive form
   passwordForm = new FormGroup(
@@ -118,5 +121,13 @@ export class ChangePasswordComponent {
     this.isLoading.set(false);
     this.isSubmitted.set(true);
     this.passwordForm.reset();
+  }
+
+  navigateToAccount() {
+    this.router.navigate(['/app/settings'], { replaceUrl: true });
+  }
+
+  navigateToForgotPassword() {
+    this.router.navigate(['/auth/forgot-password']);
   }
 }

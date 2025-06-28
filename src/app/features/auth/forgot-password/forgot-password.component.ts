@@ -6,11 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.css'],
 })
@@ -29,6 +30,8 @@ export class ForgotPasswordComponent {
     }),
   });
 
+  constructor(private router: Router) {} // Inject Router
+
   async onSubmit() {
     if (this.reactiveForm.invalid) return;
 
@@ -39,6 +42,11 @@ export class ForgotPasswordComponent {
 
     this.isLoading.set(false);
     this.isSubmitted.set(true);
+  }
+
+  // Navigation method
+  navigateToSignIn() {
+    this.router.navigate(['/auth/sign-in']);
   }
 
   // Helper methods for template

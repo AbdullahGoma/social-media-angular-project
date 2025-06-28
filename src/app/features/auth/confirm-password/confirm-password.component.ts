@@ -8,11 +8,12 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-confirm-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './confirm-password.component.html',
   styleUrls: ['./confirm-password.component.css'],
 })
@@ -21,6 +22,8 @@ export class ConfirmPasswordComponent {
   isSubmitted = signal(false);
   isLoading = signal(false);
   isSuccess = signal(false);
+
+  constructor(private router: Router) {}
 
   // Reactive form
   passwordForm = new FormGroup(
@@ -108,5 +111,9 @@ export class ConfirmPasswordComponent {
     this.isSubmitted.set(true);
     this.isSuccess.set(true);
     this.passwordForm.reset();
+  }
+
+  navigateToSignIn() {
+    this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
   }
 }

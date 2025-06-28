@@ -6,11 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-confirm-email',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './confirm-email.component.html',
   styleUrls: ['./confirm-email.component.css'],
 })
@@ -19,6 +20,8 @@ export class ConfirmEmailComponent {
   isSubmitted = signal(false);
   isLoading = signal(false);
   isResent = signal(false);
+
+  constructor(private router: Router) {}
 
   // Reactive form
   confirmForm = new FormGroup({
@@ -49,5 +52,9 @@ export class ConfirmEmailComponent {
     this.isLoading.set(false);
     this.isSubmitted.set(true);
     this.isResent.set(true);
+  }
+
+  navigateToSignIn() {
+    this.router.navigate(['/auth/sign-in'], { replaceUrl: true });
   }
 }

@@ -29,6 +29,9 @@
         </ul>
         
         <button class="social-btn" (click)="isSubmitted.set(false)">Resend Again</button>
+        <div class="social-form-links">
+          <a routerLink="/auth/sign-in">Back to Sign In</a>
+        </div>
       </div>
     }
     @else {
@@ -97,6 +100,9 @@
             Resend Confirmation
           }
         </button>
+        <div class="social-form-links">
+          <a routerLink="/auth/sign-in">Back to Sign In</a>
+        </div>
       </form>
     }
   </div>
