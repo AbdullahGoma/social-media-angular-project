@@ -500,7 +500,7 @@
     }
 
     .timeline-pt {
-      padding-top: 20px;
+      padding-top: 1px;
       position: relative;
       z-index: 2;
     }
