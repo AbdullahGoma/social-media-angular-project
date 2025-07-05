@@ -1,11 +1,8 @@
 {
   "hosting": {
+    "site": "torab1",
     "public": "dist/social-media/browser",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
